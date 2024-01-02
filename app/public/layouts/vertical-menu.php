@@ -131,8 +131,8 @@
                         <span data-key="t-horizontal">Seguimientos</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="#">Listado Seguimientos</a></li>
-                        <li><a href="#">Nuevo Seguimiento</a></li>
+                        <li><a href="dash-services.php">Listado Seguimientos</a></li>
+                        <li><a href="dash-services-add.php">Nuevo Seguimiento</a></li>
                     </ul>
                 </li>
 
