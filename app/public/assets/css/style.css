@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700;800&display=swap');
+
+body {
+    font-family: 'Open Sans', sans-serif;;
+}
+
+.logo-txt {
+    color: #2D5C6C;
+}
+
+.menu-title {
+    color: #2D5C6C;
+}
+
+#sidebar-menu ul li a svg {
+    fill: none;
+}
+
+#sidebar-menu ul li a:hover {
+    color: #2D346B;
+}
+
+.logo-lema {
+    width: 50%;
+}
+#datatable-buttons_filter > label > input {
+    width: 500px;
+}
+.table-cliente > tr{
+    height: 45px;
+}
+.table-cliente > tr > td{
+    width: 250px;
+}
+.btn-registrar{
+    width: 40%;
+    margin-left: 30%;
+    margin-top: 20px;
+    cursor: pointer;
+}
+.item-activo{
+    color: #2ab57d !important;
+    background-color: rgba(42,181,125,.18) !important;
+    font-size: 14px !important;
+}
+.item-inactivo{
+    font-size: 14px !important;
+    color: #F52D00 !important;
+    background-color: rgba(245,45,0,.18) !important;
+}
