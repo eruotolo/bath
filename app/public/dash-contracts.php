@@ -1,4 +1,5 @@
-<?php include 'layouts/session.php'; ?>
+<?php global $link;
+include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
 <?php include('layouts/config.php'); ?>
 
@@ -48,8 +49,8 @@
                         <div class="mb-3">
                             <?php
                                 $query = "SELECT COUNT(*) AS total FROM contratos;";
-                                $result_task = mysqli_query($link, $query);
-                                while ($row = mysqli_fetch_Array($result_task)) {
+                                $result_task1 = mysqli_query($link, $query);
+                                while ($row = mysqli_fetch_Array($result_task1)) {
                                     ?>
                                     <h5 class="card-title">Contratos <span
                                             class="text-muted fw-normal ms-2">(<?php echo $row['total'] ?>)</span>

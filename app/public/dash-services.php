@@ -64,7 +64,7 @@ include 'layouts/session.php'; ?>
                     <div class="col-md-6">
                         <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
                             <div>
-                                <a href="#" class="btn btn-light"><i
+                                <a href="dash-services-add.php" class="btn btn-light"><i
                                         class="bx bx-plus me-1"></i> Agregar Nuevo Servicio</a>
                             </div>
                         </div>
@@ -83,11 +83,13 @@ include 'layouts/session.php'; ?>
                                 <th scope="col">Id Servicios</th>
                                 <th scope="col">Nombre Cliente</th>
                                 <th scope="col">Id Contrato</th>
+                                <th scope="col">Código Baño</th>
                                 <th scope="col">Tipo del Servicio</th>
                                 <th scope="col" class="text-center">Estado del Servicio</th>
                                 <th style="width: 80px; min-width: 80px;" class="text-center">Acción</th>
                             </tr>
                         </thead>
+
                         <tbody>
                         <?php
                             $query = "SELECT * FROM servicios SR
@@ -102,6 +104,7 @@ include 'layouts/session.php'; ?>
                                 <td><?php echo $row['id_Servicio'] ?></td>
                                 <td><?php echo $row['nombre_Cliente'] ?></td>
                                 <td><?php echo $row['id_Contrato'] ?></td>
+                                <td><?php echo $row['codigo_Bath'] ?></td>
                                 <td><?php echo $row['tipo_Servicio'] ?></td>
 
                                 <?php
@@ -115,24 +118,30 @@ include 'layouts/session.php'; ?>
                                 }
                                 ?>
 
-                                <td style="width: 150px">
-                                    <a href="#" class="btn btn-outline-secondary btn-sm">
+                                <td style="width: 180px">
+                                    <a href="dash-services-item.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
                                         <i class="fas fas fa-eye"></i>
                                     </a>
-                                    <a href="#" class="btn btn-outline-secondary btn-sm">
+                                    <a href="dash-services-edit.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a href="#" class="btn btn-outline-secondary btn-sm">
+                                    <a href="#" class="btn btn-outline-secondary btn-sm" title="Imprimir">
                                         <i class="fas fa-print"></i>
                                     </a>
-                                    <a href="#" class="btn btn-outline-secondary btn-sm">
-                                        <i class="fas fa-arrow-down"></i>
+                                    <a href="controller/service-inactive.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Inactivar">
+                                        <i class="fas fa-lock"></i>
+                                    </a>
+                                    <a href="controller/service-active.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Activar">
+                                        <i class="fas fa-lock-open"></i>
                                     </a>
                                 </td>
+
                             </tr>
+
                         <?php
                             }
                         ?>
+
                         </tbody>
 
                     </table>
@@ -175,7 +184,6 @@ include 'layouts/session.php'; ?>
 <script src="assets/js/pages/datatables.init.js"></script>
 
 <script src="assets/js/app.js"></script>
-
 
 </body>
 
