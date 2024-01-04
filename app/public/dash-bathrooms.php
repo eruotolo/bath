@@ -122,27 +122,20 @@
                                 ?>
 
                                 <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bx bx-dots-horizontal-rounded"></i>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item editar"
-                                                   href="javascript:void(0)"
-                                                   data-bs-toggle="modal"
-                                                   data-bs-target="#editarBath"
-                                                   data-id="<?php echo $row['id_Bath']?>"
-                                                >Editar</a>
-                                            </li>
-                                            <li><a class="dropdown-item"
-                                                   href="controller/bath-active.php?id_Bath=<?php echo $row['id_Bath'] ?>">Activar</a>
-                                            </li>
-                                            <li><a class="dropdown-item"
-                                                   href="controller/bath-inactive.php?id_Bath=<?php echo $row['id_Bath'] ?>">Inactivar</a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <a href="javascript:void(0)"
+                                       class="btn btn-outline-secondary btn-sm editar"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#editarBath"
+                                       data-id="<?php echo $row['id_Bath']?>"
+                                       title="Editar">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </a>
+                                    <a href="controller/bath-active.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Activar">
+                                        <i class="fas fa-lock-open"></i>
+                                    </a>
+                                    <a href="controller/bath-inactive.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Inactivar">
+                                        <i class="fas fa-lock"></i>
+                                    </a>
                                 </td>
                             </tr>
                         <?php } ?>

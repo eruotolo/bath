@@ -160,37 +160,8 @@
                     </ul>
                 </li>
 
+                <!-- BORRAR DESDE ACÁ -->
                 <li class="menu-title mt-2" data-key="t-components"><?php echo $language["Elements"]; ?></li>
-
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow">
-                        <i data-feather="grid"></i>
-                        <span data-key="t-apps"><?php echo $language["Apps"]; ?></span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <span data-key="t-invoices"><?php echo $language["Invoices"]; ?></span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="apps-invoices-list.php" data-key="t-invoice-list"><?php echo $language["Invoice_List"]; ?></a></li>
-                                <li><a href="apps-invoices-detail.php" data-key="t-invoice-detail"><?php echo $language["Invoice_Detail"]; ?></a></li>
-                            </ul>
-                        </li>
-                        <li>
-                            <a href="javascript: void(0);" class="has-arrow">
-                                <span data-key="t-contacts"><?php echo $language["Contacts"]; ?></span>
-                            </a>
-                            <ul class="sub-menu" aria-expanded="false">
-                                <li><a href="apps-contacts-grid.php" data-key="t-user-grid"><?php echo $language["User_Grid"]; ?></a></li>
-                                <li><a href="apps-contacts-list.php" data-key="t-user-list"><?php echo $language["User_List"]; ?></a></li>
-                                <li><a href="apps-contacts-profile.php" data-key="t-profile"><?php echo $language["Profile"]; ?></a></li>
-                            </ul>
-                        </li>
-
-                    </ul>
-                </li>
 
 
                 <li>

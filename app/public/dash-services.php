@@ -118,15 +118,12 @@ include 'layouts/session.php'; ?>
                                 }
                                 ?>
 
-                                <td style="width: 180px">
+                                <td style="width: 150px">
                                     <a href="dash-services-item.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
                                         <i class="fas fas fa-eye"></i>
                                     </a>
                                     <a href="dash-services-edit.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar">
                                         <i class="fas fa-pencil-alt"></i>
-                                    </a>
-                                    <a href="#" class="btn btn-outline-secondary btn-sm" title="Imprimir">
-                                        <i class="fas fa-print"></i>
                                     </a>
                                     <a href="controller/service-inactive.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Inactivar">
                                         <i class="fas fa-lock"></i>

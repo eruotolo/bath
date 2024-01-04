@@ -112,26 +112,18 @@ include 'layouts/session.php'; ?>
                                         <td class="text-center">$ <?php echo $row['valorMensual_Contrato'] ?></td>
                                         <td class="text-center">$ <?php echo $row['valorTotal_Contrato'] ?></td>
                                         <td class="text-center">
-                                            <div class="dropdown">
-                                                <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                        type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                                    <i class="bx bx-dots-horizontal-rounded"></i>
-                                                </button>
-                                                <ul class="dropdown-menu dropdown-menu-end">
-                                                    <li><a class="dropdown-item"
-                                                           href="dash-contracts-edit.php?id_Contrato=<?php echo $row['id_Contrato'] ?>">Editar</a>
-                                                    </li>
-                                                    <li><a class="dropdown-item"
-                                                           href="controller/contract-active.php?id_Contrato=<?php echo $row['id_Contrato'] ?>">Activar</a>
-                                                    </li>
-                                                    <li><a class="dropdown-item"
-                                                           href="controller/contract-inactive.php?id_Contrato=<?php echo $row['id_Contrato'] ?>">Inactivar</a>
-                                                    </li>
-                                                    <li><a class="dropdown-item"
-                                                           href="controller/contract-down.php?id_Contrato=<?php echo $row['id_Contrato'] ?>">Eliminar</a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                            <a href="dash-contracts-edit.php?id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </a>
+                                            <a href="controller/contract-inactive.php?id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Inactivar">
+                                                <i class="fas fa-lock"></i>
+                                            </a>
+                                            <a href="controller/contract-active.php?id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Activar">
+                                                <i class="fas fa-lock-open"></i>
+                                            </a>
+                                            <a href="controller/contract-down.php?id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </a>
                                         </td>
                                     </tr>
                                     <?php

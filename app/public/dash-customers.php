@@ -110,20 +110,12 @@
                                 <td><?php echo $row['telefono_Cliente'] ?></td>
                                 <td><?php echo $row['email_Cliente'] ?></td>
                                 <td>
-                                    <div class="dropdown">
-                                        <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                            <i class="bx bx-dots-horizontal-rounded"></i>
-                                        </button>
-                                        <ul class="dropdown-menu dropdown-menu-end">
-                                            <li><a class="dropdown-item"
-                                                   href="dash-customers-item.php?id_Cliente=<?php echo $row['id_Cliente'] ?>">Ver</a>
-                                            </li>
-                                            <li><a class="dropdown-item"
-                                                   href="controller/customer-inactive.php?id_Cliente=<?php echo $row['id_Cliente'] ?>">Eliminar</a>
-                                            </li>
-                                        </ul>
-                                    </div>
+                                    <a href="dash-customers-item.php?id_Cliente=<?php echo $row['id_Cliente'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
+                                        <i class="fas fas fa-eye"></i>
+                                    </a>
+                                    <a href="controller/customer-inactive.php?id_Cliente=<?php echo $row['id_Cliente'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </a>
                                 </td>
                             </tr>
                         <?php } ?>
