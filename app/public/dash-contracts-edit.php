@@ -1,7 +1,6 @@
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
 
-
 <?php
 
 global $link;
@@ -20,7 +19,7 @@ if($query_run){
 
 <head>
 
-    <title>Clientes | Chubby - Admin & Dashboard</title>
+    <title>Item Contrato | Chubby - Admin & Dashboard</title>
 
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
