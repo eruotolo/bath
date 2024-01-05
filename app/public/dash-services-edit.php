@@ -59,7 +59,57 @@ if ($query_run){
 
                     <!-- start page contenido -->
 
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="card">
 
+                                <div class="card-header">
+                                    <div class="col-6">
+                                        <h4 class="card-title">Formulario de Edición de Contrato</h4>
+                                        <p class="card-title-desc">Los campos con <code>*</code> son campos requeridos/obligatorios.</p>
+                                    </div>
+                                </div>
+
+                                <div class="card-body py-4 d-flex justify-content-center">
+                                    <div class="col-12">
+                                        <h5 class="font-size-14 mb-4"><i class="mdi mdi-arrow-right text-primary me-1"></i> Ingresar datos en los campos</h5>
+
+                                        <form action="" method="post" style="margin-top: 50px; margin-left: 15%">
+
+                                            <input type="text" class="form-control" id="id_Servicio" name="id_Servicio" value="<?php echo $row['id_Servicio'];?>" hidden>
+
+                                            <div class="row mb-4">
+                                                <label for="id_Contrato" class="col-sm-4 col-form-label">Obra Contrato:</label>
+                                                <div class="col-sm-5">
+                                                    <select name="id_Contrato" id="id_Contrato" class="form-select">
+                                                        <?php
+                                                            $sql = "SELECT * FROM contratos";
+                                                            $result = mysqli_query($link, $sql);
+                                                            $contratros = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                                                            foreach ($contratros as $contratro) {
+                                                        ?>
+                                                                <option value="<?php echo $contratro['id_Contrato']; ?>" <?php if ($contratro['id_Contrato'] == $row['id_Contrato']){ echo 'selected'; } ?>>
+                                                                    <?php echo $contratro['obra_Contrato']; ?>
+                                                                </option>
+                                                        <?php
+                                                            }
+                                                        ?>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="row mb-4">
+                                                <label for="id_Contrato" class="col-sm-4 col-form-label">Baño Contrato:</label>
+                                            </div>
+
+                                        </form>
+
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
 
                 </div>
             </div>

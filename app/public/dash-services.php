@@ -87,7 +87,7 @@ include 'layouts/session.php'; ?>
                                 <th scope="col">Código Baño</th>
                                 <th scope="col">Tipo del Servicio</th>
                                 <th scope="col" class="text-center">Estado del Servicio</th>
-                                <th style="width: 80px; min-width: 80px;" class="text-center">Acción</th>
+                                <th style="width:140px; min-width: 140px;" class="text-center">Acción</th>
                             </tr>
                         </thead>
 
@@ -119,7 +119,7 @@ include 'layouts/session.php'; ?>
                                 }
                                 ?>
 
-                                <td style="width: 150px">
+                                <td style="width: 140px">
                                     <a href="dash-services-item.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
                                         <i class="fas fas fa-eye"></i>
                                     </a>
