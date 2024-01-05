@@ -28,83 +28,55 @@ if (isset($_GET['id_Servicio'])) {
 
         // Contenido del PDF con los datos del servicio
         $content = '
-
-            <div class="card">
-                                    <div class="card-body">
-
-                                        <div class="invoice-title">
-                                            <div class="d-flex align-items-start">
-                                                <div class="flex-grow-1">
-                                                    <div class="mb-4">
-                                                        <img src="../assets/images/logo_zl.svg" alt="" height="160">
-                                                    </div>
-                                                </div>
-                                                <div class="flex-shrink-0">
-                                                    <div class="pt-5">
-                                                        <h4 class="font-size-16">Servicio N.º: '.$row['id_Servicio'].'</h4>
-                                                        <p class="mb-1 pt-2">Blanco 60 Local 1 - Castro - Chiloé</p>
-                                                        <p class="mb-1">
-                                                            <i class="mdi mdi-email align-middle me-1"></i> jsanchez@expanda.cl
-                                                        </p>
-                                                        <p>
-                                                            <i class="mdi mdi-phone align-middle me-1"></i> +56 9 9293 7371
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <hr class="my-4">
-
-                                        <!-- DATOS DEL CUERPO DEL SERVICIO -->
-
-                                        <div class="row">
-                                            <div class="col-sm-6">
-                                                <h5 class="font-size-15 mb-3"><b>Cliente:</b></h5>
-                                                <h5 class="font-size-14 mb-2">'.$row['nombre_Cliente'].'</h5>
-                                                <p class="mb-1">'.$row['direccion_Cliente'].' </p>
-                                                <p class="mb-1">'.$row['email_Cliente'].' </p>
-                                                <p class="mb-1">'.$row['telefono_Cliente'].' </p>
-                                                <p class="mb-1">'.$row['ciudad_Cliente'].'  | '.$row['region_Cliente'].'</p>
-                                            </div>
-                                            <div class="col-sm-6">
-                                                <div>
-                                                    <h5 class="font-size-15 mb-3"><b>Información:</b></h5>
-                                                    <p class="mb-1">
-                                                        <b>Número de Contrato:</b>  '.$row['id_Contrato'].'
-                                                    </p>
-                                                    <p class="mb-1">
-                                                        <b>Obra: </b> '.$row['obra_Contrato'].'
-                                                    </p>
-                                                    <p class="mb-1">
-                                                        <b>Fecha del Servicio:</b> '.date("d/m/Y", strtotime($row['fecha_Servicio'])).'
-                                                    </p>
-
-                                                    <p class="mb-1">
-                                                        <b>Tipo de Servicio:</b> '.$row['tipo_Servicio'].'
-                                                    </p>
-                                                    <p class="mb-1">
-                                                        <b>Codigo Baño:</b>  '.$row['codigo_Bath'].'
-                                                    </p>
-
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="py-2 mt-3">
-                                            <h5 class="font-size-15">Observaciones</h5>
-                                        </div>
-
-                                        <div class="p-4 border rounded">
-                                            <p>'.$row['observaciones_Servicio'].'</p>
-                                        </div>
-
-                                       
-
-                                    </div>
-                                </div>
-           
+            <table style="width: 100%; border-collapse: collapse;">
+                <thead>
+                    <tr>
+                        <th style="width: 70%">
+                            <img src="../assets/images/logo_zl.png" style="height: 100px">
+                            <p style="font-size: 8px; line-height: 8px;"></p>
+                        </th>
+                        <th style="width: 30%">
+                            <h4 style="font-size: 10px; font-weight: 600;">Servicio N.º: '.$row['id_Servicio'].'</h4>
+                            <p style="font-size: 8px; line-height: 8px; ">Blanco 60 Local 1 - Castro - Chiloé</p>
+                            <p style="font-size: 8px; line-height: 8px; ">jsanchez@expanda.cl</p>
+                            <p style="font-size: 8px; line-height: 8px; ">+56 9 9293 7371</p>
+                            <p style="font-size: 8px; line-height: 8px;"></p>
+                        </th>
+                    </tr>
+                    <tr>
+                        <th style="width: 70%; border-top: 0,5px solid #dedfdf;">
+                            <h5 style="font-size: 10px; font-weight: 600;"><b>Cliente:</b></h5>
+                            <h5 style="font-size: 10px; font-weight: 600;">'.$row['nombre_Cliente'].'</h5>
+                            <p style="font-size: 8px; line-height: 8px;" >'.$row['direccion_Cliente'].' </p>
+                            <p style="font-size: 8px; line-height: 8px;" >'.$row['email_Cliente'].' </p>
+                            <p style="font-size: 8px; line-height: 8px;" >'.$row['telefono_Cliente'].' </p>
+                            <p style="font-size: 8px; line-height: 8px;" >'.$row['ciudad_Cliente'].'  | '.$row['region_Cliente'].'</p>
+                            <p style="font-size: 8px; line-height: 8px;"></p>
+                        </th>
+                        <th style="width: 30%; border-top: 0,5px solid #dedfdf;">
+                            <h5 style="font-size: 10px; font-weight: 600;"><b>Información:</b></h5>
+                            <p style="font-size: 8px; line-height: 8px;"><b>Número de Contrato:</b>  '.$row['id_Contrato'].'</p>
+                            <p style="font-size: 8px; line-height: 8px;"><b>Obra: </b> '.$row['obra_Contrato'].'</p>
+                            <p style="font-size: 8px; line-height: 8px;"><b>Fecha del Servicio:</b> '.date("d/m/Y", strtotime($row['fecha_Servicio'])).'</p>
+                            <p style="font-size: 8px; line-height: 8px;"><b>Tipo de Servicio:</b> '.$row['tipo_Servicio'].'</p>
+                            <p style="font-size: 8px; line-height: 8px;"><b>Codigo Baño:</b>  '.$row['codigo_Bath'].'</p>
+                            <p style="font-size: 8px; line-height: 8px;"></p>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td style="width: 100%; border: 0,5px solid #dedfdf; border-radius: 10px">
+                            <h5 style="font-size: 10px; font-weight: 600;">Observaciones:</h5>
+                            <p style="font-size: 8px; line-height: 10px;">'.$row['observaciones_Servicio'].'</p>
+                            <p style="font-size: 8px; line-height: 8px;"></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>     
         ';
+        // Línea horizontal debajo de cada fila
+        //$content = str_replace('</tr>', '<hr style="border: 0.5px solid gray; margin: 10px; padding: 10px"> </tr>', $content);
 
         // Escribir el contenido HTML en el PDF
         $pdf->writeHTML($content, true, false, true, false, '');
