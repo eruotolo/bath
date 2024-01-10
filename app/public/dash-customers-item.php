@@ -1,4 +1,5 @@
-<?php include 'layouts/session.php'; ?>
+<?php global $link;
+include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
 
 <?php

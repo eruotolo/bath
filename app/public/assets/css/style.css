@@ -54,3 +54,7 @@ body {
     margin-bottom: 8px;
     margin-top: 20px;
 }
+.table-contrato > tr > td{
+    width: 50%;
+    padding-top: 20px;
+}

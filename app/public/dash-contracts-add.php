@@ -77,14 +77,14 @@ include 'layouts/session.php'; ?>
                                     </div>
 
                                     <div class="row mb-4">
-                                        <label for="obra_Contrato" class="col-sm-3 col-form-label">Nombre de la obra:</label>
+                                        <label for="obra_Contrato" class="col-sm-3 col-form-label">Nombre del contrato / OC Compra:</label>
                                         <div class="col-sm-5">
                                             <input class="form-control" type="text" id="obra_Contrato" name="obra_Contrato" placeholder="Ingrese el nombre de la obra" required>
                                         </div>
                                     </div>
 
                                     <div class="row mb-4">
-                                        <label for="estado_Contrato" class="col-sm-3 col-form-label">Estado de la obra:</label>
+                                        <label for="estado_Contrato" class="col-sm-3 col-form-label">Estado del contrato / OC Compra:</label>
                                         <div class="col-sm-5">
                                             <select name="estado_Contrato" id="estado_Contrato" class="form-select">
                                                 <option value="">Seleccione el estado</option>
@@ -95,28 +95,28 @@ include 'layouts/session.php'; ?>
                                     </div>
 
                                     <div class="row mb-4">
-                                        <label for="fechaInicio_Contrato" class="col-sm-3 col-form-label">Fecha de inicio de la obra:</label>
+                                        <label for="fechaInicio_Contrato" class="col-sm-3 col-form-label">Fecha de inicio del contrato / OC Compra:</label>
                                         <div class="col-sm-5">
                                             <input class="form-control" type="date" id="fechaInicio_Contrato" name="fechaInicio_Contrato" required>
                                         </div>
                                     </div>
 
                                     <div class="row mb-4">
-                                        <label for="fechaFin_Contrato" class="col-sm-3 col-form-label">Fecha de inicio de la obra:</label>
+                                        <label for="fechaFin_Contrato" class="col-sm-3 col-form-label">Fecha de inicio del contrato / OC Compra:</label>
                                         <div class="col-sm-5">
                                             <input class="form-control" type="date" id="fechaFin_Contrato" name="fechaFin_Contrato" required>
                                         </div>
                                     </div>
 
                                     <div class="row mb-4">
-                                        <label for="valorMensual_Contrato" class="col-sm-3 col-form-label">Valor mensual de la obra:</label>
+                                        <label for="valorMensual_Contrato" class="col-sm-3 col-form-label">Valor mensual del contrato / OC Compra:</label>
                                         <div class="col-sm-5">
                                             <input class="form-control" type="number" id="valorMensual_Contrato" name="valorMensual_Contrato" required>
                                         </div>
                                     </div>
 
                                     <div class="row mb-4">
-                                        <label for="valorTotal_Contrato" class="col-sm-3 col-form-label">Valor total de la obra:</label>
+                                        <label for="valorTotal_Contrato" class="col-sm-3 col-form-label">Valor total del contrato / OC Compra:</label>
                                         <div class="col-sm-5">
                                             <input class="form-control" type="number" id="valorTotal_Contrato" name="valorTotal_Contrato" required>
                                         </div>

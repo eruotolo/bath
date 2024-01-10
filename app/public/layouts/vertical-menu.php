@@ -105,23 +105,23 @@
 
                 <li>
                     <a href="javascript: void(0);" class="has-arrow">
-                        <i class="mdi mdi-file-sign"></i>
-                        <span data-key="t-horizontal">Contratos</span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="dash-contracts.php">Listado Contratos</a></li>
-                        <li><a href="dash-contracts-add.php">Nuevo Contrato</a></li>
-                    </ul>
-                </li>
-
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow">
                         <i class="mdi mdi-bathtub-outline"></i>
                         <span data-key="t-horizontal">Baños Químicos</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="dash-bathrooms.php">Baños Químicos</a></li>
                         <li><a href="dash-bathrooms-add.php">Nuevo Baño Químicos</a></li>
+                    </ul>
+                </li>
+
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="mdi mdi-file-sign"></i>
+                        <span data-key="t-horizontal">Obra / Contratos</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="dash-contracts.php">Listado Obras / Contratos</a></li>
+                        <li><a href="dash-contracts-add.php">Nueva Obra / Contrato</a></li>
                     </ul>
                 </li>
 

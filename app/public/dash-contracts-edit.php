@@ -100,6 +100,13 @@ if($query_run){
                                         </div>
 
                                         <div class="row mb-4">
+                                            <label for="direccion_Contrato" class="col-sm-4 col-form-label">Dirección de la Obra:</label>
+                                            <div class="col-sm-5">
+                                                <input type="text" class="form-control" id="direccion_Contrato" name="direccion_Contrato" value="<?php echo $row['direccion_Contrato'];?>">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-4">
                                             <label for="estado_Contrato" class="col-sm-4 col-form-label">Estado de la Obra:</label>
                                             <div class="col-sm-5">
                                                 <select name="estado_Contrato" id="estado_Contrato" class="form-select">
@@ -135,6 +142,13 @@ if($query_run){
                                             <label for="valorTotal_Contrato" class="col-sm-4 col-form-label">Valor Total:</label>
                                             <div class="col-sm-5">
                                                 <input type="number" class="form-control text-end" id="valorTotal_Contrato" name="valorTotal_Contrato" value="<?php echo $row['valorTotal_Contrato'];?>">
+                                            </div>
+                                        </div>
+
+                                        <div class="row mb-4">
+                                            <label for="observacion_Contrato" class="col-sm-4 col-form-label">Observaciones:</label>
+                                            <div class="col-sm-5">
+                                                <textarea class="form-control" id="observacion_Contrato" name="observacion_Contrato" rows="5" ><?php echo $row['observacion_Contrato'];?>"</textarea>
                                             </div>
                                         </div>
 

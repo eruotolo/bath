@@ -1,5 +1,6 @@
 <?php
 
+global $link;
 require '../layouts/config.php';
 
 // Obtención del identificador único de la fila a eliminar
