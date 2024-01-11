@@ -27,7 +27,7 @@ if (isset($_POST['crear'])){
     //echo $tipo_query;
     //die();
 
-    $result = mysqli_query($link, $servicio_query) or ($error = mysqli_error($link));
+    //$result = mysqli_query($link, $servicio_query) or ($error = mysqli_error($link));
 
     if ($link->query($servicio_query) === TRUE && $link->query($tipo_query) === TRUE) {
         // REGISTRO EN SERVICIO Y TIPO DE SERVICIO CORRECTO;

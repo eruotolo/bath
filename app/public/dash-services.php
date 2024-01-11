@@ -108,8 +108,8 @@ include 'layouts/session.php'; ?>
                                 <td><?php echo $row['obra_Contrato'] ?></td>
                                 <td style="text-align: center"><?php echo date("d/m/Y", strtotime($row['fecha_Servicio'])); ?></td>
                                 <td style="width: 140px; text-align: center">
-                                    <a href="dash-services-item.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
-                                        <i class="fas fas fa-eye"></i>
+                                    <a href="dash-services-item.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Asignar Baños a Servicios">
+                                        <i class="fas fa-toilet"></i>
                                     </a>
                                     <a href="dash-services-edit.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar">
                                         <i class="fas fa-pencil-alt"></i>

@@ -112,8 +112,8 @@ include 'layouts/session.php'; ?>
                                         <td class="text-center">$ <?php echo $row['valorMensual_Contrato'] ?></td>
                                         <td class="text-center">$ <?php echo $row['valorTotal_Contrato'] ?></td>
                                         <td class="text-center">
-                                            <a href="dash-contracts-item.php?id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
-                                                <i class="fas fas fa-eye"></i>
+                                            <a href="dash-contracts-item.php?id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Agregar Baños Químicos">
+                                                <i class="fas fa-toilet"></i>
                                             </a>
                                             <a href="dash-contracts-edit.php?id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar">
                                                 <i class="fas fa-pencil-alt"></i>
