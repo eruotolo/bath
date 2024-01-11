@@ -81,59 +81,43 @@ include 'layouts/session.php'; ?>
 
                         <thead>
                             <tr>
-                                <th scope="col">Id Servicios</th>
+                                <th scope="col">Número de Servicio</th>
                                 <th scope="col">Nombre Cliente</th>
                                 <th scope="col">Id Contrato</th>
-                                <th scope="col">Código Baño</th>
-                                <th scope="col">Tipo del Servicio</th>
-                                <th scope="col" class="text-center">Estado del Servicio</th>
+                                <th scope="col">Nombre de la Obra</th>
+                                <th scope="col" class="text-center">Fecha Seguimiento</th>
                                 <th style="width:140px; min-width: 140px;" class="text-center">Acción</th>
                             </tr>
                         </thead>
 
                         <tbody>
+
                         <?php
                             $query = "SELECT * FROM servicios SR
-                                            JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
-                                            JOIN bathrooms BT ON SR.id_Bath = BT.id_Bath
-                                            JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
-                                        ORDER BY SR.fecha_Servicio DESC";
+                                JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
+                                JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
+                            WHERE estado_Servicio = 1;";
                             $result_task = mysqli_query($link, $query);
                             while ($row = mysqli_fetch_array($result_task)){
                         ?>
+
                             <tr>
-                                <td><?php echo $row['id_Servicio'] ?></td>
+                                <td><?php echo $row['nro_Servicio'] ?></td>
                                 <td><?php echo $row['nombre_Cliente'] ?></td>
                                 <td><?php echo $row['id_Contrato'] ?></td>
-                                <td><?php echo $row['codigo_Bath'] ?></td>
-                                <td><?php echo $row['tipo_Servicio'] ?></td>
-
-                                <?php
-                                if ($row['estado_Servicio'] == 1){ ?>
-                                    <td class="text-center" style="width: 200px"><div class="badge item-activo">Activo</div></td>
-                                    <?php
-                                }else{
-                                    ?>
-                                    <td class="text-center" style="width: 200px"><div class="badge item-inactivo">Inactivo</div></td>
-                                    <?php
-                                }
-                                ?>
-
-                                <td style="width: 140px">
+                                <td><?php echo $row['obra_Contrato'] ?></td>
+                                <td style="text-align: center"><?php echo date("d/m/Y", strtotime($row['fecha_Servicio'])); ?></td>
+                                <td style="width: 140px; text-align: center">
                                     <a href="dash-services-item.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
                                         <i class="fas fas fa-eye"></i>
                                     </a>
                                     <a href="dash-services-edit.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
-                                    <a href="controller/service-inactive.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Inactivar">
-                                        <i class="fas fa-lock"></i>
-                                    </a>
-                                    <a href="controller/service-active.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Activar">
-                                        <i class="fas fa-lock-open"></i>
+                                    <a href="controller/service-inactive.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
+                                        <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
-
                             </tr>
 
                         <?php

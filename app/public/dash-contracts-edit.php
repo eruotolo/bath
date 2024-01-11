@@ -148,7 +148,7 @@ if($query_run){
                                         <div class="row mb-4">
                                             <label for="observacion_Contrato" class="col-sm-4 col-form-label">Observaciones:</label>
                                             <div class="col-sm-5">
-                                                <textarea class="form-control" id="observacion_Contrato" name="observacion_Contrato" rows="5" ><?php echo $row['observacion_Contrato'];?>"</textarea>
+                                                <textarea class="form-control" id="observacion_Contrato" name="observacion_Contrato" rows="15" ><?php echo $row['observacion_Contrato'];?></textarea>
                                             </div>
                                         </div>
 

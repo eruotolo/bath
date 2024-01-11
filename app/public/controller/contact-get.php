@@ -16,7 +16,8 @@ if (mysqli_num_rows($result ) > 0) {
         'apellido_Contacto' => $row['apellido_Contacto'],
         'rut_Contacto' => $row['rut_Contacto'],
         'telefono_Contacto' => $row['telefono_Contacto'],
-        'direccion_Contacto' => $row['direccion_Contacto']
+        'direccion_Contacto' => $row['direccion_Contacto'],
+        'observacion_Contacto' => $row['observacion_Contacto']
     );
 
     echo json_encode($contactData);

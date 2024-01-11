@@ -44,6 +44,14 @@
                             <input type="text" class="form-control" id="direccion" name="direccion" readonly>
                         </div>
                     </div>
+
+                    <div class="row mb-4">
+                        <label for="observacion" class="col-sm-4 col-form-label">Observaciones:</label>
+                        <div class="col-sm-8">
+                            <textarea id="observacion" name="observacion" rows="10" cols="33" class="form-control" readonly></textarea>
+                        </div>
+                    </div>
+
                 </form>
             </div>
             <div class="modal-footer">

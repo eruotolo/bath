@@ -15,6 +15,7 @@ $(document).on('click', '.view', function () {
             $('#rut').val(contactData.rut_Contacto);
             $('#telefono').val(contactData.telefono_Contacto);
             $('#direccion').val(contactData.direccion_Contacto);
+            $('#observacion').val(contactData.observacion_Contacto);
             // Show the modal
             //$("#myModal").modal("show");
         },

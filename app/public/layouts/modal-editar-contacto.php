@@ -46,6 +46,13 @@
                         </div>
                     </div>
                     <div class="row mb-4">
+                        <label for="observacionC" class="col-sm-4 col-form-label">Observaciones:</label>
+                        <div class="col-sm-8">
+                            <textarea id="observacionC" name="observacionC" rows="10" cols="33" class="form-control"></textarea>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
                         <button class="btn btn-primary w-md btn-registrar" type="submit" name="update">Actualizar</button>
                     </div>
                 </form>

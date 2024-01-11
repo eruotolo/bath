@@ -58,7 +58,7 @@ include 'layouts/session.php'; ?>
 
                                     <div class="row mb-4">
                                         <label for="id_Contrato" class="col-sm-3 col-form-label">Seleccione el Contrato:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-sm-6">
                                             <select name="id_Contrato" id="id_Contrato" class="form-select">
                                                 <?php
                                                     $sql = "SELECT * FROM contratos";
@@ -77,59 +77,81 @@ include 'layouts/session.php'; ?>
                                     </div>
 
                                     <div class="row mb-4">
-                                        <label for="id_Bath" class="col-sm-3 col-form-label">Seleccione Baño:</label>
-                                        <div class="col-sm-5">
-                                            <select name="id_Bath" id="id_Bath" class="form-select">
-                                                <?php
-                                                    $sql = "SELECT * FROM bathrooms";
-                                                    $result = mysqli_query($link, $sql);
-                                                    $bathrooms = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                                                    foreach ($bathrooms as $bath) {
-                                                ?>
-                                                        <option value="<?php echo $bath['id_Bath']; ?>">
-                                                            <?php echo $bath['codigo_Bath']?>
-                                                        </option>
-                                                <?php
-                                                    }
-                                                ?>
-                                            </select>
-                                        </div>
-                                    </div>
+                                        <label for="fecha_Servicio" class="col-sm-3 col-form-label">Tipo de Servicios:</label>
+                                        <div class="col-sm-2">
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" value="1" id="instalacion_Tipo" name="instalacion_Tipo">
+                                                <label class="form-check-label" for="instalacion_Tipo">
+                                                    Instalación
+                                                </label>
+                                            </div>
 
-                                    <div class="row mb-4">
-                                        <label for="tipo_Servicio" class="col-sm-3 col-form-label">Tipo de Servicio:</label>
-                                        <div class="col-sm-5">
-                                            <select name="tipo_Servicio" id="tipo_Servicio" class="form-select">
-                                                <option value="Mantenimiento">Mantenimiento</option>
-                                                <option value="Limpieza">Limpieza</option>
-                                                <option value="Reparación">Reparación</option>
-                                                <option value="Instalación">Instalación</option>
-                                                <option value="Otros">Otros</option>
-                                            </select>
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" value="1" id="reparacion_Tipo" name="reparacion_Tipo">
+                                                <label class="form-check-label" for="reparacion_Tipo">
+                                                    Reparación
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" value="1" id="limpieza_Tipo" name="limpieza_Tipo">
+                                                <label class="form-check-label" for="limpieza_Tipo">
+                                                    Limpieza
+                                                </label>
+                                            </div>
                                         </div>
+
+                                        <div class="col-sm-2">
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" value="1" id="desinfeccion_Tipo" name="desinfeccion_Tipo">
+                                                <label class="form-check-label" for="desinfeccion_Tipo">
+                                                    Desinfeccion
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" value="1" id="sanitizacion_Tipo" name="sanitizacion_Tipo">
+                                                <label class="form-check-label" for="sanitizacion_Tipo">
+                                                    Sanitización
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" value="1" id="higienico_Tipo" name="higienico_Tipo">
+                                                <label class="form-check-label" for="higienico_Tipo">
+                                                    Entrega Papel Higiénico
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-2">
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" value="1" id="jabon_Tipo" name="jabon_Tipo">
+                                                <label class="form-check-label" for="jabon_Tipo">
+                                                    Entrega de Jabón Liquido
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" value="1" id="otros_Tipo" name="otros_Tipo">
+                                                <label class="form-check-label" for="otros_Tipo">
+                                                    Otros
+                                                </label>
+                                            </div>
+                                        </div>
+
                                     </div>
 
                                     <div class="row mb-4">
                                         <label for="fecha_Servicio" class="col-sm-3 col-form-label">Fecha del Servicio:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-sm-6">
                                             <input class="form-control" type="date" id="fecha_Servicio" name="fecha_Servicio" required>
                                         </div>
                                     </div>
 
                                     <div class="row mb-4">
-                                        <label for="estado_Servicio" class="col-sm-3 col-form-label">Estado del Servicio:</label>
-                                        <div class="col-sm-5">
-                                            <select name="estado_Servicio" id="estado_Servicio" class="form-select">
-                                                <option value="">Seleccionar el estado</option>
-                                                <option value="0">Inactivo</option>
-                                                <option value="1">Activo</option>
-                                            </select>
-                                        </div>
-                                    </div>
-
-                                    <div class="row mb-4">
                                         <label for="observaciones_Servicio" class="col-sm-3 col-form-label">Observaciones:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-sm-6">
                                             <textarea class="form-control" id="observaciones_Servicio" name="observaciones_Servicio" rows="5" required></textarea>
                                         </div>
                                     </div>
@@ -141,7 +163,6 @@ include 'layouts/session.php'; ?>
                                             </div>
                                         </div>
                                     </div>
-
                                 </form>
 
                             </div>

@@ -12,6 +12,7 @@ if (isset($_POST['update'])){
     $rut_Contacto = $_POST['rutC'];
     $telefono_Contacto = $_POST['telefonoC'];
     $direccion_Contacto = $_POST['direccionC'];
+    $observacion_Contacto = $_POST['observacionC'];
 
     $query = "UPDATE contactos SET 
                      id_Contacto = '$id_Contacto', 
@@ -20,7 +21,8 @@ if (isset($_POST['update'])){
                      apellido_Contacto = '$apellido_Contacto',
                      rut_Contacto = '$rut_Contacto',
                      telefono_Contacto = '$telefono_Contacto',
-                     direccion_Contacto = '$direccion_Contacto'
+                     direccion_Contacto = '$direccion_Contacto',
+                     observacion_Contacto = '$observacion_Contacto'
                      WHERE id_Contacto = $id_Contacto";
     //echo $query;
     //die();

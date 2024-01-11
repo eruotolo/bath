@@ -5,13 +5,15 @@ include ('../layouts/config.php');
 if(isset($_POST['crear'])) {
     $id_Cliente = $_POST['id_Cliente'];
     $obra_Contrato = $_POST['obra_Contrato'];
+    $direccion_Contrato = $_POST['direccion_Contrato'];
     $estado_Contrato = $_POST['estado_Contrato'];
     $fechaInicio_Contrato = $_POST['fechaInicio_Contrato'];
     $fechaFin_Contrato = $_POST['fechaFin_Contrato'];
     $valorMensual_Contrato = $_POST['valorMensual_Contrato'];
     $valorTotal_Contrato = $_POST['valorTotal_Contrato'];
+    $observacion_Contrato = $_POST['observacion_Contrato'];
 
-    $sql = "INSERT INTO contratos (id_Cliente, obra_Contrato, estado_Contrato, fechaInicio_Contrato, fechaFin_Contrato, valorMensual_Contrato, valorTotal_Contrato) VALUE ('$id_Cliente', '$obra_Contrato', '$estado_Contrato', '$fechaFin_Contrato', '$fechaFin_Contrato', '$valorMensual_Contrato', '$valorTotal_Contrato')";
+    $sql = "INSERT INTO contratos (id_Cliente, obra_Contrato, direccion_Contrato, estado_Contrato, fechaInicio_Contrato, fechaFin_Contrato, valorMensual_Contrato, valorTotal_Contrato, observacion_Contrato) VALUE ('$id_Cliente', '$obra_Contrato', '$direccion_Contrato','$estado_Contrato', '$fechaFin_Contrato', '$fechaFin_Contrato', '$valorMensual_Contrato', '$valorTotal_Contrato', '$observacion_Contrato')";
 
     // echo $sql;
     // die();
