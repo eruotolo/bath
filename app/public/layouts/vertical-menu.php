@@ -147,6 +147,17 @@
                     </ul>
                 </li>
 
+                <li>
+                    <a href="javascript: void(0);" class="has-arrow">
+                        <i class="fas fa-certificate"></i>
+                        <span data-key="t-horizontal">Certificados</span>
+                    </a>
+                    <ul class="sub-menu" aria-expanded="false">
+                        <li><a href="dash-certificates.php">Listado de Certificados</a></li>
+                        <li><a href="dash-certificates-add.php">Nuevo Certificado</a></li>
+                    </ul>
+                </li>
+
                 <li class="menu-title mt-2" data-key="t-components">Autenticación</li>
 
                 <li>
@@ -159,42 +170,6 @@
                         <li><a href="dash-users-add.php" data-key="t-register"><?php echo $language["Register"]; ?></a></li>
                     </ul>
                 </li>
-
-                <!-- BORRAR DESDE ACÁ -->
-                <li class="menu-title mt-2" data-key="t-components"><?php echo $language["Elements"]; ?></li>
-
-
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow">
-                        <i data-feather="file-text"></i>
-                        <span data-key="t-pages"><?php echo $language["Pages"]; ?></span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="pages-starter.php" data-key="t-starter-page"><?php echo $language["Starter_Page"]; ?> </a></li>
-                        <li><a href="pages-maintenance.php" data-key="t-maintenance"><?php echo $language["Maintenance"]; ?></a></li>
-                        <li><a href="pages-comingsoon.php" data-key="t-coming-soon"><?php echo $language["Coming_Soon"]; ?></a></li>
-                        <li><a href="pages-timeline.php" data-key="t-timeline"><?php echo $language["Timeline"]; ?></a></li>
-                        <li><a href="pages-faqs.php" data-key="t-faqs"><?php echo $language["FAQs"]; ?></a></li>
-                        <li><a href="pages-pricing.php" data-key="t-pricing"><?php echo $language["Pricing"]; ?></a></li>
-                        <li><a href="pages-404.php" data-key="t-error-404"><?php echo $language["Error_404"]; ?></a></li>
-                        <li><a href="pages-500.php" data-key="t-error-500"><?php echo $language["Error_500"]; ?></a></li>
-                    </ul>
-                </li>
-
-
-                <li>
-                    <a href="javascript: void(0);" class="has-arrow">
-                        <i data-feather="cpu"></i>
-                        <span data-key="t-icons"><?php echo $language["Icons"]; ?></span>
-                    </a>
-                    <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="icons-boxicons.php" data-key="t-boxicons"><?php echo $language["Boxicons"]; ?></a></li>
-                        <li><a href="icons-materialdesign.php" data-key="t-material-design"><?php echo $language["Material_Design"]; ?></a></li>
-                        <li><a href="icons-dripicons.php" data-key="t-dripicons"><?php echo $language["Dripicons"]; ?></a></li>
-                        <li><a href="icons-fontawesome.php" data-key="t-font-awesome"><?php echo $language["Font_Awesome_5"]; ?></a></li>
-                    </ul>
-                </li>
-
 
             </ul>
 

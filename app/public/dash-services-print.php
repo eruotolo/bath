@@ -70,6 +70,7 @@ if ($query_run) {
                                     <div class="card-body">
 
                                         <div class="invoice-title">
+
                                             <div class="d-flex align-items-start">
                                                 <div class="flex-grow-1">
                                                     <div class="mb-4">
@@ -78,8 +79,7 @@ if ($query_run) {
                                                 </div>
                                                 <div class="flex-shrink-0">
                                                     <div class="pt-5">
-                                                        <h4 class="font-size-16">Servicio N.º: <?php echo $row['nro_Servicio']; ?></h4>
-                                                        <p class="mb-1 pt-2">Blanco 60 Local 1 - Castro - Chiloé</p>
+                                                        <h4 class="font-size-16">Servicios Blanco</h4>
                                                         <p class="mb-1">
                                                             <i class="mdi mdi-email align-middle me-1"></i> jsanchez@expanda.cl
                                                         </p>
@@ -89,6 +89,11 @@ if ($query_run) {
                                                     </div>
                                                 </div>
                                             </div>
+
+                                            <div class="d-flex titulo-comprobante justify-content-center">
+                                                <h4>Comprobante de Ejecución N°: <?php echo $row['nro_Servicio']; ?></h4>
+                                            </div>
+
                                         </div>
 
                                         <hr class="my-4">
@@ -188,18 +193,13 @@ if ($query_run) {
                                             <p><?php echo $row['observaciones_Servicio']; ?></p>
                                         </div>
                                         
-                                        <div class="row my-3">
-                                            <div class="col-6 firma">
-                                                <img src="assets/images/firma.jpeg" alt="">
-                                            </div>
-                                            <div class="col-6 firma-cliente">
-                                                <hr>
-                                                <p class="mb-1">Responsable empresa</p>
-                                                <p>RUT:</p>
+                                        <div class="row my-3 sub-pie">
+                                            <div class="d-flex justify-content-center firma">
+                                                <img src="assets/images/firma_01.png" alt="firma">
                                             </div>
                                         </div>
 
-                                        <hr class="my-4">
+                                        <hr class="my-2">
 
                                         <div class="row">
                                             <div class="col-6 pie">
