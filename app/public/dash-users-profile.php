@@ -80,19 +80,14 @@
                                         </div>
                                     </div>
                                     <div class="col-sm-auto order-1 order-sm-2">
-                                        <div class="d-flex align-items-start justify-content-end gap-2">
-                                            <div>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-link font-size-16 shadow-none text-muted dropdown-toggle"
-                                                            type="button" data-bs-toggle="dropdown"
-                                                            aria-expanded="false">
-                                                        <i class="bx bx-dots-horizontal-rounded"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="#">Nuevo Password</a></li>
-                                                    </ul>
-                                                </div>
-                                            </div>
+                                        <div class="d-flex justify-content-end gap-2">
+                                            <a href="javascript:void(0)"
+                                               class="btn btn-light float-end editarCliente mt-3"
+                                               data-bs-toggle="modal"
+                                               data-bs-target="#nuevoPassword"
+                                               title="Nuevo Password">Cambiar el Password</a>
+
+                                            <?php include 'layouts/modal-new-password.php'; ?>
                                         </div>
                                     </div>
                                 </div>

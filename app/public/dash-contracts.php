@@ -87,7 +87,7 @@ include 'layouts/session.php'; ?>
                                 </thead>
                                 <tbody>
                                     <?php
-                                        $query = "SELECT * FROM contratos CO JOIN clientes CL on CO.id_Cliente = CL.id_Cliente WHERE estado_Contrato IN (1, 2)  ORDER BY fechaInicio_Contrato DESC";
+                                        $query = "SELECT * FROM contratos CO JOIN clientes CL on CO.id_Cliente = CL.id_Cliente WHERE estado_Contrato IN (1, 2)  ORDER BY id_Contrato";
                                         $result_task = mysqli_query($link, $query);
                                         while ($row = mysqli_fetch_array($result_task)){
                                     ?>

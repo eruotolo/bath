@@ -10,7 +10,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 // Include config file
 require_once "layouts/config.php";
 
-// Define variables and initialize with empty values
+// Define variables and initialize with empty valuesservicios
 $useremail = $username = $password = $image = $name = $lastname = $category = "";
 $username_err = $password_err = "";
 

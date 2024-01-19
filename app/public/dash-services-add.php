@@ -105,7 +105,7 @@ include 'layouts/session.php'; ?>
                                             <div class="form-check mt-2">
                                                 <input class="form-check-input" type="checkbox" value="1" id="desinfeccion_Tipo" name="desinfeccion_Tipo">
                                                 <label class="form-check-label" for="desinfeccion_Tipo">
-                                                    Desinfeccion
+                                                    Desinfección
                                                 </label>
                                             </div>
 

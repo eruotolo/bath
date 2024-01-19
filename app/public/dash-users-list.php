@@ -61,7 +61,7 @@ include 'layouts/session.php'; ?>
                     <div class="col-md-12">
                         <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
                             <div>
-                                <a href="dash-contacts-add.php" class="btn btn-light"><i class="bx bx-plus me-1"></i> Agregar Nuevo Usuario</a>
+                                <a href="dash-users-add.php" class="btn btn-light"><i class="bx bx-plus me-1"></i> Agregar Nuevo Usuario</a>
                             </div>
                         </div>
 
@@ -109,7 +109,8 @@ include 'layouts/session.php'; ?>
                             </td>
                             <td><?php echo $row['name'];?> <?php echo $row['lastname'];?></td>
                             <td><?php echo $row['useremail'];?></td>
-                            <td><?php echo $row['name_category'];?></td></td>
+                            <td><?php echo $row['name_category'];?></td>
+
                             <td>
                                 <div class="dropdown">
                                     <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
@@ -117,12 +118,28 @@ include 'layouts/session.php'; ?>
                                         <i class="bx bx-dots-horizontal-rounded"></i>
                                     </button>
                                     <ul class="dropdown-menu dropdown-menu-end">
-                                        <li><a class="dropdown-item" href="#">Editar</a></li>
-                                        <li><a class="dropdown-item" href="#">Password Default</a></li>
-                                        <li><a class="dropdown-item" href="#">Eliminar</a></li>
+
+                                        <?php
+                                        if ($_SESSION['category'] == 1 ){
+                                            ?>
+                                            <li><a class="dropdown-item" href="dash-users-edit.php?id_User=<?php echo $row['id'] ?>">Editar</a></li>
+                                            <li><a class="dropdown-item" href="controller/user-inactive.php?id_User=<?php echo $row['id'] ?>">Inactivar</a></li>
+                                            <li><a class="dropdown-item" href="controller/user-default-pass.php?id_User=<?php echo $row['id'] ?>">Password Default</a></li>
+                                            <li><a class="dropdown-item cat-admin" href="controller/user-setadmin.php?id_User=<?php echo $row['id'] ?>&category=<?php echo $row['id_category'] ?>" style="color: #5156be">Set Admin/User</a></li>
+                                            <?php
+                                        }else{
+                                            ?>
+                                            <li><a class="dropdown-item disabled" href="">Editar</a></li>
+                                            <li><a class="dropdown-item disabled" href="">Inactivar</a></li>
+                                            <li><a class="dropdown-item disabled" href="">Reset Password</a></li>
+                                        <?php
+                                            }
+                                        ?>
+
                                     </ul>
                                 </div>
                             </td>
+
                         </tr>
                         <?php
                             }

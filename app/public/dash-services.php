@@ -49,7 +49,7 @@ include 'layouts/session.php'; ?>
                     <div class="col-md-6">
                         <div class="mb-3">
                             <?php
-                                $query = "SELECT COUNT(*) AS total FROM servicios";
+                                $query = "SELECT COUNT(*) AS total FROM servicios WHERE estado_Servicio = 1";
                                 $result_task1 = mysqli_query($link, $query);
                             while ($row = mysqli_fetch_Array($result_task1)) {
                                 ?>
@@ -96,7 +96,7 @@ include 'layouts/session.php'; ?>
                             $query = "SELECT * FROM servicios SR
                                 JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
                                 JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
-                            WHERE estado_Servicio = 1;";
+                            WHERE estado_Servicio = 1 ORDER BY fecha_Servicio DESC;";
                             $result_task = mysqli_query($link, $query);
                             while ($row = mysqli_fetch_array($result_task)){
                         ?>
@@ -108,12 +108,13 @@ include 'layouts/session.php'; ?>
                                 <td><?php echo $row['obra_Contrato'] ?></td>
                                 <td style="text-align: center"><?php echo date("d/m/Y", strtotime($row['fecha_Servicio'])); ?></td>
                                 <td style="width: 140px; text-align: center">
-                                    <a href="dash-services-item.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Asignar Baños a Servicios">
+                                    <a href="dash-services-bath.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Asignar Baños a Servicios">
                                         <i class="fas fa-toilet"></i>
                                     </a>
-                                    <a href="dash-services-edit.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar">
-                                        <i class="fas fa-pencil-alt"></i>
+                                    <a href="dash-services-print.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir">
+                                        <i class="fa fa-print"></i>
                                     </a>
+
                                     <a href="controller/service-inactive.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
@@ -166,6 +167,7 @@ include 'layouts/session.php'; ?>
 <script src="assets/js/pages/datatables.init.js"></script>
 
 <script src="assets/js/app.js"></script>
+
 
 </body>
 

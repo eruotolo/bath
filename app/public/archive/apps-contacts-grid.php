@@ -56,7 +56,7 @@
                             <div>
                                 <ul class="nav nav-pills">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="../apps-contacts-list.php" data-bs-toggle="tooltip"
+                                        <a class="nav-link" href="apps-contacts-list.php" data-bs-toggle="tooltip"
                                            data-bs-placement="top" title="List"><i class="bx bx-list-ul"></i></a>
                                     </li>
                                     <li class="nav-item">
