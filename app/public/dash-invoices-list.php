@@ -1,5 +1,7 @@
-<?php include 'layouts/session.php'; ?>
+<?php global $link;
+include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
+<?php include('layouts/config.php'); ?>
 
 <head>
 
@@ -95,16 +97,20 @@
                                                 </div>
                                             </th>
                                             <th style="width: 120px;">Nro. Factura</th>
-                                            <th>Fecha Factura</th>
+                                            <th style="text-align: center">Fecha Factura</th>
                                             <th>Cliente</th>
-                                            <th>Monto Factura</th>
-                                            <th>Estado</th>
-                                            <th style="width: 150px;">Otros</th>
-                                            <th style="width: 90px;">Acciones</th>
+                                            <th style="text-align: center">Monto Factura</th>
+                                            <th style="text-align: center">Estado</th>
+                                            <th style="width: 150px; text-align: center">Otros</th>
+                                            <th style="width: 90px;" >Acciones</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-
+                                        <?php
+                                            $query = "SELECT * FROM facturas FT JOIN clientes CL ON FT.id_Cliente = CL.id_Cliente order by fecha_Factura";
+                                            $result_task = mysqli_query($link, $query);
+                                            while ($row = mysqli_fetch_array($result_task)){
+                                        ?>
                                         <tr>
                                             <td>
                                                 <div class="form-check font-size-16">
@@ -113,26 +119,29 @@
                                                 </div>
                                             </td>
 
-                                            <td><a href="javascript: void(0);" class="text-body fw-medium">#MN0215</a>
-                                            </td>
-                                            <td>
-                                                12 Oct, 2020
-                                            </td>
-                                            <td>Connie Franco</td>
+                                            <td>#<?php echo $row['numero_Factura'] ?></td>
+                                            <td style="text-align: center"><?php echo date("d/m/Y", strtotime($row['fecha_Factura'])); ?></td>
+                                            <td><?php echo $row['nombre_Cliente'] ?></td>
+                                            <td style="text-align: center"><?php echo $row['valor_Factura'] ?></td>
+                                            <td style="text-align: center">
+                                                <?php
+                                                    if ($row['estado_Factura'] == 1){
+                                                ?>
+                                                     <div class="badge badge-soft-warning font-size-12">Pendiente</div>
+                                                <?php }elseif ($row['estado_Factura'] == 2){ ?>
+                                                     <div class="badge bg-success font-size-12">Pagado</div>
+                                                <?php }else{ ?>
+                                                     <div class="badge bg-secondary font-size-12">Anulado</div>
+                                                <?php } ?>
 
-                                            <td>
-                                                $26.30
                                             </td>
-                                            <td>
-                                                <div class="badge badge-soft-success font-size-12">Pagado</div>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <button type="button"
-                                                            class="btn btn-soft-light btn-sm w-xs waves-effect btn-label waves-light">
-                                                        <i class="bx bx-download label-icon"></i> Pdf
-                                                    </button>
-                                                </div>
+                                            <td style="text-align: center">
+                                                <a href="dash-invoices-print.php?id_Factura=<?php echo $row['id_Factura'] ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir">
+                                                    <i class="fa fa-print"></i>
+                                                </a>
+                                                <a href="dash-invoices-detail.php?id_Factura=<?php echo $row['id_Factura'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </a>
                                             </td>
 
                                             <td>
@@ -143,57 +152,14 @@
                                                         <i class="bx bx-dots-horizontal-rounded"></i>
                                                     </button>
                                                     <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                        <li><a class="dropdown-item" href="#">Print</a></li>
-                                                        <li><a class="dropdown-item" href="#">Delete</a></li>
+                                                        <li><a class="dropdown-item" href="controller/invoice-estado.php?id_Factura=<?php echo $row['id_Factura'] ?>&estado_Factura=1">Pendiente</a></li>
+                                                        <li><a class="dropdown-item" href="controller/invoice-estado.php?id_Factura=<?php echo $row['id_Factura'] ?>&estado_Factura=2">Pagado</a></li>
+                                                        <li><a class="dropdown-item" href="controller/invoice-estado.php?id_Factura=<?php echo $row['id_Factura'] ?>&estado_Factura=3">Anulado</a></li>
                                                     </ul>
                                                 </div>
                                             </td>
                                         </tr>
-                                        <tr>
-                                            <td>
-                                                <div class="form-check font-size-16">
-                                                    <input type="checkbox" class="form-check-input">
-                                                    <label class="form-check-label"></label>
-                                                </div>
-                                            </td>
-
-                                            <td><a href="javascript: void(0);" class="text-body fw-medium">#MN0213</a>
-                                            </td>
-                                            <td>
-                                                10 Oct, 2020
-                                            </td>
-                                            <td>Ronald Patterson</td>
-
-                                            <td>
-                                                $20.20
-                                            </td>
-                                            <td>
-                                                <div class="badge badge-soft-warning font-size-12">Pending</div>
-                                            </td>
-                                            <td>
-                                                <div>
-                                                    <button type="button"
-                                                            class="btn btn-soft-light btn-sm w-xs waves-effect btn-label waves-light">
-                                                        <i class="bx bx-download label-icon"></i> Pdf
-                                                    </button>
-                                                </div>
-                                            </td>
-                                            <td>
-                                                <div class="dropdown">
-                                                    <button class="btn btn-link font-size-16 shadow-none py-0 text-muted dropdown-toggle"
-                                                            type="button" data-bs-toggle="dropdown"
-                                                            aria-expanded="false">
-                                                        <i class="bx bx-dots-horizontal-rounded"></i>
-                                                    </button>
-                                                    <ul class="dropdown-menu dropdown-menu-end">
-                                                        <li><a class="dropdown-item" href="#">Edit</a></li>
-                                                        <li><a class="dropdown-item" href="#">Print</a></li>
-                                                        <li><a class="dropdown-item" href="#">Delete</a></li>
-                                                    </ul>
-                                                </div>
-                                            </td>
-                                        </tr>
+                                        <?php } ?>
 
                                         </tbody>
                                     </table>

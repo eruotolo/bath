@@ -131,3 +131,20 @@ body {
 .firma-blanco > img{
     height: 130px;
 }
+.info-empresa{
+    margin-left: 50px;
+}
+.info-nrofactura{
+    margin-right: 50px;
+}
+.info-nrofactura > div > h4{
+    font-size: 22px !important;
+    font-weight: bold;
+}
+.info-factura{
+    padding-right: 45px;
+    padding-left: 50px;
+}
+
+
+

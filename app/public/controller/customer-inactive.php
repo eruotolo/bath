@@ -1,6 +1,7 @@
 <?php
 
 require '../layouts/config.php';
+global $link;
 
 $id_Cliente = $_GET['id_Cliente'];
 $estado_Cliente = 0;

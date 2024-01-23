@@ -1,17 +1,29 @@
 <?php
 
 require '../layouts/config.php';
+global $link;
 
-$id_Contrato = $_GET['id_Contrato'];
-$estado_Contrato = 1;
+    $id_Contrato = $_GET['id_Contrato'];
+    $estado_Contrato = 1;
 
-$sql = "UPDATE contratos SET estado_Contrato = '$estado_Contrato' WHERE id_Contrato = '$id_Contrato'";
+// Actualizar el estado del contrato en la tabla "contratos"
+$sqlContrato = "UPDATE contratos SET estado_Contrato = '$estado_Contrato' WHERE id_Contrato = '$id_Contrato'";
 
- //echo $sql;
- //die();
+if ($link->query($sqlContrato) === TRUE) {
+    // Obtener los baños asignados a este contrato
+    $sqlBathrooms = "SELECT id_Bath FROM contrato_bathroom WHERE id_Contrato = '$id_Contrato'";
+    $resultBathrooms = $link->query($sqlBathrooms);
 
-if ($link->query($sql) === TRUE) {
-    //echo "Registro eliminado correctamente.";
+    if ($resultBathrooms->num_rows > 0) {
+        // Recorrer los baños y actualizar asignado_Bath a 0
+        while ($row = $resultBathrooms->fetch_assoc()) {
+            $id_Bath = $row['id_Bath'];
+            $sqlUpdateBath = "UPDATE bathrooms SET asignado_Bath = 0 WHERE id_Bath = '$id_Bath'";
+            $link->query($sqlUpdateBath);
+        }
+    }
+
+    // Redirigir a la página después de la actualización
     header("Location: ../dash-contracts.php");
 } else {
     header("Location: ../dash-contracts.php");
