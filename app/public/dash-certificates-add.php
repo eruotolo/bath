@@ -60,8 +60,9 @@ include 'layouts/session.php'; ?>
 
                                     <div class="row mb-4">
                                         <label for="id_Cliente" class="col-sm-3 col-form-label">Seleccionar el Cliente:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-sm-6">
                                             <select name="id_Cliente" id="id_Cliente" class="form-select">
+                                                <option value="" selected>Seleccionar el cliente</option>
                                                 <?php
                                                 $sql = "SELECT * FROM clientes";
                                                 $result = mysqli_query($link, $sql);
@@ -77,27 +78,19 @@ include 'layouts/session.php'; ?>
                                         </div>
                                     </div>
 
+                                    <!-- Segundo select para contratos (inicialmente vacío) -->
                                     <div class="row mb-4">
-                                        <label for="id_Contrato" class="col-sm-3 col-form-label">Seleccionar la obra:</label>
-                                        <div class="col-sm-5">
+                                        <label for="id_Contrato" class="col-sm-3 col-form-label">Seleccione el Contrato:</label>
+                                        <div class="col-sm-6">
                                             <select name="id_Contrato" id="id_Contrato" class="form-select">
-                                                <?php
-                                                    $sql = "SELECT * FROM contratos";
-                                                    $result = mysqli_query($link, $sql);
-                                                    $contratos = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                                                    foreach ($contratos as $contrato) {
-                                                ?>
-                                                        <option value="<?php echo $contrato['id_Contrato']; ?>">
-                                                            <?php echo $contrato['obra_Contrato']?>
-                                                        </option>
-                                                <?php } ?>
+                                                <!-- Opciones se cargarán dinámicamente con JavaScript -->
                                             </select>
                                         </div>
                                     </div>
 
                                     <div class="row mb-4">
                                         <label for="fecha_Servicio" class="col-sm-3 col-form-label">Fecha Servicio:</label>
-                                        <div class="col-sm-5">
+                                        <div class="col-sm-6">
                                             <input class="form-control" type="text" id="fecha_Servicio" name="fecha_Servicio" placeholder="Ingrese las Fecha del Servicio Campo Libre" required>
                                         </div>
                                     </div>
@@ -135,6 +128,24 @@ include 'layouts/session.php'; ?>
 <?php include 'layouts/vendor-scripts.php'; ?>
 
 <script src="assets/js/app.js"></script>
+
+<<script>
+	$(document).ready(function () {
+		$('#id_Cliente').change(function () {
+			var idCliente = $(this).val();
+			// Realizar una solicitud AJAX para obtener contratos basados en el idCliente
+			$.ajax({
+				url: 'controller/obtener_contratos.php', // Reemplaza con la ruta correcta de tu archivo PHP
+				type: 'POST',
+				data: {idCliente: idCliente},
+				success: function (response) {
+					// Actualizar las opciones del segundo select
+					$('#id_Contrato').html(response);
+				}
+			});
+		});
+	});
+</script>
 
 </body>
 

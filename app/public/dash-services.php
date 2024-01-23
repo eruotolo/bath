@@ -102,7 +102,7 @@ include 'layouts/session.php'; ?>
                         ?>
 
                             <tr>
-                                <td><?php echo $row['nro_Servicio'] ?></td>
+                                <td>#<?php echo $row['nro_Servicio'] ?></td>
                                 <td><?php echo $row['nombre_Cliente'] ?></td>
                                 <td><?php echo $row['id_Contrato'] ?></td>
                                 <td><?php echo $row['obra_Contrato'] ?></td>

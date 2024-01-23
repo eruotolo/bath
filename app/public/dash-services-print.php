@@ -79,7 +79,7 @@ if ($query_run) {
                                                 </div>
                                                 <div class="flex-shrink-0">
                                                     <div class="pt-5">
-                                                        <h4 class="font-size-16">Servicios Blanco</h4>
+                                                        <h4 class="font-size-18" style="font-weight: bold">Servicios Blanco</h4>
                                                         <p class="mb-1">
                                                             <i class="mdi mdi-email align-middle me-1"></i> jsanchez@expanda.cl
                                                         </p>
@@ -90,7 +90,7 @@ if ($query_run) {
                                                 </div>
                                             </div>
 
-                                            <div class="d-flex titulo-comprobante justify-content-center">
+                                            <div class="d-flex titulo-comprobante justify-content-center titulo-certificado">
                                                 <h4>Comprobante de Ejecución N°: <?php echo $row['nro_Servicio']; ?></h4>
                                             </div>
 
@@ -102,7 +102,7 @@ if ($query_run) {
 
                                         <div class="row">
                                             <div class="col-sm-6">
-                                                <h5 class="font-size-15 mb-3"><b>Cliente:</b></h5>
+                                                <h5 class="font-size-14 mb-3"><b>Cliente:</b></h5>
                                                 <h5 class="font-size-14 mb-2"><?php echo $row['nombre_Cliente']; ?></h5>
                                                 <p class="mb-1"><?php echo $row['direccion_Cliente']; ?></p>
                                                 <p class="mb-1"><?php echo $row['email_Cliente']; ?></p>

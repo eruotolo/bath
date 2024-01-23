@@ -57,21 +57,31 @@ include 'layouts/session.php'; ?>
                                 <form class="needs-validation mt-4 pt-2" method="post" action="controller/service-new.php">
 
                                     <div class="row mb-4">
+                                        <label for="id_Cliente" class="col-sm-3 col-form-label">Seleccione el Cliente:</label>
+                                        <div class="col-sm-6">
+                                            <select name="id_Cliente" id="id_Cliente" class="form-select">
+                                                <option value="">Seleccionar el Cliente</option>
+                                                <?php
+                                                $sql = "SELECT * FROM clientes";
+                                                $result = mysqli_query($link, $sql);
+                                                $clientes = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                                                foreach ($clientes as $cliente) { ?>
+                                                    <option value="<?php echo $cliente['id_Cliente']; ?>" >
+                                                        <?php echo $cliente['nombre_Cliente']?>
+                                                    </option>
+                                                    <?php
+                                                }
+                                                ?>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <!-- Segundo select para contratos (inicialmente vacío) -->
+                                    <div class="row mb-4">
                                         <label for="id_Contrato" class="col-sm-3 col-form-label">Seleccione el Contrato:</label>
                                         <div class="col-sm-6">
                                             <select name="id_Contrato" id="id_Contrato" class="form-select">
-                                                <?php
-                                                    $sql = "SELECT * FROM contratos";
-                                                    $result = mysqli_query($link, $sql);
-                                                    $contratos = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                                                    foreach ($contratos as $contrato) {
-                                                ?>
-                                                        <option value="<?php echo $contrato['id_Contrato']; ?>">
-                                                            <?php echo $contrato['obra_Contrato']?>
-                                                        </option>
-                                                <?php
-                                                    }
-                                                ?>
+                                                <!-- Opciones se cargarán dinámicamente con JavaScript -->
                                             </select>
                                         </div>
                                     </div>
@@ -188,6 +198,24 @@ include 'layouts/session.php'; ?>
 <?php include 'layouts/vendor-scripts.php'; ?>
 
 <script src="assets/js/app.js"></script>
+
+<<script>
+	$(document).ready(function () {
+		$('#id_Cliente').change(function () {
+			var idCliente = $(this).val();
+			// Realizar una solicitud AJAX para obtener contratos basados en el idCliente
+			$.ajax({
+				url: 'controller/obtener_contratos.php', // Reemplaza con la ruta correcta de tu archivo PHP
+				type: 'POST',
+				data: {idCliente: idCliente},
+				success: function (response) {
+					// Actualizar las opciones del segundo select
+					$('#id_Contrato').html(response);
+				}
+			});
+		});
+	});
+</script>
 
 </body>
 

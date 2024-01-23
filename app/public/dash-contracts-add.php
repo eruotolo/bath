@@ -61,6 +61,7 @@ include 'layouts/session.php'; ?>
                                         <label for="id_Cliente" class="col-sm-3 col-form-label">Seleccionar el Cliente:</label>
                                         <div class="col-sm-5">
                                             <select name="id_Cliente" id="id_Cliente" class="form-select">
+                                                <option value="" selected>Seleccionar un Cliente</option>
                                                 <?php
                                                     $sql = "SELECT * FROM clientes";
                                                     $result = mysqli_query($link, $sql);

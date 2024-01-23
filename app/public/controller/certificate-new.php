@@ -6,11 +6,10 @@ include ('../layouts/config.php');
 if (isset($_POST['crear'])){
     $id_Cliente = $_POST['id_Cliente'];
     $id_Contrato = $_POST['id_Contrato'];
-    $fechahoy_Certificado = date('Y-m-d');
     $fecha_Servicio = $_POST['fecha_Servicio'];
 
     // Obtener el último número correlativo de la base de datos
-    $query = "SELECT MAX(SUBSTRING(nro_Certificado, 9)) AS ultimo_correlativo FROM Certificados";
+    $query = "SELECT MAX(nro_Certificado) AS ultimo_correlativo FROM Certificados WHERE fechahoy_Certificado = DATE(NOW())";
     $result = mysqli_query($link, $query);
 
     if ($result) {
@@ -18,13 +17,13 @@ if (isset($_POST['crear'])){
         $ultimoCorrelativo = $row['ultimo_correlativo'];
 
         // Incrementar el número correlativo
-        $nuevoCorrelativo = $ultimoCorrelativo + 1;
+        $nuevoCorrelativo =  1 + intval($ultimoCorrelativo);
 
-        // Generar el número de certificado
-        $nro_Certificado = date('dmY') . 'A' . $nuevoCorrelativo;
+        // Convertir el nuevo correlativo a un string
+        $nuevoCorrelativoStr = (string) $nuevoCorrelativo;
 
         // Insertar en la tabla Certificados
-        $insertQuery = "INSERT INTO Certificados (nro_Certificado, id_Cliente, id_Contrato, fechahoy_Certificado, fecha_Servicio) VALUES ('$nro_Certificado', $id_Cliente, $id_Contrato, '$fechahoy_Certificado', '$fecha_Servicio')";
+        $insertQuery = "INSERT INTO Certificados (nro_Certificado, id_Cliente, id_Contrato, fechahoy_Certificado, fecha_Servicio) VALUES ($nuevoCorrelativo, $id_Cliente, $id_Contrato, NOW(), '$fecha_Servicio')";
 
         //echo $insertQuery;
         //die();
@@ -39,3 +38,6 @@ if (isset($_POST['crear'])){
         echo "Error al obtener el número correlativo";
     }
 }
+
+
+

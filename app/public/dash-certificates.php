@@ -89,9 +89,13 @@ include 'layouts/session.php'; ?>
                                             ORDER BY nro_Certificado";
                                             $result_task = mysqli_query($link, $query);
                                             while ($row = mysqli_fetch_array($result_task)){
+                                                //$certificado = $row['fechahoy_Certificado'];
+                                                // Generar el número de certificado
+                                                $fechaHoy = date("dmY", strtotime($row['fechahoy_Certificado']));
+                                                $certificado = $fechaHoy . 'A' . $row['nro_Certificado'];
                                         ?>
                                         <tr>
-                                            <td><?php echo $row['nro_Certificado'] ?></td>
+                                            <td>#<?php echo $certificado ?></td>
                                             <td><?php echo $row['nombre_Cliente'] ?></td>
                                             <td><?php echo $row['rut_Cliente'] ?></td>
                                             <td><?php echo $row['obra_Contrato'] ?></td>

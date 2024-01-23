@@ -97,3 +97,37 @@ body {
     text-align: center;
     font-size: 12px;
 }
+.logo-zl{
+    margin-left: 50px;
+}
+.logo-rc{
+    margin-right: 50px;
+}
+.titulo-certificado > h4{
+    font-size: 26px;
+    line-height: 36px;
+    text-transform: uppercase;
+    font-weight: bold;
+    margin-top: 30px;
+}
+.contenido-certificado{
+    margin-top: 50px;
+    padding-left: 30px;
+    padding-right: 30px;
+}
+.datos-certificados{
+    margin-top: 30px;
+    margin-bottom: 30px;
+}
+.datos-certificados > p{
+    font-size: 14px;
+    line-height: 20px;
+    margin-bottom: 5px;
+}
+.firma-blanco{
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+.firma-blanco > img{
+    height: 130px;
+}
