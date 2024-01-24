@@ -186,9 +186,9 @@
 <?php include 'layouts/vendor-scripts.php'; ?>
 
 <!-- materialdesign icon js-->
-<script src="assets/js/pages/materialdesign.init.js"></script>
+<script src="../assets/js/pages/materialdesign.init.js"></script>
 
-<script src="assets/js/app.js"></script>
+<script src="../assets/js/app.js"></script>
 
 </body>
 

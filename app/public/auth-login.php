@@ -131,7 +131,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <div class="mb-3 <?php echo (!empty($username_err)) ? 'has-error' : ''; ?>">
                                         <label class="form-label" for="username">Usuario</label>
                                         <input type="text" class="form-control" id="username"
-                                               placeholder="Enter username" name="username" value="eruotolo">
+                                               placeholder="Enter username" name="username" value="">
                                         <span class="text-danger"><?php echo $username_err; ?></span>
                                     </div>
                                     <div class="mb-3 <?php echo (!empty($password_err)) ? 'has-error' : ''; ?>">
@@ -141,15 +141,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             </div>
                                             <div class="flex-shrink-0">
                                                 <div class="">
-                                                    <a href="auth-recoverpw.php"
-                                                       class="text-muted">¿Olvidaste tu contraseña?</a>
+                                                    <!--<a href="auth-recoverpw.php"
+                                                       class="text-muted">¿Olvidaste tu contraseña?</a>-->
                                                 </div>
                                             </div>
                                         </div>
                                         
                                         <div class="input-group auth-pass-inputgroup">
                                             <input type="password" class="form-control" placeholder="Enter password"
-                                                   name="password" value="123456" aria-label="Password"
+                                                   name="password" value="" aria-label="Password"
                                                    aria-describedby="password-addon">
                                             <span class="text-danger"><?php echo $password_err; ?></span>
                                             <button class="btn btn-light ms-0" type="button" id="password-addon"><i
@@ -166,9 +166,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <!-- FIN DEL FORMULARIO -->
                                 
                                 <div class="mt-5 text-center">
-                                    <p class="mb-0 text-muted">¿No tienes una cuenta? <a href="auth-register.php"
+                                    <!--<p class="mb-0 text-muted">¿No tienes una cuenta? <a href="auth-register.php"
                                                                                          class="text-primary fw-semibold">Regístrate ahora </a>
-                                    </p>
+                                    </p>-->
                                 </div>
                             </div>
                             <div class="mt-4 text-center mt-md-5">

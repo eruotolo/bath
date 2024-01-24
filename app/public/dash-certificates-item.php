@@ -12,7 +12,7 @@ $id_Certificado = $_GET['id_Certificado'];
 $query = "SELECT * FROM certificados CR
     JOIN clientes CL ON CR.id_Cliente = CL.id_Cliente
     JOIN contratos CT ON CL.id_Cliente = CT.id_Cliente
-WHERE id_Certificado = 1";
+WHERE id_Certificado = $id_Certificado";
 
 $query_run = mysqli_query($link, $query);
 
@@ -94,7 +94,7 @@ if ($query_run) {
                                             <p><b>Cliente</b>: <?php echo $row['nombre_Cliente']; ?></p>
                                             <p><b>Rut</b>: <?php echo $row['rut_Cliente']; ?></p>
                                             <p><b>Fecha del Servicio</b>: <?php echo $row['fecha_Servicio']; ?></p>
-                                            <p><b>Cantidad M3</b>: Ms3</p>
+                                            <p><b>Cantidad metros cúbicos</b>: 3 Mts</p>
                                             <p><b>Sector de Origen</b>: <?php echo $row['obra_Contrato']; ?></p>
                                         </div>
                                         <div class="col-12">

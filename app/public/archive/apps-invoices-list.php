@@ -8,13 +8,13 @@
     <?php include 'layouts/head.php'; ?>
 
     <!-- flatpickr css -->
-    <link href="assets/libs/flatpickr/flatpickr.min.css" rel="stylesheet" type="text/css">
+    <link href="../assets/libs/flatpickr/flatpickr.min.css" rel="stylesheet" type="text/css">
 
     <!-- DataTables -->
-    <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
+    <link href="../assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 
     <!-- Responsive datatable examples -->
-    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
+    <link href="../assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
           type="text/css"/>
 
     <?php include 'layouts/head-style.php'; ?>
@@ -679,19 +679,19 @@
 <?php include 'layouts/vendor-scripts.php'; ?>
 
 <!-- flatpickr js -->
-<script src="assets/libs/flatpickr/flatpickr.min.js"></script>
+<script src="../assets/libs/flatpickr/flatpickr.min.js"></script>
 
 <!-- Required datatable js -->
-<script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="../assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="../assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
 
 <!-- Responsive examples -->
-<script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
-<script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
+<script src="../assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
+<script src="../assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
 <!-- init js -->
-<script src="assets/js/pages/invoices-list.init.js"></script>
+<script src="../assets/js/pages/invoices-list.init.js"></script>
 
-<script src="assets/js/app.js"></script>
+<script src="../assets/js/app.js"></script>
 </body>
 </html>

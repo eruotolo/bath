@@ -83,8 +83,8 @@ include 'layouts/session.php'; ?>
                             <tr>
                                 <th scope="col">Número de Servicio</th>
                                 <th scope="col">Nombre Cliente</th>
-                                <th scope="col">Id Contrato</th>
                                 <th scope="col">Nombre de la Obra</th>
+                                <th scope="col">Factura</th>
                                 <th scope="col" class="text-center">Fecha Seguimiento</th>
                                 <th style="width:140px; min-width: 140px;" class="text-center">Acción</th>
                             </tr>
@@ -93,10 +93,13 @@ include 'layouts/session.php'; ?>
                         <tbody>
 
                         <?php
-                            $query = "SELECT * FROM servicios SR
-                                JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
-                                JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
-                            WHERE estado_Servicio = 1 ORDER BY fecha_Servicio DESC;";
+                            $query = "SELECT SR.*, CT.*, CL.*, FT.* -- Selecciona todas las columnas
+                                        FROM servicios SR
+                                                 JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
+                                                 JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
+                                                 LEFT JOIN facturas FT ON CT.id_Contrato = FT.id_Contrato
+                                        WHERE estado_Servicio = 1
+                                        GROUP BY SR.id_Servicio;";
                             $result_task = mysqli_query($link, $query);
                             while ($row = mysqli_fetch_array($result_task)){
                         ?>
@@ -104,8 +107,19 @@ include 'layouts/session.php'; ?>
                             <tr>
                                 <td>#<?php echo $row['nro_Servicio'] ?></td>
                                 <td><?php echo $row['nombre_Cliente'] ?></td>
-                                <td><?php echo $row['id_Contrato'] ?></td>
                                 <td><?php echo $row['obra_Contrato'] ?></td>
+
+                                <?php
+                                if ($row['id_Factura'] == null){ ?>
+                                    <td><div class="badge item-inactivo">No tiene factura</div></td>
+                                    <?php
+                                }else{
+                                    ?>
+                                    <td><div class="badge item-activo">Tiene factura</div></td>
+                                    <?php
+                                }
+                                ?>
+
                                 <td style="text-align: center"><?php echo date("d/m/Y", strtotime($row['fecha_Servicio'])); ?></td>
                                 <td style="width: 140px; text-align: center">
                                     <a href="dash-services-bath.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Asignar Baños a Servicios">

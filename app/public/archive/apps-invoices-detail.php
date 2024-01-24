@@ -50,7 +50,7 @@
                                     <div class="d-flex align-items-start">
                                         <div class="flex-grow-1">
                                             <div class="mb-4">
-                                                <img src="assets/images/logo-sm.svg" alt="" height="24"><span
+                                                <img src="../assets/images/logo-sm.svg" alt="" height="24"><span
                                                         class="logo-txt">Chubby</span>
                                             </div>
                                         </div>
@@ -180,7 +180,7 @@
 
 <?php include 'layouts/vendor-scripts.php'; ?>
 
-<script src="assets/js/app.js"></script>
+<script src="../assets/js/app.js"></script>
 
 </body>
 

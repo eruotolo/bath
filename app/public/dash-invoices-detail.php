@@ -165,13 +165,18 @@ $id_Factura = $_GET['id_Factura'];
                                                                 $sql = "SELECT * FROM servicios SR
                                                                             JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
                                                                             JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
-                                                                            JOIN facturas FT ON CL.id_Cliente = FT.id_Cliente
-                                                                        WHERE id_Factura =$id_Factura;";
-                                                                $result_tasks1 = mysqli_query($link, $sql);
-                                                                while ($row1 = mysqli_fetch_Array($result_tasks1)) {
-                                                                    ?>
-                                                                    <option value="<?php echo $row1['id_Servicio'] ?>"><?php echo $row1['nro_Servicio'] ?></option>
-                                                                    <?php
+                                                                            WHERE NOT EXISTS (
+                                                                                SELECT 1 FROM facturas FT
+                                                                                WHERE FT.id_Cliente = CL.id_Cliente
+                                                                                AND FT.id_Factura <> $id_Factura
+                                                                            )";
+                                                                    $result_tasks1 = mysqli_query($link, $sql);
+                                                                    while ($row1 = mysqli_fetch_array($result_tasks1)) {
+                                                                ?>
+                                                                    <option value="<?php echo $row1['id_Servicio'] ?>">
+                                                                        <?php echo date("d/m/Y", strtotime($row1['fecha_Servicio'])); ?> | N°: <?php echo $row1['nro_Servicio'] ?>
+                                                                    </option>
+                                                                <?php
                                                                 }
                                                                 ?>
                                                             </select>

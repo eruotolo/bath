@@ -103,9 +103,9 @@
 <?php include 'layouts/vendor-scripts.php'; ?>
 
 <!-- fontawesome icons init -->
-<script src="assets/js/pages/fontawesome.init.js"></script>
+<script src="../assets/js/pages/fontawesome.init.js"></script>
 
-<script src="assets/js/app.js"></script>
+<script src="../assets/js/app.js"></script>
 
 </body>
 

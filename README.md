@@ -17,3 +17,10 @@ max_input_vars = 8000
 max_execution_time = 500
 
 memory_limit = 512M
+
+
+# Datos Servidor Producción
+
+Base de datos
+User: cch94190_sistema
+Database: cch94190_sistema

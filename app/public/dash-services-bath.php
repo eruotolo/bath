@@ -198,23 +198,52 @@ if ($query_run) {
                                                                 <input type="number" class="form-control" id="id_Servicio" name="id_Servicio" value="<?php echo $row['id_Servicio'] ?>" hidden>
 
                                                                 <div class="row mb-4">
-                                                                    <label for="id_Bath" class="col-sm-4 col-form-label">Seleccionar el baño:</label>
+                                                                    <label for="id_Bath" class="col-sm-4 col-form-label">Seleccionar el/los baño/s:</label>
                                                                     <div class="col-sm-8">
-                                                                        <select name="id_Bath" id="id_Bath" class="form-select">
+                                                                        <div>
+                                                                            <div class="form-check">
+                                                                                <input type="checkbox" id="checkTodos" class="form-check-input">
+                                                                                <label for="checkTodos" class="form-check-label">TODOS LOS BAÑOS</label><br>
+                                                                            </div>
+
+
                                                                             <?php
                                                                             $sql = "SELECT * FROM bathrooms BT
-                                                                                        JOIN contrato_bathroom CB ON BT.id_Bath = CB.id_Bath
-                                                                                        JOIN contratos CT ON CB.id_Contrato = CT.id_Contrato
-                                                                                        JOIN servicios SR ON CT.id_Contrato = SR.id_Contrato
-                                                                                    WHERE id_Servicio = $id_Servicio";
+                                                                                JOIN contrato_bathroom CB ON BT.id_Bath = CB.id_Bath
+                                                                                JOIN contratos CT ON CB.id_Contrato = CT.id_Contrato
+                                                                                JOIN servicios SR ON CT.id_Contrato = SR.id_Contrato
+                                                                            WHERE id_Servicio = $id_Servicio";
                                                                             $result_task = mysqli_query($link, $sql);
+
                                                                             while ($row = mysqli_fetch_Array($result_task)) {
                                                                                 ?>
-                                                                                <option value="<?php echo $row['id_Bath'] ?>"><?php echo $row['codigo_Bath'] ?></option>
+
+                                                                                <div class="form-check">
+                                                                                    <input class="form-check-input" type="checkbox" name="id_Bath[]" value="<?php echo $row['id_Bath'] ?>" id="bath_<?php echo $row['id_Bath'] ?>">
+                                                                                    <label class="form-check-label" for="bath_<?php echo $row['id_Bath'] ?>"><?php echo $row['codigo_Bath'] ?></label>
+                                                                                </div>
+
                                                                                 <?php
                                                                             }
                                                                             ?>
-                                                                        </select>
+                                                                        </div>
+                                                                        <!-- SCRIPT PARA SELECCIONAR TODOS LOS CHECHBOX -->
+                                                                        <script>
+		                                                                    // Obtén el checkbox 'Todos'
+		                                                                    var checkTodos = document.getElementById('checkTodos');
+
+		                                                                    // Obtén todos los checkboxes dentro del div
+		                                                                    var checkboxes = document.querySelectorAll('input[name="id_Bath[]"]');
+
+		                                                                    // Agrega un event listener al checkbox 'Todos'
+		                                                                    checkTodos.addEventListener('change', function () {
+			                                                                    checkboxes.forEach(function (checkbox) {
+				                                                                    // Establece el estado de todos los checkboxes según el estado del checkbox 'Todos'
+				                                                                    checkbox.checked = checkTodos.checked;
+			                                                                    });
+		                                                                    });
+                                                                        </script>
+
                                                                     </div>
                                                                 </div>
 
