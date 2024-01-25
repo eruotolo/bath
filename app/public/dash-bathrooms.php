@@ -87,6 +87,7 @@
                             <th scope="col">Fecha de compra</th>
                             <th scope="col">Observaciones</th>
                             <th scope="col">Estado</th>
+                            <th scope="col">Asignado a Obra</th>
                             <th style="width: 80px; min-width: 80px;">Acción</th>
                         </tr>
                         </thead>
@@ -108,18 +109,30 @@
                                 <td><?php echo $row['observacion_Bath'] ?></td>
                                 <?php
                                 if ($row['estado_Bath'] == 1) { ?>
-                                    <td class="text-center">
+                                    <td>
                                         <div class="badge item-activo">Activo</div>
                                     </td>
                                     <?php
                                 } else {
                                     ?>
-                                    <td class="text-center">
+                                    <td>
                                         <div class="badge item-inactivo">Inactivo</div>
                                     </td>
                                     <?php
                                 }
                                 ?>
+
+                                <?php
+                                    if ($row['asignado_Bath'] == 0) {
+                                ?>
+                                    <td>
+                                        <div class="badge item-inactivo">No Asignado</div>
+                                    </td>
+                                <?php }else{ ?>
+                                    <td>
+                                        <div class="badge item-activo">Asignado</div>
+                                    </td>
+                                <?php } ?>
 
                                 <td>
                                     <a href="javascript:void(0)"
@@ -135,6 +148,9 @@
                                     </a>
                                     <a href="controller/bath-inactive.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Inactivar">
                                         <i class="fas fa-lock"></i>
+                                    </a>
+                                    <a href="controller/bath-notassign.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Deshacer la asignación">
+                                        <i class="fas fa-level-down-alt"></i>
                                     </a>
                                 </td>
                             </tr>

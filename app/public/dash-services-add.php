@@ -62,15 +62,16 @@ include 'layouts/session.php'; ?>
                                             <select name="id_Cliente" id="id_Cliente" class="form-select">
                                                 <option value="">Seleccionar el Cliente</option>
                                                 <?php
-                                                $sql = "SELECT * FROM clientes";
-                                                $result = mysqli_query($link, $sql);
-                                                $clientes = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                                                foreach ($clientes as $cliente) { ?>
-                                                    <option value="<?php echo $cliente['id_Cliente']; ?>" >
-                                                        <?php echo $cliente['nombre_Cliente']?>
-                                                    </option>
-                                                    <?php
-                                                }
+                                                    $sql = "SELECT * FROM clientes";
+                                                    $result = mysqli_query($link, $sql);
+                                                    $clientes = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                                                    foreach ($clientes as $cliente) {
+                                                ?>
+                                                        <option value="<?php echo $cliente['id_Cliente']; ?>" >
+                                                            <?php echo $cliente['nombre_Cliente']?>
+                                                        </option>
+                                                <?php
+                                                    }
                                                 ?>
                                             </select>
                                         </div>
@@ -199,7 +200,7 @@ include 'layouts/session.php'; ?>
 
 <script src="assets/js/app.js"></script>
 
-<<script>
+<script>
 	$(document).ready(function () {
 		$('#id_Cliente').change(function () {
 			var idCliente = $(this).val();

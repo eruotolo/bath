@@ -7,12 +7,20 @@ define('DB_USERNAME', 'eruotolo');
 define('DB_PASSWORD', 'Guns026772');
 define('DB_NAME', 'donbano');
 
+/*-------- SERVIDOR DE PRODUCCIÓN --------*/
 /*
 define('DB_SERVER', 'localhost');
 define('DB_USERNAME', 'cch94190_sistema');
 define('DB_PASSWORD', 'Guns026772');
 define('DB_NAME', 'cch94190_sistema');
  */
+
+/*-------- SERVIDOR DE TESTING --------*/
+/*
+define('DB_SERVER', 'localhost');
+define('DB_USERNAME', 'u2g8v9gzzgram');
+define('DB_PASSWORD', 'Guns026772');
+define('DB_NAME', 'dbjnf0hv3xnfyr');*/
 
 
 /* Attempt to connect to MySQL database */

@@ -17,7 +17,7 @@ services:
             - "3306:3306"
         volumes:
             - ./mysql/mysql-data:/var/lib/mysql
-            - ./mysql/database/donbano_db.sql:/docker-entrypoint-initdb.d/dump_file.sql
+            - ./mysql/database/donbano.sql:/docker-entrypoint-initdb.d/dump_file.sql
         networks:
             - my-bathnet
 

@@ -10,7 +10,7 @@ if (isset($_POST['update'])){
     $asignado_Bath = 1;
 
     $update_query = "UPDATE bathrooms SET asignado_Bath = $asignado_Bath WHERE id_Bath = $id_Bath";
-    $insert_query = "INSERT INTO contrato_Bathroom (id_Contrato, id_Bath) VALUE('$id_Contrato', '$id_Bath')";
+    $insert_query = "INSERT INTO contrato_bathroom (id_Contrato, id_Bath) VALUE('$id_Contrato', '$id_Bath')";
 
     //echo $update_query;
     //echo $insert_query;

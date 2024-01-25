@@ -9,6 +9,13 @@
           </advancedOptions>
         </fileTransfer>
       </webServer>
+      <webServer id="a9b65196-d947-4275-a2bf-56d4ed790718" name="Testing" url="http://ftp.crowindagac1.sg-host.com">
+        <fileTransfer host="ftp.crowindagac1.sg-host.com" port="21">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+        </fileTransfer>
+      </webServer>
     </option>
   </component>
 </project>
