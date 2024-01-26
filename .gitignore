@@ -1,4 +1,4 @@
-mysql/mysql-data
 README.md
 .prettierrc
 .idea
+/mysql/mysql-data/
