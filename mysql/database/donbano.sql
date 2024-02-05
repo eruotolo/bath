@@ -2,10 +2,10 @@
 -- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Servidor: localhost:3306
--- Tiempo de generación: 25-01-2024 a las 20:11:34
--- Versión del servidor: 10.5.23-MariaDB-cll-lve
--- Versión de PHP: 8.1.25
+-- Servidor: mysql
+-- Tiempo de generación: 05-02-2024 a las 00:24:57
+-- Versión del servidor: 11.2.2-MariaDB-1:11.2.2+maria~ubu2204
+-- Versión de PHP: 8.2.15
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `cch94190_sistema`
+-- Base de datos: `donbano`
 --
 
 -- --------------------------------------------------------
@@ -34,21 +34,22 @@ CREATE TABLE `bathrooms` (
   `observacion_Bath` varchar(150) DEFAULT NULL,
   `estado_Bath` int(11) DEFAULT NULL,
   `asignado_Bath` bit(1) DEFAULT b'0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `bathrooms`
 --
 
 INSERT INTO `bathrooms` (`id_Bath`, `codigo_Bath`, `fechaCompra_Bath`, `observacion_Bath`, `estado_Bath`, `asignado_Bath`) VALUES
-(14, 'AT064', '2023-12-01', 'SO', 1, b'0'),
-(15, 'AT063', '2023-12-01', 'SO', 1, b'0'),
-(16, 'AT062', '2023-12-01', 'SO', 1, b'0'),
-(17, 'AT061', '2023-12-01', 'SO', 1, b'0'),
-(18, 'AT060', '2023-12-01', 'SO', 1, b'0'),
-(19, 'AT084', '2023-12-01', 'SO', 1, b'0'),
-(20, 'AT065', '2023-12-01', 'SO', 1, b'0'),
-(21, 'AT077', '2023-12-01', 'SO', 1, b'0');
+(14, 'AT064', '2023-12-01', 'SO', 1, b'1'),
+(15, 'AT063', '2023-12-01', 'SO', 1, b'1'),
+(16, 'AT062', '2023-12-01', 'SO', 1, b'1'),
+(17, 'AT061', '2023-12-01', 'SO', 1, b'1'),
+(18, 'AT060', '2023-12-01', 'SO', 1, b'1'),
+(19, 'AT084', '2023-12-01', 'SO', 1, b'1'),
+(20, 'AT065', '2023-12-01', 'SO', 1, b'1'),
+(21, 'AT077', '2023-12-01', 'SO', 1, b'0'),
+(22, 'AT079', '2023-12-01', 'SO', 1, b'1');
 
 -- --------------------------------------------------------
 
@@ -59,7 +60,7 @@ INSERT INTO `bathrooms` (`id_Bath`, `codigo_Bath`, `fechaCompra_Bath`, `observac
 CREATE TABLE `category` (
   `id_category` int(11) NOT NULL,
   `name_category` varchar(50) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `category`
@@ -101,7 +102,7 @@ CREATE TABLE `clientes` (
   `telefono_Cliente` varchar(15) DEFAULT NULL,
   `email_Cliente` varchar(50) DEFAULT NULL,
   `estado_Cliente` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `clientes`
@@ -126,7 +127,14 @@ CREATE TABLE `contactos` (
   `direccion_Contacto` varchar(50) DEFAULT NULL,
   `observacion_Contacto` text DEFAULT NULL,
   `estado_Contacto` int(1) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `contactos`
+--
+
+INSERT INTO `contactos` (`id_Contacto`, `id_Cliente`, `nombre_Contacto`, `apellido_Contacto`, `rut_Contacto`, `telefono_Contacto`, `direccion_Contacto`, `observacion_Contacto`, `estado_Contacto`) VALUES
+(17, 17, 'KARINA', 'INOSTROZA', '1', '945131805', 'MOCOPULLI S/N DALCAHUE', NULL, 1);
 
 -- --------------------------------------------------------
 
@@ -145,14 +153,14 @@ CREATE TABLE `contratos` (
   `valorMensual_Contrato` int(11) DEFAULT NULL,
   `valorTotal_Contrato` int(11) DEFAULT NULL,
   `observacion_Contrato` text DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `contratos`
 --
 
 INSERT INTO `contratos` (`id_Contrato`, `id_Cliente`, `obra_Contrato`, `direccion_Contrato`, `estado_Contrato`, `fechaInicio_Contrato`, `fechaFin_Contrato`, `valorMensual_Contrato`, `valorTotal_Contrato`, `observacion_Contrato`) VALUES
-(17, 17, 'GM CASTRO / OC 008060', 'PENINSULA DE RILAN - CASTRO', 2, '2023-10-31', '2023-10-31', 89250, 6426000, 'OC GLOBAL PENINSULA DE RILAN\r\n6 BAÑOS');
+(17, 17, 'GLOBAL PENINSULA DE RILAN', 'PENINSULA DE RILAN - CASTRO', 2, '2023-10-31', '2023-10-31', 89250, 6426000, 'OC GLOBAL PENINSULA DE RILAN\r\n6 BAÑOS\r\nOC 008060 (6 BAÑOS)\r\nOC 008139 (1 BAÑO)\r\nOC 008513 (1 BAÑO)');
 
 -- --------------------------------------------------------
 
@@ -165,6 +173,20 @@ CREATE TABLE `contrato_bathroom` (
   `id_Contrato` int(11) DEFAULT NULL,
   `id_Bath` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `contrato_bathroom`
+--
+
+INSERT INTO `contrato_bathroom` (`id_Relacion`, `id_Contrato`, `id_Bath`) VALUES
+(23, 17, 14),
+(24, 17, 15),
+(25, 17, 16),
+(26, 17, 17),
+(27, 17, 18),
+(28, 17, 19),
+(29, 17, 20),
+(30, 17, 22);
 
 -- --------------------------------------------------------
 
@@ -180,7 +202,7 @@ CREATE TABLE `facturas` (
   `fecha_Factura` date DEFAULT NULL,
   `valor_Factura` int(20) DEFAULT NULL,
   `estado_Factura` int(2) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish_ci;
 
 -- --------------------------------------------------------
 
@@ -227,7 +249,30 @@ CREATE TABLE `servicios` (
   `fecha_Servicio` date DEFAULT NULL,
   `observaciones_Servicio` text DEFAULT NULL,
   `estado_Servicio` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish_ci;
+
+--
+-- Volcado de datos para la tabla `servicios`
+--
+
+INSERT INTO `servicios` (`id_Servicio`, `id_Contrato`, `nro_Servicio`, `fecha_Servicio`, `observaciones_Servicio`, `estado_Servicio`) VALUES
+(1023, 17, 393686, '2023-10-31', 'ENTREGA DE 6 BAÑOS', 1),
+(1024, 17, 509288, '2023-11-08', '6 BAÑOS QUIMICOS - LIMPIEZA Y DESINFECCION', 1),
+(1025, 17, 374612, '2023-11-16', 'LIMPIEZA DE 7 BAÑOS', 1),
+(1026, 17, 142785, '2023-11-09', 'INSTALACION 1 BAÑO (OC 008139)', 1),
+(1027, 17, 289438, '2023-11-23', 'LIMPIEZA Y DESINFECION 7 BAÑOS', 1),
+(1028, 17, 200247, '2023-11-30', 'limpieza de 7 baños', 1),
+(1029, 17, 726332, '2023-12-07', 'limpieza de 7 baños', 1),
+(1030, 17, 589990, '2023-12-15', 'limpieza 7 baños', 1),
+(1031, 17, 207125, '2023-12-21', 'limpieza de 7 baños', 1),
+(1032, 17, 542825, '2023-12-28', 'limpieza de 7 baños', 1),
+(1033, 17, 468435, '2024-01-03', 'limpieza de 7 baños', 1),
+(1034, 17, 41947, '2024-01-10', 'limpieza de 7 baños', 1),
+(1035, 17, 237988, '2023-01-10', 'instalacion 1 baño', 0),
+(1036, 17, 319315, '2024-01-10', 'instalacion 1 baño', 1),
+(1037, 17, 998793, '2024-01-17', 'limpieza de 8 baños', 1),
+(1038, 17, 474079, '2024-01-24', 'limpieza 8 baños', 1),
+(1039, 17, 162810, '2024-01-31', 'prueba', 0);
 
 -- --------------------------------------------------------
 
@@ -240,6 +285,98 @@ CREATE TABLE `servicios_bathrooms` (
   `id_Servicio` int(11) DEFAULT NULL,
   `id_Bath` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `servicios_bathrooms`
+--
+
+INSERT INTO `servicios_bathrooms` (`id_Relacion`, `id_Servicio`, `id_Bath`) VALUES
+(21, 1023, 14),
+(22, 1023, 15),
+(23, 1023, 16),
+(24, 1023, 17),
+(25, 1023, 18),
+(26, 1023, 19),
+(27, 1024, 14),
+(28, 1024, 15),
+(29, 1024, 16),
+(30, 1024, 17),
+(31, 1024, 18),
+(32, 1024, 19),
+(33, 1026, 20),
+(34, 1025, 14),
+(35, 1025, 15),
+(36, 1025, 16),
+(37, 1025, 17),
+(38, 1025, 18),
+(39, 1025, 19),
+(40, 1025, 20),
+(41, 1027, 14),
+(42, 1027, 15),
+(43, 1027, 16),
+(44, 1027, 17),
+(45, 1027, 18),
+(46, 1027, 19),
+(47, 1027, 20),
+(48, 1028, 14),
+(49, 1028, 15),
+(50, 1028, 16),
+(51, 1028, 17),
+(52, 1028, 18),
+(53, 1028, 19),
+(54, 1028, 20),
+(55, 1030, 14),
+(56, 1030, 15),
+(57, 1030, 16),
+(58, 1030, 17),
+(59, 1030, 18),
+(60, 1030, 19),
+(61, 1030, 20),
+(62, 1031, 14),
+(63, 1031, 15),
+(64, 1031, 16),
+(65, 1031, 17),
+(66, 1031, 18),
+(67, 1031, 19),
+(68, 1031, 20),
+(69, 1032, 14),
+(70, 1032, 15),
+(71, 1032, 16),
+(72, 1032, 17),
+(73, 1032, 18),
+(74, 1032, 19),
+(75, 1032, 20),
+(76, 1033, 14),
+(77, 1033, 15),
+(78, 1033, 16),
+(79, 1033, 17),
+(80, 1033, 18),
+(81, 1033, 19),
+(82, 1033, 20),
+(83, 1034, 14),
+(84, 1034, 15),
+(85, 1034, 16),
+(86, 1034, 17),
+(87, 1034, 18),
+(88, 1034, 19),
+(89, 1034, 20),
+(90, 1036, 22),
+(91, 1037, 14),
+(92, 1037, 15),
+(93, 1037, 16),
+(94, 1037, 17),
+(95, 1037, 18),
+(96, 1037, 19),
+(97, 1037, 20),
+(98, 1037, 22),
+(99, 1038, 14),
+(100, 1038, 15),
+(101, 1038, 16),
+(102, 1038, 17),
+(103, 1038, 18),
+(104, 1038, 19),
+(105, 1038, 20),
+(106, 1038, 22);
 
 -- --------------------------------------------------------
 
@@ -260,6 +397,29 @@ CREATE TABLE `tipo_servicio` (
   `otros_Tipo` tinyint(1) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `tipo_servicio`
+--
+
+INSERT INTO `tipo_servicio` (`id_Tipo`, `nro_Servicio`, `instalacion_Tipo`, `reparacion_Tipo`, `limpieza_Tipo`, `desinfeccion_Tipo`, `sanitizacion_Tipo`, `higienico_Tipo`, `jabon_Tipo`, `otros_Tipo`) VALUES
+(9, 393686, 1, 0, 0, 0, 0, 1, 1, 0),
+(10, 509288, 0, 0, 1, 1, 1, 1, 1, 0),
+(11, 374612, 0, 0, 0, 1, 1, 1, 1, 0),
+(12, 142785, 1, 0, 0, 0, 0, 0, 0, 0),
+(13, 289438, 0, 0, 1, 1, 1, 1, 1, 0),
+(14, 200247, 0, 1, 1, 1, 1, 1, 1, 0),
+(15, 726332, 0, 1, 1, 1, 1, 1, 1, 0),
+(16, 589990, 0, 1, 1, 1, 1, 1, 1, 0),
+(17, 207125, 0, 1, 1, 1, 1, 1, 1, 0),
+(18, 542825, 0, 1, 1, 1, 1, 1, 1, 0),
+(19, 468435, 0, 1, 1, 1, 1, 1, 1, 0),
+(20, 41947, 0, 1, 1, 1, 1, 1, 1, 0),
+(21, 237988, 1, 0, 0, 0, 0, 0, 0, 0),
+(22, 319315, 1, 0, 0, 0, 0, 0, 0, 0),
+(23, 998793, 0, 1, 1, 1, 1, 1, 1, 0),
+(24, 474079, 0, 1, 1, 1, 1, 1, 1, 0),
+(25, 162810, 1, 0, 0, 0, 0, 0, 0, 0);
+
 -- --------------------------------------------------------
 
 --
@@ -278,7 +438,7 @@ CREATE TABLE `users` (
   `category` int(11) DEFAULT NULL,
   `state` int(11) DEFAULT NULL,
   `created_at` datetime DEFAULT current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COLLATE=utf8mb3_spanish_ci;
 
 --
 -- Volcado de datos para la tabla `users`
@@ -402,7 +562,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT de la tabla `bathrooms`
 --
 ALTER TABLE `bathrooms`
-  MODIFY `id_Bath` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id_Bath` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT de la tabla `certificados`
@@ -420,7 +580,7 @@ ALTER TABLE `clientes`
 -- AUTO_INCREMENT de la tabla `contactos`
 --
 ALTER TABLE `contactos`
-  MODIFY `id_Contacto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+  MODIFY `id_Contacto` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT de la tabla `contratos`
@@ -432,7 +592,7 @@ ALTER TABLE `contratos`
 -- AUTO_INCREMENT de la tabla `contrato_bathroom`
 --
 ALTER TABLE `contrato_bathroom`
-  MODIFY `id_Relacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id_Relacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT de la tabla `facturas`
@@ -450,19 +610,19 @@ ALTER TABLE `factura_servicio`
 -- AUTO_INCREMENT de la tabla `servicios`
 --
 ALTER TABLE `servicios`
-  MODIFY `id_Servicio` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1023;
+  MODIFY `id_Servicio` int(255) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1040;
 
 --
 -- AUTO_INCREMENT de la tabla `servicios_bathrooms`
 --
 ALTER TABLE `servicios_bathrooms`
-  MODIFY `id_Relacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id_Relacion` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=107;
 
 --
 -- AUTO_INCREMENT de la tabla `tipo_servicio`
 --
 ALTER TABLE `tipo_servicio`
-  MODIFY `id_Tipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id_Tipo` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT de la tabla `users`
