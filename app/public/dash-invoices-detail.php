@@ -67,7 +67,7 @@ $id_Factura = $_GET['id_Factura'];
                                 <div class="d-flex align-items-start pt-4">
                                     <div class="flex-grow-1">
                                         <div class="mb-4 logo-zl">
-                                            <img src="assets/images/logo_zl.svg" alt="" height="120">
+                                            <img src="assets/images/logo_zl.png" alt="" height="120">
                                         </div>
                                     </div>
                                     <div class="flex-shrink-0">

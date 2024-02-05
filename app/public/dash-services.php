@@ -91,17 +91,17 @@ include 'layouts/session.php'; ?>
                         </thead>
 
                         <tbody>
-
                         <?php
-                            $query = "SELECT SR.*, CT.*, CL.*, FT.* -- Selecciona todas las columnas
-                                        FROM servicios SR
-                                                 JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
-                                                 JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
-                                                 LEFT JOIN facturas FT ON CT.id_Contrato = FT.id_Contrato
-                                        WHERE estado_Servicio = 1
-                                        GROUP BY SR.id_Servicio;";
+                            $query = "SELECT SR.*, CT.*, CL.*
+                                            FROM servicios SR
+                                                JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
+                                                JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
+                                                
+                                            WHERE estado_Servicio = 1
+                                            ORDER BY fecha_Servicio DESC;";
                             $result_task = mysqli_query($link, $query);
                             while ($row = mysqli_fetch_array($result_task)){
+                                    $id_Servicio = $row['id_Servicio'];
                         ?>
 
                             <tr>
@@ -110,17 +110,25 @@ include 'layouts/session.php'; ?>
                                 <td><?php echo $row['obra_Contrato'] ?></td>
 
                                 <?php
-                                if ($row['id_Factura'] == null){ ?>
-                                    <td><div class="badge item-inactivo">No tiene factura</div></td>
-                                    <?php
-                                }else{
+                                $query_factura = "SELECT * FROM factura_servicio WHERE id_Servicio = $id_Servicio";
+                                $result_task1 = mysqli_query($link, $query_factura);
+                                $factura_status = mysqli_fetch_assoc($result_task1);
+
+                                if (!$factura_status) {
                                     ?>
-                                    <td><div class="badge item-activo">Tiene factura</div></td>
+                                    <td><div class="badge item-inactivo">No Facturado</div></td>
+                                    <?php
+                                } else {
+                                    ?>
+                                    <td><div class="badge item-activo">Facturado</div></td>
                                     <?php
                                 }
                                 ?>
 
-                                <td style="text-align: center"><?php echo date("d/m/Y", strtotime($row['fecha_Servicio'])); ?></td>
+
+
+                                <!--<td style="text-align: center"><?php /*echo date("d/m/Y", strtotime($row['fecha_Servicio'])); */?></td>-->
+                                <td style="text-align: center"><?php echo $row['fecha_Servicio'] ?></td>
                                 <td style="width: 140px; text-align: center">
                                     <a href="dash-services-bath.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Asignar Baños a Servicios">
                                         <i class="fas fa-toilet"></i>

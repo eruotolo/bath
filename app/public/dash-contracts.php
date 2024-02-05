@@ -107,8 +107,9 @@ include 'layouts/session.php'; ?>
                                             }
                                         ?>
 
-                                        <td class="text-center"><?php echo date("d/m/Y", strtotime($row['fechaInicio_Contrato'])); ?></td>
-                                        <td class="text-center"><?php echo date("d/m/Y", strtotime($row['fechaFin_Contrato'])); ?></td>
+                                        <td class="text-center"><?php echo $row['fechaInicio_Contrato'] ?></td>
+                                        <td class="text-center"><?php echo $row['fechaFin_Contrato'] ?></td>
+
                                         <td class="text-center">$ <?php echo $row['valorMensual_Contrato'] ?></td>
                                         <td class="text-center">$ <?php echo $row['valorTotal_Contrato'] ?></td>
                                         <td class="text-center">

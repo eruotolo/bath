@@ -102,16 +102,16 @@ include 'layouts/session.php'; ?>
                                         </thead>
                                         <tbody>
                                         <?php
-                                            $query = "SELECT * FROM facturas FT 
-                                                        JOIN clientes CL ON FT.id_Cliente = CL.id_Cliente 
-                                                        JOIN contratos CT ON CL.id_Cliente = CT.id_Cliente    
+                                            $query = "SELECT * FROM facturas FT
+                                                                JOIN clientes CL ON FT.id_Cliente = CL.id_Cliente
+                                                                LEFT JOIN contratos CT ON FT.id_Contrato = CT.id_Contrato
                                                         order by fecha_Factura";
                                             $result_task = mysqli_query($link, $query);
                                             while ($row = mysqli_fetch_array($result_task)){
                                         ?>
                                         <tr>
                                             <td>#<?php echo $row['numero_Factura'] ?></td>
-                                            <td style="text-align: center"><?php echo date("d/m/Y", strtotime($row['fecha_Factura'])); ?></td>
+                                            <td style="text-align: center"><?php echo $row['fecha_Factura'] ?></td>
                                             <td><?php echo $row['nombre_Cliente'] ?></td>
                                             <td><?php echo $row['obra_Contrato'] ?></td>
                                             <td style="text-align: center"><?php echo $row['valor_Factura'] ?></td>

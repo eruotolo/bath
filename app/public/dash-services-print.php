@@ -74,7 +74,7 @@ if ($query_run) {
                                             <div class="d-flex align-items-start">
                                                 <div class="flex-grow-1">
                                                     <div class="mb-4">
-                                                        <img src="assets/images/logo_zl.svg" alt="" height="160">
+                                                        <img src="assets/images/logo_zl.png" alt="" height="160">
                                                     </div>
                                                 </div>
                                                 <div class="flex-shrink-0">
@@ -221,7 +221,7 @@ if ($query_run) {
                                                    class="btn btn-success waves-effect waves-light me-1"><i
                                                             class="fa fa-print"></i></a>
 
-                                                <a href="controller/servicio-pdf.php?id_Servicio=<?php echo $row['id_Servicio']; ?>" class="btn btn-primary w-md waves-effect waves-light" >Enviar</a>
+                                               <!-- <a href="controller/servicio-pdf.php?id_Servicio=<?php /*echo $row['id_Servicio']; */?>" class="btn btn-primary w-md waves-effect waves-light" >Enviar</a>-->
                                             </div>
                                         </div>
 

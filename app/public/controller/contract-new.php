@@ -20,10 +20,12 @@ if(isset($_POST['crear'])) {
 
     $result = mysqli_query($link, $sql) or ($error = mysqli_error($link));
 
+    $id_Contrato = mysqli_insert_id($link);
+
     //echo $error;
     //die();
 
-    header('Location: ../dash-contracts.php');
+    header("Location: ../dash-contracts-item.php?id_Contrato=$id_Contrato");
 
 }else{
     echo '<script>alert("No se pudo crear el contrato")</script>';

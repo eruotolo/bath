@@ -21,20 +21,26 @@ if (isset($_POST['crear'])){
 
     $servicio_query = "INSERT INTO servicios (id_Contrato, nro_Servicio, fecha_Servicio, observaciones_Servicio, estado_Servicio) VALUE ('$id_Contrato', '$nro_Servicio', '$fecha_Servicio', '$observaciones_Servicio', '$estado_Servicio')";
 
+
     $tipo_query = "INSERT INTO tipo_servicio (nro_Servicio, instalacion_Tipo, reparacion_Tipo, limpieza_Tipo, desinfeccion_Tipo, sanitizacion_Tipo, higienico_Tipo, jabon_Tipo, otros_Tipo) VALUE ('$nro_Servicio','$instalacion_Tipo', '$reparacion_Tipo', '$limpieza_Tipo', '$desinfeccion_Tipo', '$sanitizacion_Tipo', '$higienico_Tipo', '$jabon_Tipo', '$otros_Tipo')";
 
     //echo $servicio_query;
     //echo $tipo_query;
     //die();
 
-    //$result = mysqli_query($link, $servicio_query) or ($error = mysqli_error($link));
+    if ($link->query($servicio_query) === TRUE) {
+        $id_Servicio = mysqli_insert_id($link); // Obtiene el ID del Servicio creado
 
-    if ($link->query($servicio_query) === TRUE && $link->query($tipo_query) === TRUE) {
-        // REGISTRO EN SERVICIO Y TIPO DE SERVICIO CORRECTO;
-        header('Location: ../dash-services.php');
+        if ($link->query($tipo_query) === TRUE) {
+            // REGISTRO EN SERVICIO Y TIPO DE SERVICIO CORRECTO;
+            header("Location: ../dash-services-bath.php?id_Servicio=$id_Servicio");
+        } else {
+            // REGISTRO EN TIPO DE SERVICIO INCORRECTO;
+            echo '<script>alert("No se pudo crear el tipo de servicio")</script>';
+        }
     } else {
-        // REGISTRO EN SERVICIO Y TIPO DE SERVICIO INCORRECTO;
-        echo '<script>alert("No se pudo crear el contrato")</script>';
+        // REGISTRO EN SERVICIO INCORRECTO;
+        echo '<script>alert("No se pudo crear el servicio")</script>';
     }
 
 }

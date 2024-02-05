@@ -68,7 +68,7 @@ if ($query_run) {
                                         <div class="d-flex align-items-start">
                                             <div class="flex-grow-1">
                                                 <div class="mb-4 logo-zl">
-                                                    <img src="assets/images/logo_zl.svg" alt="" height="120">
+                                                    <img src="assets/images/logo_zl.png" alt="" height="120">
                                                 </div>
                                             </div>
                                             <div class="flex-shrink-0">
@@ -110,7 +110,7 @@ if ($query_run) {
                                         </div>
                                     </div>
 
-                                    <hr class="my-2">
+                                    <hr class="my-1">
 
                                     <div class="row">
                                         <div class="col-6 pie">
