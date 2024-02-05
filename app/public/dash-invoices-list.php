@@ -131,8 +131,8 @@ include 'layouts/session.php'; ?>
                                                 <a href="dash-invoices-print.php?id_Factura=<?php echo $row['id_Factura'] ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir">
                                                     <i class="fa fa-print"></i>
                                                 </a>
-                                                <a href="dash-invoices-detail.php?id_Factura=<?php echo $row['id_Factura'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar">
-                                                    <i class="fas fa-pencil-alt"></i>
+                                                <a href="dash-invoices-detail.php?id_Factura=<?php echo $row['id_Factura'] ?>" class="btn btn-outline-secondary btn-sm" title="Agregar Servicios a la Factura">
+                                                    <i class="fas fa-plus"></i>
                                                 </a>
                                             </td>
 

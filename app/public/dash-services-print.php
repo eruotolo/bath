@@ -113,10 +113,10 @@ if ($query_run) {
                                                 <div>
                                                     <h5 class="font-size-15 mb-3"><b>Información:</b></h5>
                                                     <p class="mb-1">
-                                                        <b>Número de Contrato:</b>  <?php echo $row['id_Contrato']; ?>
+                                                        <b>Obra: </b><?php echo $row['obra_Contrato']; ?>
                                                     </p>
                                                     <p class="mb-1">
-                                                        <b>Obra: </b><?php echo $row['obra_Contrato']; ?>
+                                                        <b>Dirección de la obra:</b>  <?php echo $row['direccion_Contrato']; ?>
                                                     </p>
                                                     <p class="mb-1">
                                                         <b>Fecha del Servicio:</b> <?php echo date("d/m/Y", strtotime($row['fecha_Servicio'])); ?>
@@ -165,9 +165,10 @@ if ($query_run) {
                                                         <?php } ?>
                                                     </ul>
 
-                                                    <ul class="list-service-print mb-1">
-                                                        <li><b>Código de Baños:</b></li>
+                                                    <br>
 
+                                                    <ul class="list-service-print mb-1">
+                                                        <li><b>Baños Tratados:</b></li>
                                                         <?php
                                                             $sql = "SELECT * FROM servicios_bathrooms SB 
                                                                             JOIN servicios SR ON SB.id_Servicio = SR.id_Servicio 
@@ -180,7 +181,6 @@ if ($query_run) {
                                                         <?php
                                                         }
                                                         ?>
-
                                                     </ul>
 
 

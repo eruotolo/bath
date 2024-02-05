@@ -125,21 +125,24 @@ include 'layouts/session.php'; ?>
                                 }
                                 ?>
 
-
-
-                                <!--<td style="text-align: center"><?php /*echo date("d/m/Y", strtotime($row['fecha_Servicio'])); */?></td>-->
                                 <td style="text-align: center"><?php echo $row['fecha_Servicio'] ?></td>
                                 <td style="width: 140px; text-align: center">
+
                                     <a href="dash-services-bath.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Asignar Baños a Servicios">
                                         <i class="fas fa-toilet"></i>
                                     </a>
+
                                     <a href="dash-services-print.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir">
                                         <i class="fa fa-print"></i>
+                                    </a>
+                                    <a href="dash-services-edit.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar">
+                                        <i class="fas fa-pencil-alt"></i>
                                     </a>
 
                                     <a href="controller/service-inactive.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
+
                                 </td>
                             </tr>
 
