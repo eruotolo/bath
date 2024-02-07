@@ -11,7 +11,7 @@
                         aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="controller/customer-update.php" method="post" id="contactForm" class="mt-4 pt-2">
+                <form action="../controller/customer-update.php" method="post" id="contactForm" class="mt-4 pt-2">
 
                     <input type="number" class="form-control" id="idCliente" name="idCliente" hidden>
 

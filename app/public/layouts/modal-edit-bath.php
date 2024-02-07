@@ -13,7 +13,7 @@
             </div>
 
             <div class="modal-body">
-                <form action="controller/bath-update.php" method="post" id="bathForm" class="mt-4 pt-2">
+                <form action="../controller/bath-update.php" method="post" id="bathForm" class="mt-4 pt-2">
                     <input type="number" class="form-control" id="idBath" name="idBath" hidden>
 
                     <div class="row mb-4">
@@ -60,4 +60,4 @@
         </div>
 
     </div>
-</div>>
+</div>
