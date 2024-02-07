@@ -4,18 +4,18 @@ include "../layouts/config.php";
 global $link;
 
 if (isset($_POST['update'])){
-    $id_Bath = $_POST['idBath'];
-    $codigo_Bath = $_POST['codigoBath'];
-    $fechaCompra_Bath = $_POST['fechaCompraBath'];
-    $observacion_Bath = $_POST['observacionBath'];
-    $estado_Bath = $_POST['estadoBath'];
+    $id_Bath = $_POST['id_Bath'];
+    $codigo_Bath = $_POST['codigo_Bath'];
+    $fechaCompra_Bath = $_POST['fechaCompra_Bath'];
+    $observacion_Bath = $_POST['observacion_Bath'];
+    $estado_Bath = $_POST['estado_Bath'];
 
     $query = "UPDATE bathrooms SET
-                    id_Bath = '$id_Bath',
+                    id_Bath = $id_Bath,
                     codigo_Bath = '$codigo_Bath',
                     fechaCompra_Bath = '$fechaCompra_Bath',
                     observacion_Bath = '$observacion_Bath',
-                    estado_Bath = '$estado_Bath'
+                    estado_Bath = $estado_Bath
                     WHERE id_Bath = $id_Bath";
 
     //echo $query;

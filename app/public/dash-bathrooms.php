@@ -2,6 +2,8 @@
 <?php include 'layouts/head-main.php'; ?>
 <?php include('layouts/config.php'); ?>
 
+
+
 <head>
 
     <title>Listado de Baños | Chubby - Admin & Dashboard</title>
@@ -135,12 +137,8 @@
                                 <?php } ?>
 
                                 <td>
-                                    <a href="javascript:void(0)"
-                                       class="btn btn-outline-secondary btn-sm editar"
-                                       data-bs-toggle="modal"
-                                       data-bs-target="#editarBath"
-                                       data-id="<?php echo $row['id_Bath']?>"
-                                       title="Editar">
+
+                                    <a href="dash-bathrooms-edit.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar">
                                         <i class="fas fa-pencil-alt"></i>
                                     </a>
                                     <a href="controller/bath-active.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Activar">
@@ -157,9 +155,6 @@
                         <?php } ?>
                         </tbody>
                     </table>
-
-                    <!-- MODAL EDITA BATHROOMS-->
-                    <?php include 'layouts/modal-edit-bath.php' ?>
 
                 </div>
 
@@ -203,30 +198,8 @@
 <script src="assets/js/pages/datatables.init.js"></script>
 
 <script src="assets/js/app.js"></script>
-<!--<script src="assets/js/bathEdit.js"></script>-->
-<script>
-	$(document).on('click', '.editar', function () {
-		let id_Bath = $(this).data('id');
-		$.ajax({
-			url: 'controller/bath-get.php',
-			type: 'post',
-			data: { id_Bath: id_Bath },
-			dataType: 'text',
-			success: function (response) {
-				let bathData = JSON.parse(response);
-				$('#idBath').val(bathData.id_Bath);
-				$('#codigoBath').val(bathData.codigo_Bath);
-				$('#fechaCompraBath').val(bathData.fechaCompra_Bath);
-				$('#observacionBath').val(bathData.observacion_Bath);
-				$('#estadoBath').val(bathData.estado_Bath);
-			},
-			error: function (request, status, error) {
-				$('.modal-body').html(request.responseText);
-			},
-		});
-	});
-</script>
 
 </body>
 
 </html>
+
