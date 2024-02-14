@@ -9,12 +9,8 @@ if (isset($_POST['crear'])){
     $fecha_Servicio = $_POST['fecha_Servicio'];
     $fechahoy_Certificado = $_POST['fechahoy_Certificado'];
 
-
-    // Obtener el último número correlativo de la base de datos
-    $query = "SELECT MAX(nro_Certificado) AS ultimo_correlativo FROM certificados WHERE fechahoy_Certificado = $fechahoy_Certificado";
-
-    //echo $query;
-    //die();
+    // Obtener el último número correlativo
+    $query = "SELECT MAX(nro_Certificado) AS ultimo_correlativo FROM certificados WHERE fechahoy_Certificado = CURDATE()";
 
     $result = mysqli_query($link, $query);
 
@@ -22,25 +18,32 @@ if (isset($_POST['crear'])){
         $row = mysqli_fetch_assoc($result);
         $ultimoCorrelativo = $row['ultimo_correlativo'];
 
-        // Incrementar el número correlativo
-        $nuevoCorrelativo =  1 + intval($ultimoCorrelativo);
+        // Si no hay datos, se asigna el valor inicial 1
+        if ($ultimoCorrelativo === NULL) {
+            $nuevoCorrelativo = 1;
+        } else {
+            // Incrementar el número correlativo
+            $nuevoCorrelativo = 1 + intval($ultimoCorrelativo);
+        }
 
-        // Convertir el nuevo correlativo a un string
-        $nuevoCorrelativoStr = (string) $nuevoCorrelativo;
+        // Convertir el nuevo correlativo a string con ceros a la izquierda
+        $nuevoCorrelativoStr = sprintf("%05d", $nuevoCorrelativo);
 
         // Insertar en la tabla Certificados
         $insertQuery = "INSERT INTO Certificados (nro_Certificado, id_Cliente, id_Contrato, fechahoy_Certificado, fecha_Servicio) 
-                                VALUES ($nuevoCorrelativo, $id_Cliente, $id_Contrato, '$fechahoy_Certificado', '$fecha_Servicio')";
-
-        //echo $insertQuery;
-        //die();
+                                VALUES ($nuevoCorrelativoStr, $id_Cliente, $id_Contrato, CURDATE(), '$fecha_Servicio')";
 
         $result = mysqli_query($link, $insertQuery) or ($error = mysqli_error($link));
 
-        header("Location: ../dash-certificates.php");
-        exit();
+        if ($result) {
+            header("Location: ../dash-certificates.php");
+            exit();
+        } else {
+            echo "Error al insertar el registro: " . $error;
+        }
     } else {
-        // Manejar el error al obtener el número correlativo
         echo "Error al obtener el número correlativo";
     }
 }
+
+?>
