@@ -14,8 +14,9 @@ if (isset($_POST['crear'])){
 
     //echo $query;
     //die();
-
+    echo "antes del result";
     $result  = mysqli_query($link, $query) or ($error = mysqli_error());
+    echo "despues del result";
     echo $error;
     die();
 
