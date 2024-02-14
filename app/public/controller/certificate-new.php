@@ -37,11 +37,11 @@ if (isset($_POST['crear'])){
 
         // Insertar en la tabla Certificados
 
-        $insertQuery = "INSERT INTO Certificados (nro_Certificado, id_Cliente, id_Contrato, fechahoy_Certificado, fecha_Servicio) 
+        $insertQuery = "INSERT INTO certificados (nro_Certificado, id_Cliente, id_Contrato, fechahoy_Certificado, fecha_Servicio) 
                                 VALUES ($nuevoCorrelativoStr, $id_Cliente, $id_Contrato, CURDATE(), '$fecha_Servicio')";
 
-        echo $insertQuery;
-        die();
+        //echo $insertQuery;
+        //die();
 
         $result = mysqli_query($link, $insertQuery) or ($error = mysqli_error($link));
 
