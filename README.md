@@ -21,6 +21,9 @@ memory_limit = 512M
 
 # Datos Servidor Producción
 
-Base de datos
-User: cch94190_sistema
-Database: cch94190_sistema
+
+git pull https://<usuario>:<TOKEN>@github.com/<usuario>/<proyecto>.git
+
+git clone https://eruotolo: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@github.com/eruotolo/bath.git
+
+git pull https://eruotolo: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@github.com/eruotolo/bath.git
