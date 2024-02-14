@@ -146,5 +146,7 @@ body {
     padding-left: 50px;
 }
 
-
-
+.dataTables_length{
+    display: inline;
+    margin-right: 50px;
+}

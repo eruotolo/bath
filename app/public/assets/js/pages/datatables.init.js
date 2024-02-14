@@ -1,44 +1,43 @@
-/*
-Template Name: Chubby - Admin & Dashboard Template
-Author: Themesbrand
-Website: https://themesbrand.com/
-Contact: themesbrand@gmail.com
-File: Datatables Js File
-*/
-
 $(document).ready(function () {
-  $("#datatable").DataTable();
+    var table = $('#datatable-buttons').DataTable({
+        lengthMenu: [
+            [10, 25, 50, -1],
+            [10, 25, 50, 'All'],
+        ], // Define los valores para la opción "Show Entries"
+        buttons: [
+            {
+                extend: 'collection',
+                text: 'Exportar',
+                buttons: ['copy', 'excel', 'pdf'],
+            },
+            {
+                extend: 'colvis', // Cambiado a extend 'colvis'
+                text: 'Visibilidad de columnas', // Traducción
+            },
+        ],
+        language: {
+            search: 'Buscar:',
+            lengthMenu: 'Mostrar _MENU_ entradas', // Personaliza el texto de "Show Entries"
+            info: 'Mostrando _PAGE_ de _PAGES_ páginas',
+            infoEmpty: 'Mostrando 0 a 0 de 0 elementos',
+            infoFiltered: '(filtrado de _MAX_ elementos en total)',
+            emptyTable: 'No hay datos disponibles en la tabla',
+            loadingRecords: 'Cargando...',
+            zeroRecords: 'No se encontraron registros coincidentes',
+            aria: {
+                sortAscending: ': permite ordenar la columna en orden ascendente',
+                sortDescending: ': habilita ordenar la columna en orden descendente',
+            },
+            paginate: {
+                first: 'Primero',
+                previous: 'Anterior',
+                next: 'Siguiente',
+                last: 'Último',
+            },
+        },
+    });
 
-  //Buttons examples
-  var table = $("#datatable-buttons").DataTable({
-    lengthChange: false,
-    buttons: ["copy", "excel", "pdf", "colvis"],
-    language: {
-      search: "Buscar:",
-      lengthMenu: "Mostrar elementos _MENU_",
-      info: "Mostrando _PAGE_ pagina de _PAGES_ paginas",
-      infoEmpty: "Mostrando elemento 0 a 0 de 0 elementos",
-      infoFiltered: "(filtrado por _MAX_ elementos en total)",
-      emptyTable: "No hay datos disponibles en la tabla",
-      loadingRecords: "Cargando...",
-      zeroRecords: "No se encontraron registros coincidentes",
-      aria: {
-        sortAscending: ": permite ordenar la columna en orden ascendente",
-        sortDescending: ": habilita ordenar la columna en orden descendente",
-      },
-      paginate: {
-        first: "Primero",
-        previous: "Anterior",
-        next: "Siguiente",
-        last: "Ultimo",
-      },
-    },
-  });
+    table.buttons().container().appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
 
-  table
-    .buttons()
-    .container()
-    .appendTo("#datatable-buttons_wrapper .col-md-6:eq(0)");
-
-  $(".dataTables_length select").addClass("form-select form-select-sm");
+    $('.dataTables_length select').addClass('form-select form-select-sm');
 });
