@@ -159,17 +159,20 @@ $id_Factura = $_GET['id_Factura'];
                                                     <input type="number" class="form-control" id="id_Factura" name="id_Factura" value="<?php echo $row['id_Factura'] ?>" hidden>
 
                                                     <div class="row mb-4">
+
                                                         <label for="id_Servicio" class="col-sm-5 col-form-label">Selecciona el servicio:</label>
                                                         <div class="col-sm-7">
                                                             <select name="id_Servicio" id="id_Servicio" class="form-select">
                                                                 <option value="">Selecciona un servicio</option>
                                                                 <?php
                                                                 $id_Cliente = $row['id_Cliente'];
+                                                                $id_Contrato = $row['id_Contrato'];
+
                                                                 $sql = "SELECT SR.*
                                                                             FROM servicios SR
                                                                                      JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
                                                                                      JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
-                                                                            WHERE CL.id_Cliente = $id_Cliente
+                                                                            WHERE CL.id_Cliente = $id_Cliente and CT.id_Contrato = $id_Contrato
                                                                               AND NOT EXISTS (
                                                                                 SELECT 1
                                                                                 FROM factura_servicio FS
