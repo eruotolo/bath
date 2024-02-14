@@ -16,6 +16,8 @@ $id_Factura = $_GET['id_Factura'];
 
     if ($query_run) {
     $row = mysqli_fetch_array($query_run);
+
+
 ?>
 
 <head>
@@ -162,13 +164,16 @@ $id_Factura = $_GET['id_Factura'];
                                                             <select name="id_Servicio" id="id_Servicio" class="form-select">
                                                                 <option value="">Selecciona un servicio</option>
                                                                 <?php
-                                                                $sql = "SELECT * FROM servicios SR
-                                                                            JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
-                                                                            JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
-                                                                            WHERE NOT EXISTS (
-                                                                                SELECT 1 FROM facturas FT
-                                                                                WHERE FT.id_Cliente = CL.id_Cliente
-                                                                                AND FT.id_Factura <> $id_Factura
+                                                                $id_Cliente = $row['id_Cliente'];
+                                                                $sql = "SELECT SR.*
+                                                                            FROM servicios SR
+                                                                                     JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
+                                                                                     JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
+                                                                            WHERE CL.id_Cliente = $id_Cliente
+                                                                              AND NOT EXISTS (
+                                                                                SELECT 1
+                                                                                FROM factura_servicio FS
+                                                                                WHERE FS.id_Servicio = SR.id_Servicio
                                                                             )";
                                                                     $result_tasks1 = mysqli_query($link, $sql);
                                                                     while ($row1 = mysqli_fetch_array($result_tasks1)) {
@@ -226,7 +231,7 @@ $id_Factura = $_GET['id_Factura'];
                                                 <td><?php echo $rows['observaciones_Servicio'] ?></td>
                                                 <td style="width: 70px; text-align: center" >
                                                     <!-- Botón para eliminar relación -->
-                                                    <a href="" class="btn btn-outline-secondary btn-sm" title="Eliminar">
+                                                    <a href="controller/invoice-service-remove.php?id_Relacion=<?php echo $rows['id_Relacion']?>&id_Factura=<?php echo $rows['id_Factura']?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
                                                         <i class="fas fa-trash-alt"></i>
                                                     </a>
                                                 </td>

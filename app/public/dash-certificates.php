@@ -48,7 +48,7 @@ include 'layouts/session.php'; ?>
                                 $result_task1 = mysqli_query($link, $query);
                                 while ($row = mysqli_fetch_Array($result_task1)) {
                                     ?>
-                                    <h5 class="card-title">Contratos <span
+                                    <h5 class="card-title">Certificados <span
                                             class="text-muted fw-normal ms-2">(<?php echo $row['total'] ?>)</span>
                                     </h5>
                                     <?php
@@ -84,9 +84,9 @@ include 'layouts/session.php'; ?>
                                     <tbody>
                                         <?php
                                             $query = "SELECT * FROM certificados CR
-                                                JOIN clientes CL ON CR.id_Cliente = CL.id_Cliente
-                                                JOIN contratos CT ON CL.id_Cliente = CT.id_Cliente
-                                            ORDER BY nro_Certificado";
+                                                            JOIN clientes CL ON CR.id_Cliente = CL.id_Cliente
+                                                            JOIN contratos CT ON CR.id_Contrato = CT.id_Contrato 
+                                                        ORDER BY nro_Certificado";
                                             $result_task = mysqli_query($link, $query);
                                             while ($row = mysqli_fetch_array($result_task)){
                                                 //$certificado = $row['fechahoy_Certificado'];
