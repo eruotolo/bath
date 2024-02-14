@@ -37,6 +37,3 @@ if (isset($_POST['crear'])){
         echo "Error al obtener el número correlativo";
     }
 }
-
-
-
