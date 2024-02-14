@@ -30,7 +30,6 @@ if (isset($_POST['crear'])){
 
         $result = mysqli_query($link, $insertQuery) or ($error = mysqli_error($link));
 
-
         header("Location: ../dash-certificates.php");
         exit();
     } else {
