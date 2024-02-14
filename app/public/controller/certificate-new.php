@@ -14,11 +14,11 @@ if (isset($_POST['crear'])){
 
     //echo $query;
     //die();
-    echo "antes del result";
+    //echo "antes del result";
     $result  = mysqli_query($link, $query) or ($error = mysqli_error());
-    echo "despues del result";
-    echo $error;
-    die();
+    //echo "despues del result";
+    //echo $error;
+    //die();
 
     if ($result) {
         $row = mysqli_fetch_assoc($result);
@@ -36,8 +36,12 @@ if (isset($_POST['crear'])){
         $nuevoCorrelativoStr = sprintf("%05d", $nuevoCorrelativo);
 
         // Insertar en la tabla Certificados
+
         $insertQuery = "INSERT INTO Certificados (nro_Certificado, id_Cliente, id_Contrato, fechahoy_Certificado, fecha_Servicio) 
                                 VALUES ($nuevoCorrelativoStr, $id_Cliente, $id_Contrato, CURDATE(), '$fecha_Servicio')";
+
+        echo $insertQuery;
+        die();
 
         $result = mysqli_query($link, $insertQuery) or ($error = mysqli_error($link));
 
