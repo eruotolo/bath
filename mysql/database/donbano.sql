@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: mysql
--- Tiempo de generación: 13-02-2024 a las 23:13:53
+-- Tiempo de generación: 14-02-2024 a las 17:08:05
 -- Versión del servidor: 11.2.2-MariaDB-1:11.2.2+maria~ubu2204
 -- Versión de PHP: 8.2.15
 
@@ -130,6 +130,13 @@ CREATE TABLE `certificados` (
   `fechahoy_Certificado` date DEFAULT NULL,
   `fecha_Servicio` varchar(100) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `certificados`
+--
+
+INSERT INTO `certificados` (`id_Certificado`, `nro_Certificado`, `id_Cliente`, `id_Contrato`, `fechahoy_Certificado`, `fecha_Servicio`) VALUES
+(23, '1', 17, 18, '2024-02-14', 'Febrero del 2024');
 
 -- --------------------------------------------------------
 
@@ -395,7 +402,6 @@ CREATE TABLE `factura_servicio` (
 --
 
 INSERT INTO `factura_servicio` (`id_Relacion`, `id_Factura`, `id_Servicio`) VALUES
-(9, 18, 1045),
 (10, 18, 1045),
 (11, 18, 1046),
 (12, 18, 1047),
@@ -1382,7 +1388,7 @@ ALTER TABLE `bathrooms`
 -- AUTO_INCREMENT de la tabla `certificados`
 --
 ALTER TABLE `certificados`
-  MODIFY `id_Certificado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_Certificado` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 
 --
 -- AUTO_INCREMENT de la tabla `clientes`
