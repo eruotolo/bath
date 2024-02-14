@@ -12,10 +12,12 @@ if (isset($_POST['crear'])){
     // Obtener el último número correlativo
     $query = "SELECT MAX(nro_Certificado) AS ultimo_correlativo FROM certificados WHERE fechahoy_Certificado = CURDATE()";
 
-    echo $query;
-    die();
+    //echo $query;
+    //die();
 
-    $result = mysqli_query($link, $query);
+    $result  = mysqli_query($link, $query) or ($error = mysqli_error());
+    echo $error;
+    die();
 
     if ($result) {
         $row = mysqli_fetch_assoc($result);
