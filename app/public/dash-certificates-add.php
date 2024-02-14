@@ -95,6 +95,8 @@ include 'layouts/session.php'; ?>
                                         </div>
                                     </div>
 
+                                    <input type="date" id="fechahoy_Certificado" name="fechahoy_Certificado" value="<?php echo date('Y-m-d'); ?>" max="<?php echo date('Y-m-d'); ?>" hidden>
+
                                     <div class="row justify-content-end">
                                         <div class="col-sm-9">
                                             <div>
