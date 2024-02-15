@@ -1,8 +1,8 @@
 $(document).ready(function () {
     var table = $('#datatable-buttons').DataTable({
         lengthMenu: [
-            [10, 25, 50, -1],
-            [10, 25, 50, 'All'],
+            [50, 100, -1],
+            [50, 100, 'All'],
         ], // Define los valores para la opción "Show Entries"
         buttons: [
             {
