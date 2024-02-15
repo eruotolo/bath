@@ -87,10 +87,10 @@
                             </th>
                             <th scope="col">Código</th>
                             <th scope="col">Fecha Inicio de Contrato</th>
-                            <th scope="col">Observaciones</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Asignado a Obra</th>
                             <th scope="col">Nombre de Obra</th>
+                            <th scope="col">Cliente</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -98,6 +98,7 @@
                         $query = "SELECT * FROM bathrooms BT
                                  JOIN contrato_bathroom CB ON BT.id_Bath = CB.id_Bath
                                  JOIN contratos CT ON CB.id_Contrato = CT.id_Contrato
+                                JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
                                  WHERE BT.estado_Bath = 1 ORDER BY fechaCompra_Bath DESC";
                         $result_task = mysqli_query($link, $query);
                         while ($row = mysqli_fetch_Array($result_task)) {
@@ -111,7 +112,6 @@
                                 </th>
                                 <td><?php echo $row['codigo_Bath'] ?></td>
                                 <td><?php echo date("d/m/Y", strtotime($row['fechaInicio_Contrato'])); ?></td>
-                                <td><?php echo $row['observacion_Bath'] ?></td>
                                 <?php
                                     if ($row['estado_Bath'] == 1) { ?>
                                         <td>
@@ -140,6 +140,7 @@
                                 <?php } ?>
 
                                 <td><?php echo $row['obra_Contrato'] ?></td>
+                                <td><?php echo $row['nombre_Cliente'] ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>
