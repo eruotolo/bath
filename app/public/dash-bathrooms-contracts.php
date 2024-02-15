@@ -86,7 +86,7 @@
                                 </div>
                             </th>
                             <th scope="col">Código</th>
-                            <th scope="col">Fecha de compra</th>
+                            <th scope="col">Fecha Inicio de Contrato</th>
                             <th scope="col">Observaciones</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Asignado a Obra</th>
@@ -110,7 +110,7 @@
                                     </div>
                                 </th>
                                 <td><?php echo $row['codigo_Bath'] ?></td>
-                                <td><?php echo date("d/m/Y", strtotime($row['fechaCompra_Bath'])); ?></td>
+                                <td><?php echo date("d/m/Y", strtotime($row['fechaInicio_Contrato'])); ?></td>
                                 <td><?php echo $row['observacion_Bath'] ?></td>
                                 <?php
                                     if ($row['estado_Bath'] == 1) { ?>
