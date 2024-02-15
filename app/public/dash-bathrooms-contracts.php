@@ -6,7 +6,7 @@
 
 <head>
 
-    <title>Listado de Baños | Blanco Servicios - Admin & Dashboard</title>
+    <title>Listado de Baños con Contratos | Blanco Servicios - Admin & Dashboard</title>
 
     <?php include 'layouts/head.php'; ?>
 
@@ -39,7 +39,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0 font-size-18">Listado de Baños</h4>
+                            <h4 class="mb-sm-0 font-size-18">Listado de Baños & Contratos</h4>
 
                         </div>
                     </div>
@@ -90,12 +90,15 @@
                             <th scope="col">Observaciones</th>
                             <th scope="col">Estado</th>
                             <th scope="col">Asignado a Obra</th>
-                            <th style="width: 80px; min-width: 80px;">Acción</th>
+                            <th scope="col">Nombre de Obra</th>
                         </tr>
                         </thead>
                         <tbody>
                         <?php
-                        $query = "SELECT * FROM bathrooms WHERE estado_Bath IN (0, 1) ORDER BY fechaCompra_Bath DESC";
+                        $query = "SELECT * FROM bathrooms BT
+                                 JOIN contrato_bathroom CB ON BT.id_Bath = CB.id_Bath
+                                 JOIN contratos CT ON CB.id_Contrato = CT.id_Contrato
+                                 WHERE BT.estado_Bath = 1 ORDER BY fechaCompra_Bath DESC";
                         $result_task = mysqli_query($link, $query);
                         while ($row = mysqli_fetch_Array($result_task)) {
                             ?>
@@ -110,18 +113,18 @@
                                 <td><?php echo date("d/m/Y", strtotime($row['fechaCompra_Bath'])); ?></td>
                                 <td><?php echo $row['observacion_Bath'] ?></td>
                                 <?php
-                                if ($row['estado_Bath'] == 1) { ?>
-                                    <td>
-                                        <div class="badge item-activo">Activo</div>
-                                    </td>
-                                    <?php
-                                } else {
-                                    ?>
-                                    <td>
-                                        <div class="badge item-inactivo">Inactivo</div>
-                                    </td>
-                                    <?php
-                                }
+                                    if ($row['estado_Bath'] == 1) { ?>
+                                        <td>
+                                            <div class="badge item-activo">Activo</div>
+                                        </td>
+                                        <?php
+                                    } else {
+                                        ?>
+                                        <td>
+                                            <div class="badge item-inactivo">Inactivo</div>
+                                        </td>
+                                        <?php
+                                    }
                                 ?>
 
                                 <?php
@@ -136,24 +139,7 @@
                                     </td>
                                 <?php } ?>
 
-                                <td>
-
-                                    <a href="dash-bathrooms-edit.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar">
-                                        <i class="fas fa-pencil-alt"></i>
-                                    </a>
-                                    <a href="controller/bath-active.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Activar">
-                                        <i class="fas fa-lock-open"></i>
-                                    </a>
-                                    <a href="controller/bath-inactive.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Inactivar">
-                                        <i class="fas fa-lock"></i>
-                                    </a>
-                                    <a href="controller/bath-notassign.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Deshacer la asignación">
-                                        <i class="fas fa-level-down-alt"></i>
-                                    </a>
-                                    <a href="controller/bath-delete.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
-                                        <i class="fas fa-trash-alt"></i>
-                                    </a>
-                                </td>
+                                <td><?php echo $row['obra_Contrato'] ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>

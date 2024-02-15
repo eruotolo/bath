@@ -19,7 +19,7 @@ if($query_run){
 
     <head>
 
-        <title>Item Contrato | Chubby - Admin & Dashboard</title>
+        <title>Item Contrato | Blanco Servicios - Admin & Dashboard</title>
 
         <?php include 'layouts/head.php'; ?>
         <?php include 'layouts/head-style.php'; ?>
@@ -203,14 +203,9 @@ if($query_run){
                                                         ?>
                                                         <td style="width: 70px; text-align: center">
                                                             <!-- Botón para eliminar relación -->
-                                                            <a href="controller/contract-bath-assign.php?id_Contrato=<?php echo $row['id_Contrato'] ?>&&id_Bath=<?php echo $row['id_Bath'] ?>"
-                                                               class="btn btn-outline-secondary btn-sm delete-contacto" title="Asignar">
-                                                                <i class="fas fa-lock"></i>
-                                                            </a>
-
-                                                            <a href="controller/contract-bath-notassign.php?id_Contrato=<?php echo $row['id_Contrato'] ?>&&id_Bath=<?php echo $row['id_Bath'] ?>"
+                                                            <a href="controller/contract-bath-notassign.php?id_Contrato=<?php echo $row['id_Contrato'] ?>&id_Bath=<?php echo $row['id_Bath'] ?>&id_Relacion=<?php echo $row['id_Relacion'] ?>"
                                                                class="btn btn-outline-secondary btn-sm delete-contacto" title="No Asignar">
-                                                                <i class="fas fa-lock-open"></i>
+                                                                <i class="fas fa-trash-alt"></i>
                                                             </a>
                                                         </td>
                                                     </tr>

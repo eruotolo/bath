@@ -25,7 +25,7 @@ if ($query_run) {
 
     <head>
 
-        <title>Item Certificado | Chubby - Admin & Dashboard</title>
+        <title>Item Certificado | Blanco Servicios - Admin & Dashboard</title>
 
         <?php include 'layouts/head.php'; ?>
         <?php include 'layouts/head-style.php'; ?>

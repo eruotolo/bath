@@ -108,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
 
-    <title>Register | Chubby - Admin & Dashboard Template</title>
+    <title>Register | Blanco Servicios - Admin & Dashboard Template</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 
@@ -126,13 +126,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="mb-4 mb-md-5 text-center">
                                 <a href="index.php" class="d-block auth-logo">
                                     <img src="assets/images/logo-sm.svg" alt="" height="28"> <span
-                                            class="logo-txt">Chubby</span>
+                                            class="logo-txt">Blanco Servicios</span>
                                 </a>
                             </div>
                             <div class="auth-content my-auto">
                                 <div class="text-center">
                                     <h5 class="mb-0">Register Account</h5>
-                                    <p class="text-muted mt-2">Get your free Chubby account now.</p>
+                                    <p class="text-muted mt-2">Get your free Blanco Servicios account now.</p>
                                 </div>
                                 <form class="needs-validation mt-4 pt-2"
                                       action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="post">
@@ -169,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </div>
                                     
                                     <div class="mb-4">
-                                        <p class="mb-0">By registering you agree to the Chubby <a href="#"
+                                        <p class="mb-0">By registering you agree to the Blanco Servicios <a href="#"
                                                                                                   class="text-primary">Terms of Use</a>
                                         </p>
                                     </div>
@@ -218,7 +218,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <script>
                                         document.write(new Date().getFullYear())
                                     </script>
-                                                Chubby . Crafted with <i
+                                                Blanco Servicios . Crafted with <i
                                             class="mdi mdi-heart text-danger"></i> by Themesbrand
                                 </p>
                             </div>

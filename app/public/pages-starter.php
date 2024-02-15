@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>Starter Page | Chubby - Admin & Dashboard Template</title>
+    <title>Starter Page | Blanco Servicios - Admin & Dashboard Template</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 

@@ -5,7 +5,7 @@ include 'layouts/session.php'; ?>
 
 <head>
 
-    <title>Facturas List | Chubby - Admin & Dashboard Template</title>
+    <title>Facturas List | Blanco Servicios - Admin & Dashboard Template</title>
 
     <?php include 'layouts/head.php'; ?>
 
@@ -128,10 +128,10 @@ include 'layouts/session.php'; ?>
 
                                             </td>
                                             <td style="text-align: center">
-                                                <a href="dash-invoices-print.php?id_Factura=<?php echo $row['id_Factura'] ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir">
+                                                <a href="dash-invoices-print.php?id_Factura=<?php echo $row['id_Factura'] ?>&id_Contrato=<?php echo $row['id_Contrato']; ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir">
                                                     <i class="fa fa-print"></i>
                                                 </a>
-                                                <a href="dash-invoices-detail.php?id_Factura=<?php echo $row['id_Factura'] ?>" class="btn btn-outline-secondary btn-sm" title="Agregar Servicios a la Factura">
+                                                <a href="dash-invoices-detail.php?id_Factura=<?php echo $row['id_Factura'] ?>&id_Contrato=<?php echo $row['id_Contrato']; ?>" class="btn btn-outline-secondary btn-sm" title="Agregar Servicios a la Factura">
                                                     <i class="fas fa-plus"></i>
                                                 </a>
                                             </td>

@@ -4,7 +4,7 @@ include 'layouts/session.php'; ?>
 <?php include 'layouts/config.php'; ?>
 
 <head>
-    <title>Dashboard | Chubby - Admin & Dashboard Template</title>
+    <title>Dashboard | Blanco Servicios - Admin & Dashboard Template</title>
 
     <?php include 'layouts/head.php'; ?>
 
@@ -37,7 +37,7 @@ include 'layouts/session.php'; ?>
 
                             <div class="page-title-right">
                                 <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Chubby</a></li>
+                                    <li class="breadcrumb-item"><a href="javascript: void(0);">Blanco Servicios</a></li>
                                     <li class="breadcrumb-item active">Tablero</li>
                                 </ol>
                             </div>

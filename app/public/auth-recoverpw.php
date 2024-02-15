@@ -69,7 +69,7 @@ if (isset($_POST['submit'])) {
 
 <head>
 
-    <title>Recover Password | Chubby - Admin & Dashboard Template</title>
+    <title>Recover Password | Blanco Servicios - Admin & Dashboard Template</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 
@@ -86,13 +86,13 @@ if (isset($_POST['submit'])) {
                             <div class="mb-4 mb-md-5 text-center">
                                 <a href="index.php" class="d-block auth-logo">
                                     <img src="assets/images/logo-sm.svg" alt="" height="28"> <span
-                                            class="logo-txt">Chubby</span>
+                                            class="logo-txt">Blanco Servicios</span>
                                 </a>
                             </div>
                             <div class="auth-content my-auto">
                                 <div class="text-center">
                                     <h5 class="mb-0">Reset Password</h5>
-                                    <p class="text-muted mt-2">Reset Password with Chubby.</p>
+                                    <p class="text-muted mt-2">Reset Password with Blanco Servicios.</p>
                                 </div>
                                 <?php if ($msg) { ?>
                                     <div class="alert alert-success text-center my-4" role="alert">
@@ -125,7 +125,7 @@ if (isset($_POST['submit'])) {
                                     <script>
                                         document.write(new Date().getFullYear())
                                     </script>
-                                                Chubby. Crafted with <i
+                                                Blanco Servicios. Crafted with <i
                                             class="mdi mdi-heart text-danger"></i> by Themesbrand
                                 </p>
                             </div>

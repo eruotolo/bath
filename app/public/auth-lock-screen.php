@@ -74,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
 
-    <title>Lock Screen | Chubby - Admin & Dashboard Template</title>
+    <title>Lock Screen | Blanco Servicios - Admin & Dashboard Template</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 
@@ -91,7 +91,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="mb-4 mb-md-5 text-center">
                                 <a href="index.php" class="d-block auth-logo">
                                     <img src="assets/images/logo-sm.svg" alt="" height="28"> <span
-                                            class="logo-txt">Chubby Backend</span>
+                                            class="logo-txt">Blanco Servicios</span>
                                 </a>
                             </div>
                             <div class="auth-content my-auto">
@@ -143,7 +143,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="mt-4 mt-md-5 text-center">
                                 <p class="mb-0">©
                                     <script>document.write(new Date().getFullYear())</script>
-                                                Chubby Backend. <br>Elaborado con <i
+                                                Blanco Servicios. <br>Elaborado con <i
                                             class="mdi mdi-heart text-danger"></i>
                                                 Crow Advance
                                 </p>

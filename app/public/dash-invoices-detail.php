@@ -7,11 +7,12 @@ include('layouts/config.php');
 global $link;
 
 $id_Factura = $_GET['id_Factura'];
+$id_Contrato = $_GET['id_Contrato'];
 
     $query = "SELECT * FROM facturas FT
         JOIN clientes CL ON FT.id_Cliente = CL.id_Cliente
         JOIN contratos CT ON CL.id_Cliente = CT.id_Cliente
-    WHERE id_Factura = $id_Factura";
+    WHERE id_Factura = $id_Factura and CT.id_Contrato = $id_Contrato";
     $query_run = mysqli_query($link, $query);
 
     if ($query_run) {
@@ -22,7 +23,7 @@ $id_Factura = $_GET['id_Factura'];
 
 <head>
 
-    <title>Detalle de factura | Chubby - Admin & Dashboard Template</title>
+    <title>Detalle de factura | Blanco Servicios - Admin & Dashboard Template</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 

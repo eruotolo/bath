@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>Login | Chubby - Admin & Dashboard Template</title>
+    <title>Login | Blanco Servicios - Admin & Dashboard Template</title>
     <?php include 'layouts/head.php'; ?>
 
     <?php include 'layouts/head-style.php'; ?>
@@ -21,13 +21,13 @@
                             <div class="mb-4 mb-md-5 text-center">
                                 <a href="index.php" class="d-block auth-logo">
                                     <img src="assets/images/logo-sm.svg" alt="" height="28"> <span
-                                            class="logo-txt">Chubby</span>
+                                            class="logo-txt">Blanco Servicios</span>
                                 </a>
                             </div>
                             <div class="auth-content my-auto">
                                 <div class="text-center">
                                     <h5 class="mb-0">Welcome Back !</h5>
-                                    <p class="text-muted mt-2">Sign in to continue to Chubby.</p>
+                                    <p class="text-muted mt-2">Sign in to continue to Blanco Servicios.</p>
                                 </div>
                                 <form class="custom-form mt-4 pt-2">
                                     <div class="mb-3">
@@ -110,7 +110,7 @@
                                     <script>
                                         document.write(new Date().getFullYear())
                                     </script>
-                                                Chubby . Crafted with <i
+                                                Blanco Servicios . Crafted with <i
                                             class="mdi mdi-heart text-danger"></i> by Themesbrand
                                 </p>
                             </div>

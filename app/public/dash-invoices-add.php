@@ -4,7 +4,7 @@
 
 <head>
 
-    <title>Nueva Factura | Chubby - Admin & Dashboard Template</title>
+    <title>Nueva Factura | Blanco Servicios - Admin & Dashboard Template</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 

@@ -5,7 +5,7 @@ include 'layouts/session.php'; ?>
 
 <head>
 
-    <title>Nuevo Baño | Chubby - Admin & Dashboard</title>
+    <title>Nuevo Baño | Blanco Servicios - Admin & Dashboard</title>
 
     <?php include 'layouts/head.php'; ?>
 

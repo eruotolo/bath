@@ -5,19 +5,19 @@
             <div class="navbar-brand-box">
                 <a href="index.php" class="logo logo-dark">
                     <span class="logo-sm">
-                        <img src="assets/images/logo-sm.svg" alt="" height="24">
+                        <img src="../assets/images/logo-sm.svg" alt="" height="24">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/images/logo-sm.svg" alt="" height="24"> <span class="logo-txt">Chubby</span>
+                        <img src="../assets/images/logo-sm.svg" alt="" height="24"> <span class="logo-txt">Blanco Servicios</span>
                     </span>
                 </a>
 
                 <a href="index.php" class="logo logo-light">
                     <span class="logo-sm">
-                        <img src="assets/images/logo-sm.svg" alt="" height="24">
+                        <img src="../assets/images/logo-sm.svg" alt="" height="24">
                     </span>
                     <span class="logo-lg">
-                        <img src="assets/images/logo-sm.svg" alt="" height="24"> <span class="logo-txt">Chubby</span>
+                        <img src="../assets/images/logo-sm.svg" alt="" height="24"> <span class="logo-txt">Blanco Servicios</span>
                     </span>
                 </a>
             </div>
@@ -111,6 +111,7 @@
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="dash-bathrooms.php">Baños Químicos</a></li>
                         <li><a href="dash-bathrooms-add.php">Nuevo Baño Químicos</a></li>
+                        <li><a href="dash-bathrooms-contracts.php">Baños & Contratos</a></li>
                     </ul>
                 </li>
 

@@ -5,7 +5,7 @@
 
 <head>
 
-    <title>Usuarios | Chubby - Admin & Dashboard</title>
+    <title>Usuarios | Blanco Servicios - Admin & Dashboard</title>
 
     <?php include 'layouts/head.php'; ?>
 

@@ -19,7 +19,7 @@ if($query_run){
 
 <head>
 
-    <title>Item Contrato | Chubby - Admin & Dashboard</title>
+    <title>Item Contrato | Blanco Servicios - Admin & Dashboard</title>
 
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>

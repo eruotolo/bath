@@ -20,6 +20,10 @@ if ($link->query($sqlContrato) === TRUE) {
             $id_Bath = $row['id_Bath'];
             $sqlUpdateBath = "UPDATE bathrooms SET asignado_Bath = 0 WHERE id_Bath = '$id_Bath'";
             $link->query($sqlUpdateBath);
+
+            // Eliminar la relación de la tabla contrato_bathroom
+            $sqlDeleteRelation = "DELETE FROM contrato_bathroom WHERE id_Contrato = '$id_Contrato' AND id_Bath = '$id_Bath'";
+            $link->query($sqlDeleteRelation);
         }
     }
 

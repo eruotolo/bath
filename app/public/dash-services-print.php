@@ -25,7 +25,7 @@ if ($query_run) {
 
         <head>
 
-            <title>Item Servicio | Chubby - Admin & Dashboard</title>
+            <title>Item Servicio | Blanco Servicios - Admin & Dashboard</title>
 
             <?php include 'layouts/head.php'; ?>
             <?php include 'layouts/head-style.php'; ?>

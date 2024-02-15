@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>Error 500 | Chubby - Admin & Dashboard Template</title>
+    <title>Error 500 | Blanco Servicios - Admin & Dashboard Template</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 

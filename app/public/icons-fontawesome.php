@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>Font Awesome 5 | Chubby - Admin & Dashboard Template</title>
+    <title>Font Awesome 5 | Blanco Servicios - Admin & Dashboard Template</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 

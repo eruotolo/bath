@@ -3,7 +3,7 @@
 
 <head>
 
-    <title>Confirm Mail | Chubby - Admin & Dashboard Template</title>
+    <title>Confirm Mail | Blanco Servicios - Admin & Dashboard Template</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 
@@ -20,7 +20,7 @@
                             <div class="mb-4 mb-md-5 text-center">
                                 <a href="index.php" class="d-block auth-logo">
                                     <img src="assets/images/logo-sm.svg" alt="" height="28"> <span
-                                            class="logo-txt">Chubby</span>
+                                            class="logo-txt">Blanco Servicios</span>
                                 </a>
                             </div>
                             <div class="auth-content my-auto">
@@ -44,7 +44,7 @@
                                     <script>
                                         document.write(new Date().getFullYear())
                                     </script>
-                                                Chubby . Crafted with <i
+                                                Blanco Servicios . Crafted with <i
                                             class="mdi mdi-heart text-danger"></i> by Themesbrand
                                 </p>
                             </div>

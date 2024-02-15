@@ -4,7 +4,7 @@
 <head>
 
 
-    <title>Register | Chubby - Admin & Dashboard Template</title>
+    <title>Register | Blanco Servicios - Admin & Dashboard Template</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 

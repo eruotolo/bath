@@ -17,7 +17,7 @@ if ($query_run){
 
         <head>
 
-            <title>Editar Usuario | Chubby - Admin & Dashboard</title>
+            <title>Editar Usuario | Blanco Servicios - Admin & Dashboard</title>
 
             <?php include 'layouts/head.php'; ?>
             <?php include 'layouts/head-style.php'; ?>

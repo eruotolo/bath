@@ -32,7 +32,7 @@ if ($total == 0) {
 }
 
 // Consulta para obtener contratos asociados al id_Cliente
-$sqlSelect = "SELECT * FROM contratos WHERE id_Cliente = ?";
+$sqlSelect = "SELECT * FROM contratos WHERE id_Cliente = ? and estado_Contrato = 2";
 $stmtSelect = mysqli_prepare($link, $sqlSelect);
 
 if (!$stmtSelect) {

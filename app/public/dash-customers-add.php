@@ -4,7 +4,7 @@
 
 <head>
 
-    <title>Nuevo Cliente | Chubby - Admin & Dashboard</title>
+    <title>Nuevo Cliente | Blanco Servicios - Admin & Dashboard</title>
 
     <?php include 'layouts/head.php'; ?>
 

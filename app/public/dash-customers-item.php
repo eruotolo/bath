@@ -17,7 +17,7 @@ if ($query_run) {
 
         <head>
 
-            <title>Perfil Cliente | Chubby - Admin & Dashboard</title>
+            <title>Perfil Cliente | Blanco Servicios - Admin & Dashboard</title>
             <?php include 'layouts/head.php'; ?>
             <?php include 'layouts/head-style.php'; ?>
 

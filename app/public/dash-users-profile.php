@@ -3,7 +3,7 @@
 
 <head>
     
-    <title>Perfil del Usuario | Chubby - Admin & Dashboard Template</title>
+    <title>Perfil del Usuario | Blanco Servicios - Admin & Dashboard Template</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 

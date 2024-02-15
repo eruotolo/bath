@@ -5,7 +5,7 @@ include 'layouts/session.php'; ?>
 
 <head>
 
-    <title>Contratos | Chubby - Admin & Dashboard</title>
+    <title>Contratos | Blanco Servicios - Admin & Dashboard</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 
@@ -125,9 +125,9 @@ include 'layouts/session.php'; ?>
                                             <a href="controller/contract-active.php?id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Activar">
                                                 <i class="fas fa-lock-open"></i>
                                             </a>
-                                            <a href="controller/contract-down.php?id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
+                                            <!--<a href="controller/contract-down.php?id_Contrato=<?php /*echo $row['id_Contrato'] */?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
                                                 <i class="fas fa-trash-alt"></i>
-                                            </a>
+                                            </a>-->
                                         </td>
                                     </tr>
                                     <?php

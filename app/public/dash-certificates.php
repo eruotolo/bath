@@ -5,7 +5,7 @@ include 'layouts/session.php'; ?>
 
 <head>
 
-    <title>Certificados | Chubby - Admin & Dashboard</title>
+    <title>Certificados | Blanco Servicios - Admin & Dashboard</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
 

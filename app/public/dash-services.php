@@ -5,7 +5,7 @@ include 'layouts/session.php'; ?>
 
 <head>
 
-    <title>Listado de Servicios | Seguimientos | Chubby - Admin & Dashboard</title>
+    <title>Listado de Servicios | Seguimientos | Blanco Servicios - Admin & Dashboard</title>
 
     <?php include 'layouts/head.php'; ?>
 
