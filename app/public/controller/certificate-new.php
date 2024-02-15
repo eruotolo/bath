@@ -8,6 +8,7 @@ if (isset($_POST['crear'])){
     $id_Contrato = $_POST['id_Contrato'];
     $fecha_Servicio = $_POST['fecha_Servicio'];
     $fechahoy_Certificado = $_POST['fechahoy_Certificado'];
+    $mts_Certificado = $_POST['mts_Certificado'];
 
     // Obtener el último número correlativo
     $query = "SELECT MAX(nro_Certificado) AS ultimo_correlativo FROM certificados WHERE fechahoy_Certificado = CURDATE()";
@@ -37,8 +38,8 @@ if (isset($_POST['crear'])){
 
         // Insertar en la tabla Certificados
 
-        $insertQuery = "INSERT INTO certificados (nro_Certificado, id_Cliente, id_Contrato, fechahoy_Certificado, fecha_Servicio) 
-                                VALUES ($nuevoCorrelativoStr, $id_Cliente, $id_Contrato, CURDATE(), '$fecha_Servicio')";
+        $insertQuery = "INSERT INTO certificados (nro_Certificado, id_Cliente, id_Contrato, fechahoy_Certificado, fecha_Servicio, mts_Certificado) 
+                                VALUES ($nuevoCorrelativoStr, $id_Cliente, $id_Contrato, CURDATE(), '$fecha_Servicio', $mts_Certificado)";
 
         //echo $insertQuery;
         //die();

@@ -89,6 +89,13 @@ include 'layouts/session.php'; ?>
                                     </div>
 
                                     <div class="row mb-4">
+                                        <label for="mts_Certificado" class="col-sm-3 col-form-label">Metros Cúbicos:</label>
+                                        <div class="col-sm-6">
+                                            <input class="form-control" type="number" id="mts_Certificado" name="mts_Certificado" placeholder="Ingrese los metros cúbicos" required>
+                                        </div>
+                                    </div>
+
+                                    <div class="row mb-4">
                                         <label for="fecha_Servicio" class="col-sm-3 col-form-label">Fecha Servicio:</label>
                                         <div class="col-sm-6">
                                             <input class="form-control" type="text" id="fecha_Servicio" name="fecha_Servicio" placeholder="Ingrese las Fecha del Servicio Campo Libre" required>
