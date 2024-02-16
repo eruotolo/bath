@@ -107,7 +107,7 @@
                                     </div>
                                 </th>
                                 <td><?php echo $row['codigo_Bath'] ?></td>
-                                <td><?php echo date("d/m/Y", strtotime($row['fechaCompra_Bath'])); ?></td>
+                                <td><?php echo $row['fechaCompra_Bath'] ?></td>
                                 <td><?php echo $row['observacion_Bath'] ?></td>
                                 <?php
                                 if ($row['estado_Bath'] == 1) { ?>
