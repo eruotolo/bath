@@ -21,7 +21,7 @@ if(isset($_POST['crear'])){
     // Obtener el ID de la factura creada
     $id_factura_creada = mysqli_insert_id($link);
 
-    header("Location: ../dash-invoices-detail.php?id_Factura=$id_factura_creada");
+    header("Location: ../dash-invoices-detail.php?id_Factura=$id_factura_creada&id_Contrato=$id_Contrato");
 }else{
     header("Location: ../index.php");
 }

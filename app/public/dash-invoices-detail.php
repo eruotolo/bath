@@ -158,6 +158,7 @@ $id_Contrato = $_GET['id_Contrato'];
                                                 <form action="controller/invoice-service-add.php" class="mt-4 pt-2"  method="post" enctype="multipart/form-data">
 
                                                     <input type="number" class="form-control" id="id_Factura" name="id_Factura" value="<?php echo $row['id_Factura'] ?>" hidden>
+                                                    <input type="number" class="form-control" id="id_Contrato" name="id_Contrato" value="<?php echo $row['id_Contrato'] ?>" hidden>
 
                                                     <div class="row mb-4">
 
