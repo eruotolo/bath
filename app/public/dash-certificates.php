@@ -101,7 +101,7 @@ include 'layouts/session.php'; ?>
                                             <td><?php echo $row['obra_Contrato'] ?></td>
                                             <td><?php echo $row['fecha_Servicio'] ?></td>
                                             <td class="text-center">
-                                                <a href="dash-certificates-item.php?id_Certificado=<?php echo $row['id_Certificado'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
+                                                <a href="dash-certificates-item.php?id_Certificado=<?php echo $row['id_Certificado'] ?>&id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
                                                     <i class="fas fas fa-eye"></i>
                                                 </a>
                                                 <a href="controller/certificate-remove.php?id_Certificado=<?php echo $row['id_Certificado'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">

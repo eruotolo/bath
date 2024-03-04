@@ -8,11 +8,12 @@ global $link;
 include('layouts/config.php');
 
 $id_Certificado = $_GET['id_Certificado'];
+$id_Contrato = $_GET['id_Contrato'];
 
 $query = "SELECT * FROM certificados CR
     JOIN clientes CL ON CR.id_Cliente = CL.id_Cliente
     JOIN contratos CT ON CL.id_Cliente = CT.id_Cliente
-WHERE id_Certificado = $id_Certificado";
+WHERE id_Certificado = $id_Certificado AND CT.id_Contrato = $id_Contrato";
 
 $query_run = mysqli_query($link, $query);
 
