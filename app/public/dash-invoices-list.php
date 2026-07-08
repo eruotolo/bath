@@ -96,6 +96,7 @@ include 'layouts/session.php'; ?>
                                             <th>Obra</th>
                                             <th style="text-align: center">Monto Factura</th>
                                             <th style="text-align: center">Estado</th>
+                                            <th style="text-align: center">Fecha de Pago</th>
                                             <th style="width: 150px; text-align: center">Otros</th>
                                             <th style="width: 90px;" >Acciones</th>
                                         </tr>
@@ -129,6 +130,16 @@ include 'layouts/session.php'; ?>
 
                                             </td>
                                             <td style="text-align: center">
+                                                <?php echo $row['fecha_Pago'] ? htmlspecialchars($row['fecha_Pago']) : '<span class="text-muted">Sin definir</span>' ?>
+                                                <button type="button" class="btn btn-outline-secondary btn-sm ms-1 btn-fecha-pago"
+                                                        data-bs-toggle="modal" data-bs-target="#modalFechaPago"
+                                                        data-id-factura="<?php echo $row['id_Factura'] ?>"
+                                                        data-fecha-pago="<?php echo htmlspecialchars($row['fecha_Pago'] ?? '') ?>"
+                                                        title="Editar Fecha de Pago">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </button>
+                                            </td>
+                                            <td style="text-align: center">
                                                 <a href="dash-invoices-print.php?id_Factura=<?php echo $row['id_Factura'] ?>&id_Contrato=<?php echo $row['id_Contrato']; ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir">
                                                     <i class="fa fa-print"></i>
                                                 </a>
@@ -159,6 +170,31 @@ include 'layouts/session.php'; ?>
                                     </table>
                                 </div>
                                 <!-- end table responsive -->
+
+                                <!-- MODAL EDITAR FECHA DE PAGO -->
+                                <div class="modal fade" id="modalFechaPago" tabindex="-1" aria-labelledby="modalFechaPagoLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="modalFechaPagoLabel">Editar Fecha de Pago</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <form action="controller/invoice-fecha-pago.php" method="POST">
+                                                <div class="modal-body">
+                                                    <input type="hidden" name="id_Factura" id="modalFechaPagoIdFactura" value="">
+                                                    <div class="mb-3">
+                                                        <label for="modalFechaPagoInput" class="form-label">Fecha de Pago</label>
+                                                        <input type="date" class="form-control" name="fecha_Pago" id="modalFechaPagoInput">
+                                                    </div>
+                                                </div>
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                                    <button type="submit" class="btn btn-primary">Guardar</button>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <!-- end card body -->
                         </div>
@@ -257,6 +293,12 @@ include 'layouts/session.php'; ?>
 		table.buttons().container().appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
 
 		$('.dataTables_length select').addClass('form-select form-select-sm');
+
+		$('#modalFechaPago').on('show.bs.modal', function (event) {
+			var button = $(event.relatedTarget);
+			$('#modalFechaPagoIdFactura').val(button.data('id-factura'));
+			$('#modalFechaPagoInput').val(button.data('fecha-pago'));
+		});
 	});
 
 </script>

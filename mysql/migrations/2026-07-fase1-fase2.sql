@@ -84,6 +84,13 @@ WHERE estado_Contrato = 2
 
 
 -- ----------------------------------------------------------------------------
+-- SECCION 5 - Facturas: campo Fecha de Pago (Fase 2 item 13)
+-- ----------------------------------------------------------------------------
+
+ALTER TABLE facturas ADD COLUMN IF NOT EXISTS fecha_Pago DATE NULL DEFAULT NULL;
+
+
+-- ----------------------------------------------------------------------------
 -- PROBLEMA CONOCIDO, NO RESUELTO POR ESTE SCRIPT:
 --
 -- Baños asignados a mas de un contrato "activo" al mismo tiempo (ver caso real
@@ -107,4 +114,7 @@ WHERE estado_Contrato = 2
 --     "Activos" sin ningun baño asignado. Verificado despues: 0 contratos
 --     activos sin baños restantes. Segura de re-correr en produccion (el
 --     WHERE no vuelve a tocar los que ya quedaron en estado_Contrato = 1).
+--   - Seccion 5: columna fecha_Pago ya presente, IF NOT EXISTS confirmado
+--     idempotente. Probada en navegador (fijar y limpiar la fecha) contra
+--     dash-invoices-list.php sin errores.
 -- ============================================================================
