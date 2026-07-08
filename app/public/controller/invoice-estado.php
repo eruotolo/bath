@@ -3,30 +3,32 @@
 include ('../layouts/config.php');
 global $link;
 
+$id_Factura = intval($_GET['id_Factura']);
+$estado_Factura = intval($_GET['estado_Factura']);
 
-$id_Factura = $_GET['id_Factura'];
-$estado_Factura = $_GET['estado_Factura'];
+if (!in_array($estado_Factura, [1, 2, 3], true)) {
+    $estado_Factura = 3;
+}
 
-    if ($estado_Factura == 1){
-        $sql = "UPDATE facturas SET estado_Factura = 1 WHERE id_Factura = $id_Factura";
-    }elseif($estado_Factura == 2){
-        $sql = "UPDATE facturas SET estado_Factura = 2 WHERE id_Factura = $id_Factura";
-    }else{
-        $sql = "UPDATE facturas SET estado_Factura = 3 WHERE id_Factura = $id_Factura";
+$sql = "UPDATE facturas SET estado_Factura = ? WHERE id_Factura = ?";
+$stmt = mysqli_prepare($link, $sql);
+mysqli_stmt_bind_param($stmt, "ii", $estado_Factura, $id_Factura);
+$ok = mysqli_stmt_execute($stmt);
+mysqli_stmt_close($stmt);
+
+if ($ok) {
+    if ($estado_Factura === 3) {
+        // Al anular la factura, se liberan los servicios asociados para que puedan volver a facturarse
+        $sqlLiberar = "DELETE FROM factura_servicio WHERE id_Factura = ?";
+        $stmtLiberar = mysqli_prepare($link, $sqlLiberar);
+        mysqli_stmt_bind_param($stmtLiberar, "i", $id_Factura);
+        mysqli_stmt_execute($stmtLiberar);
+        mysqli_stmt_close($stmtLiberar);
     }
 
-    //echo $sql;
-    //die();
-
-    $result = mysqli_query($link, $sql);
-
-    //echo $error;
-    //die();
-
-if ($link->query($sql) === TRUE) {
     header("Location: ../dash-invoices-list.php");
-}else{
-    echo '<script>alert("No se pudo actualizar el contacto)</script>';
+} else {
+    echo '<script>alert("No se pudo actualizar el estado de la factura")</script>';
 }
-// Cerrar la conexión
+
 $link->close();
