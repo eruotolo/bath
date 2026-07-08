@@ -111,7 +111,8 @@
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="dash-bathrooms.php">Baños Químicos</a></li>
                         <li><a href="dash-bathrooms-add.php">Nuevo Baño Químicos</a></li>
-                        <li><a href="dash-bathrooms-contracts.php">Baños & Contratos</a></li>
+                        <li><a href="dash-bathrooms-contracts-status.php">Baños & Contratos</a></li>
+                        <li><a href="dash-bathrooms-contracts.php">Histórico</a></li>
                     </ul>
                 </li>
 
@@ -121,7 +122,8 @@
                         <span data-key="t-horizontal">Obra / Contratos</span>
                     </a>
                     <ul class="sub-menu" aria-expanded="false">
-                        <li><a href="dash-contracts.php">Listado Obras / Contratos</a></li>
+                        <li><a href="dash-contracts.php?estado=2">Contratos Activos</a></li>
+                        <li><a href="dash-contracts.php?estado=1">Contratos Terminados</a></li>
                         <li><a href="dash-contracts-add.php">Nueva Obra / Contrato</a></li>
                     </ul>
                 </li>

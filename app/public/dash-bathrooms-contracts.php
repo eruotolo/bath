@@ -6,7 +6,7 @@
 
 <head>
 
-    <title>Listado de Baños con Contratos | Blanco Servicios - Admin & Dashboard</title>
+    <title>Histórico de Baños con Contratos | Blanco Servicios - Admin & Dashboard</title>
 
     <?php include 'layouts/head.php'; ?>
 
@@ -39,7 +39,7 @@
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0 font-size-18">Listado de Baños & Contratos</h4>
+                            <h4 class="mb-sm-0 font-size-18">Histórico de Baños & Contratos</h4>
 
                         </div>
                     </div>
@@ -131,7 +131,7 @@
                                     if ($row['asignado_Bath'] == 0) {
                                 ?>
                                     <td>
-                                        <div class="badge item-inactivo">No Asignado</div>
+                                        <div class="badge item-disponible">Disponible</div>
                                     </td>
                                 <?php }else{ ?>
                                     <td>

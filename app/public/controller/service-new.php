@@ -14,6 +14,7 @@ if (isset($_POST['crear'])){
     $higienico_Tipo = isset($_POST['higienico_Tipo']) ? $_POST['higienico_Tipo'] : 0;
     $jabon_Tipo = isset($_POST['jabon_Tipo']) ? $_POST['jabon_Tipo'] : 0;
     $otros_Tipo = isset($_POST['otros_Tipo']) ? $_POST['otros_Tipo'] : 0;
+    $retiro_Tipo = isset($_POST['retiro_Tipo']) ? $_POST['retiro_Tipo'] : 0;
 
     $fecha_Servicio = $_POST['fecha_Servicio'];
     $observaciones_Servicio = $_POST['observaciones_Servicio'];
@@ -22,7 +23,7 @@ if (isset($_POST['crear'])){
     $servicio_query = "INSERT INTO servicios (id_Contrato, nro_Servicio, fecha_Servicio, observaciones_Servicio, estado_Servicio) VALUE ('$id_Contrato', '$nro_Servicio', '$fecha_Servicio', '$observaciones_Servicio', '$estado_Servicio')";
 
 
-    $tipo_query = "INSERT INTO tipo_servicio (nro_Servicio, instalacion_Tipo, reparacion_Tipo, limpieza_Tipo, desinfeccion_Tipo, sanitizacion_Tipo, higienico_Tipo, jabon_Tipo, otros_Tipo) VALUE ('$nro_Servicio','$instalacion_Tipo', '$reparacion_Tipo', '$limpieza_Tipo', '$desinfeccion_Tipo', '$sanitizacion_Tipo', '$higienico_Tipo', '$jabon_Tipo', '$otros_Tipo')";
+    $tipo_query = "INSERT INTO tipo_servicio (nro_Servicio, instalacion_Tipo, reparacion_Tipo, limpieza_Tipo, desinfeccion_Tipo, sanitizacion_Tipo, higienico_Tipo, jabon_Tipo, otros_Tipo, retiro_Tipo) VALUE ('$nro_Servicio','$instalacion_Tipo', '$reparacion_Tipo', '$limpieza_Tipo', '$desinfeccion_Tipo', '$sanitizacion_Tipo', '$higienico_Tipo', '$jabon_Tipo', '$otros_Tipo', '$retiro_Tipo')";
 
     //echo $servicio_query;
     //echo $tipo_query;

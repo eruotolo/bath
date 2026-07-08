@@ -106,7 +106,7 @@ include 'layouts/session.php'; ?>
                                                                 JOIN clientes CL ON FT.id_Cliente = CL.id_Cliente
                                                                 LEFT JOIN contratos CT ON FT.id_Contrato = CT.id_Contrato
                                                         WHERE FT.estado_Factura IN (1,2)
-                                                        ORDER BY FT.fecha_Factura DESC ";
+                                                        ORDER BY FT.created_at DESC, FT.id_Factura DESC ";
                                             $result_task = mysqli_query($link, $query);
                                             while ($row = mysqli_fetch_array($result_task)){
                                         ?>
@@ -220,10 +220,10 @@ include 'layouts/session.php'; ?>
 				[50, 100, 'All'],
 			], // Define los valores para la opción "Show Entries"
 			responsive: true,
-			order: [[ 1, "desc" ]], //Ordenar por columna Fecha Seguimiento (la 5ta columna)
+			order: [], // Preservar el orden por created_at DESC que ya viene del SQL
 			columnDefs: [ {
-				targets: 1, //La columna Fecha Seguimiento
-				type: 'date' // Asignarle el tipo de dato Date
+				targets: 1, //La columna Fecha Factura
+				type: 'date' // Asignarle el tipo de dato Date (para permitir ordenar manualmente por esta columna)
 			} ],
 			buttons: [
 				{

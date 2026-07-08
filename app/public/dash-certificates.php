@@ -85,8 +85,8 @@ include 'layouts/session.php'; ?>
                                         <?php
                                             $query = "SELECT * FROM certificados CR
                                                             JOIN clientes CL ON CR.id_Cliente = CL.id_Cliente
-                                                            JOIN contratos CT ON CR.id_Contrato = CT.id_Contrato 
-                                                        ORDER BY nro_Certificado";
+                                                            JOIN contratos CT ON CR.id_Contrato = CT.id_Contrato
+                                                        ORDER BY CR.created_at DESC, CR.id_Certificado DESC";
                                             $result_task = mysqli_query($link, $query);
                                             while ($row = mysqli_fetch_array($result_task)){
                                                 //$certificado = $row['fechahoy_Certificado'];
@@ -103,6 +103,9 @@ include 'layouts/session.php'; ?>
                                             <td class="text-center">
                                                 <a href="dash-certificates-item.php?id_Certificado=<?php echo $row['id_Certificado'] ?>&id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
                                                     <i class="fas fas fa-eye"></i>
+                                                </a>
+                                                <a href="dash-certificates-item.php?id_Certificado=<?php echo $row['id_Certificado'] ?>&id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir" target="_blank">
+                                                    <i class="fas fa-print"></i>
                                                 </a>
                                                 <a href="controller/certificate-remove.php?id_Certificado=<?php echo $row['id_Certificado'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
                                                     <i class="fas fa-trash-alt"></i>
@@ -153,8 +156,52 @@ include 'layouts/session.php'; ?>
 <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
-<!-- init js -->
-<script src="assets/js/pages/datatables.init.js"></script>
+<script>
+    $(document).ready(function () {
+        var table = $('#datatable-buttons').DataTable({
+            lengthMenu: [
+                [50, 100, -1],
+                [50, 100, 'All'],
+            ],
+            order: [], // Preservar el orden por created_at DESC que ya viene del SQL
+            buttons: [
+                {
+                    extend: 'collection',
+                    text: 'Exportar',
+                    buttons: ['copy', 'excel', 'pdf'],
+                },
+                {
+                    extend: 'colvis',
+                    text: 'Visibilidad de columnas',
+                },
+            ],
+            language: {
+                search: 'Buscar:',
+                lengthMenu: 'Mostrar _MENU_ entradas',
+                info: 'Mostrando _PAGE_ de _PAGES_ páginas',
+                infoEmpty: 'Mostrando 0 a 0 de 0 elementos',
+                infoFiltered: '(filtrado de _MAX_ elementos en total)',
+                emptyTable: 'No hay datos disponibles en la tabla',
+                loadingRecords: 'Cargando...',
+                zeroRecords: 'No se encontraron registros coincidentes',
+                aria: {
+                    sortAscending: ': permite ordenar la columna en orden ascendente',
+                    sortDescending: ': habilita ordenar la columna en orden descendente',
+                },
+                paginate: {
+                    first: 'Primero',
+                    previous: 'Anterior',
+                    next: 'Siguiente',
+                    last: 'Último',
+                },
+            },
+        });
+
+        table.buttons().container().appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
+
+        $('.dataTables_length select').addClass('form-select form-select-sm');
+    });
+</script>
 
 <script src="assets/js/app.js"></script>
 

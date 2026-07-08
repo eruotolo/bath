@@ -48,6 +48,11 @@ body {
     color: #F52D00 !important;
     background-color: rgba(245,45,0,.18) !important;
 }
+.item-disponible{
+    font-size: 14px !important;
+    color: #3B82F6 !important;
+    background-color: rgba(59,130,246,.18) !important;
+}
 .text-invoice{
     font-size: 14px;
     line-height: 18px;

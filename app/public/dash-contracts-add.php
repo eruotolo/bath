@@ -97,7 +97,7 @@ include 'layouts/session.php'; ?>
                                             <select name="estado_Contrato" id="estado_Contrato" class="form-select">
                                                 <option value="">Seleccione el estado</option>
                                                 <option value="2">Activo</option>
-                                                <option value="1">Inactivo</option>
+                                                <option value="1">Terminado</option>
                                             </select>
                                         </div>
                                     </div>

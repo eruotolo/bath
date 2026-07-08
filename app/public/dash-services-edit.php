@@ -156,6 +156,13 @@ if ($query_run) {
                                                             Otros
                                                         </label>
                                                     </div>
+
+                                                    <div class="form-check mt-2">
+                                                        <input class="form-check-input" type="checkbox" value="<?php echo $rowTipoServicio['retiro_Tipo']?>" id="retiro_Tipo" name="retiro_Tipo" <?php echo $rowTipoServicio['retiro_Tipo'] == 1 ? 'checked' : ''; ?>>
+                                                        <label class="form-check-label" for="retiro_Tipo">
+                                                            Retiro de Baños
+                                                        </label>
+                                                    </div>
                                                 </div>
                                                 <?php
                                                     }

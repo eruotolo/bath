@@ -110,7 +110,7 @@ if($query_run){
                                             <div class="col-sm-5">
                                                 <select name="estado_Contrato" id="estado_Contrato" class="form-select">
                                                     <option value="0" <?php if ($row['estado_Contrato'] == 0) echo 'selected'; ?>>Eliminado</option>
-                                                    <option value="1" <?php if ($row['estado_Contrato'] == 1) echo 'selected'; ?>>Inactivo</option>
+                                                    <option value="1" <?php if ($row['estado_Contrato'] == 1) echo 'selected'; ?>>Terminado</option>
                                                     <option value="2" <?php if ($row['estado_Contrato'] == 2) echo 'selected'; ?>>Activo</option>
                                                 </select>
                                             </div>

@@ -15,6 +15,7 @@ if (isset($_POST['update'])){
     $higienico_Tipo = isset($_POST['higienico_Tipo']) ? 1 : 0;
     $jabon_Tipo = isset($_POST['jabon_Tipo']) ? 1 : 0;
     $otros_Tipo = isset($_POST['otros_Tipo']) ? 1 : 0;
+    $retiro_Tipo = isset($_POST['retiro_Tipo']) ? 1 : 0;
 
     $fecha_Servicio = $_POST['fecha_Servicio'];
     $observaciones_Servicio = $_POST['observaciones_Servicio'];
@@ -41,7 +42,8 @@ if (isset($_POST['update'])){
                         sanitizacion_Tipo = '$sanitizacion_Tipo',
                         higienico_Tipo = '$higienico_Tipo',
                         jabon_Tipo = '$jabon_Tipo',
-                        otros_Tipo = '$otros_Tipo'
+                        otros_Tipo = '$otros_Tipo',
+                        retiro_Tipo = '$retiro_Tipo'
                     WHERE nro_Servicio = '$nro_Servicio';";
 
     //echo $servicio_query;

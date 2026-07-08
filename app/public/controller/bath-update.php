@@ -10,21 +10,23 @@ if (isset($_POST['update'])){
     $observacion_Bath = $_POST['observacion_Bath'];
     $estado_Bath = $_POST['estado_Bath'];
 
-    $query = "UPDATE bathrooms SET
-                    id_Bath = $id_Bath,
-                    codigo_Bath = '$codigo_Bath',
-                    fechaCompra_Bath = '$fechaCompra_Bath',
-                    observacion_Bath = '$observacion_Bath',
-                    estado_Bath = $estado_Bath
-                    WHERE id_Bath = $id_Bath";
+    $stmt_check = $link->prepare('SELECT COUNT(*) AS total FROM bathrooms WHERE codigo_Bath = ? AND id_Bath != ?');
+    $stmt_check->bind_param('si', $codigo_Bath, $id_Bath);
+    $stmt_check->execute();
+    $existe = $stmt_check->get_result()->fetch_assoc()['total'] > 0;
+    $stmt_check->close();
 
-    //echo $query;
-    //die();
+    if ($existe) {
+        echo '<script>alert("Ya existe un baño con el código \'' . addslashes($codigo_Bath) . '\'. Ingresá un código distinto.")</script>';
+        echo '<script>window.location.href = "../dash-bathrooms-edit.php?id_Bath=' . (int) $id_Bath . '";</script>';
+        $link->close();
+        exit;
+    }
 
-    $result = mysqli_query($link, $query) or ($error= mysqli_error($link));
-
-    //echo $error;
-    //die();
+    $stmt = $link->prepare('UPDATE bathrooms SET codigo_Bath = ?, fechaCompra_Bath = ?, observacion_Bath = ?, estado_Bath = ? WHERE id_Bath = ?');
+    $stmt->bind_param('sssii', $codigo_Bath, $fechaCompra_Bath, $observacion_Bath, $estado_Bath, $id_Bath);
+    $stmt->execute();
+    $stmt->close();
 
     header("Location: ../dash-bathrooms.php");
 }else{

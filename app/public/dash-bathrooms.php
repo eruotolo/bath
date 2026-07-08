@@ -128,7 +128,7 @@
                                     if ($row['asignado_Bath'] == 0) {
                                 ?>
                                     <td>
-                                        <div class="badge item-inactivo">No Asignado</div>
+                                        <div class="badge item-disponible">Disponible</div>
                                     </td>
                                 <?php }else{ ?>
                                     <td>

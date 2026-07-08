@@ -35,11 +35,21 @@ include 'layouts/session.php'; ?>
         <div class="page-content">
             <div class="container-fluid">
 
+                <?php
+                    $estado_Contrato_filtro = isset($_GET['estado']) ? (int) $_GET['estado'] : null;
+                    $titulo_listado = 'Listado de contratos';
+                    if ($estado_Contrato_filtro === 2) {
+                        $titulo_listado = 'Contratos Activos';
+                    } elseif ($estado_Contrato_filtro === 1) {
+                        $titulo_listado = 'Contratos Terminados';
+                    }
+                ?>
+
                 <!-- start page title -->
                 <div class="row">
                     <div class="col-12">
                         <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0 font-size-18">Listado de contratos</h4>
+                            <h4 class="mb-sm-0 font-size-18"><?php echo $titulo_listado ?></h4>
                         </div>
                     </div>
                 </div>
@@ -87,8 +97,20 @@ include 'layouts/session.php'; ?>
                                 </thead>
                                 <tbody>
                                     <?php
-                                        $query = "SELECT * FROM contratos CO JOIN clientes CL on CO.id_Cliente = CL.id_Cliente WHERE estado_Contrato IN (1, 2)  ORDER BY id_Contrato";
-                                        $result_task = mysqli_query($link, $query);
+                                        if ($estado_Contrato_filtro === 1 || $estado_Contrato_filtro === 2) {
+                                            $stmt = $link->prepare(
+                                                'SELECT CO.*, CL.nombre_Cliente FROM contratos CO
+                                                    JOIN clientes CL ON CO.id_Cliente = CL.id_Cliente
+                                                 WHERE CO.estado_Contrato = ?
+                                                 ORDER BY CO.created_at DESC, CO.id_Contrato DESC'
+                                            );
+                                            $stmt->bind_param('i', $estado_Contrato_filtro);
+                                            $stmt->execute();
+                                            $result_task = $stmt->get_result();
+                                        } else {
+                                            $query = "SELECT * FROM contratos CO JOIN clientes CL on CO.id_Cliente = CL.id_Cliente WHERE estado_Contrato IN (1, 2) ORDER BY CO.created_at DESC, CO.id_Contrato DESC";
+                                            $result_task = mysqli_query($link, $query);
+                                        }
                                         while ($row = mysqli_fetch_array($result_task)){
                                     ?>
                                     <tr>
@@ -102,7 +124,7 @@ include 'layouts/session.php'; ?>
                                         <?php
                                             }else{
                                         ?>
-                                                <td class="text-center"><div class="badge item-inactivo">Inactivo</div></td>
+                                                <td class="text-center"><div class="badge item-disponible">Terminado</div></td>
                                         <?php
                                             }
                                         ?>

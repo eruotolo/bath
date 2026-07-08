@@ -62,7 +62,7 @@ include 'layouts/session.php'; ?>
                                             <select name="id_Cliente" id="id_Cliente" class="form-select">
                                                 <option value="">Seleccionar el Cliente</option>
                                                 <?php
-                                                    $sql = "SELECT * FROM clientes";
+                                                    $sql = "SELECT * FROM clientes ORDER BY nombre_Cliente ASC";
                                                     $result = mysqli_query($link, $sql);
                                                     $clientes = mysqli_fetch_all($result, MYSQLI_ASSOC);
                                                     foreach ($clientes as $cliente) {
@@ -147,6 +147,13 @@ include 'layouts/session.php'; ?>
                                                 <input class="form-check-input" type="checkbox" value="1" id="otros_Tipo" name="otros_Tipo">
                                                 <label class="form-check-label" for="otros_Tipo">
                                                     Otros
+                                                </label>
+                                            </div>
+
+                                            <div class="form-check mt-2">
+                                                <input class="form-check-input" type="checkbox" value="1" id="retiro_Tipo" name="retiro_Tipo">
+                                                <label class="form-check-label" for="retiro_Tipo">
+                                                    Retiro de Baños
                                                 </label>
                                             </div>
                                         </div>

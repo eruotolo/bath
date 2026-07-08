@@ -98,7 +98,7 @@ include 'layouts/session.php'; ?>
                                                 JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
                                                 
                                             WHERE estado_Servicio = 1
-                                            ORDER BY fecha_Servicio DESC;";
+                                            ORDER BY SR.created_at DESC, SR.id_Servicio DESC;";
                             $result_task = mysqli_query($link, $query);
                             while ($row = mysqli_fetch_array($result_task)){
                                     $id_Servicio = $row['id_Servicio'];
@@ -200,10 +200,10 @@ include 'layouts/session.php'; ?>
 				[50, 100, 'All'],
 			], // Define los valores para la opción "Show Entries"
 			responsive: true,
-			order: [[ 4, "desc" ]], //Ordenar por columna Fecha Seguimiento (la 5ta columna)
+			order: [], // Preservar el orden por created_at DESC que ya viene del SQL
 			columnDefs: [ {
 				targets: 4, //La columna Fecha Seguimiento
-				type: 'date' // Asignarle el tipo de dato Date
+				type: 'date' // Asignarle el tipo de dato Date (para permitir ordenar manualmente por esta columna)
 			} ],
 			buttons: [
 				{

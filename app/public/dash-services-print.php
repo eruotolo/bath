@@ -163,6 +163,11 @@ if ($query_run) {
                                                         if($row['otros_Tipo'] == 1){ ?>
                                                             <li>Otros Servicios</li>
                                                         <?php } ?>
+
+                                                        <?php
+                                                        if($row['retiro_Tipo'] == 1){ ?>
+                                                            <li>Retiro de Baños</li>
+                                                        <?php } ?>
                                                     </ul>
 
                                                     <br>
