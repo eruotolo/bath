@@ -103,6 +103,13 @@ ALTER TABLE facturas ADD COLUMN IF NOT EXISTS fecha_Pago DATE NULL DEFAULT NULL;
 -- asociado. Corregir esto requiere decidir, contrato por contrato, cual es la
 -- relacion vigente real - no es seguro automatizarlo sin criterio de negocio.
 -- Pendiente de decision de Edgardo (ver checklist Fase 2, item 9).
+--
+-- Investigacion ampliada (2026-07-08): el problema no es solo AT060, son 41
+-- baños distintos con 2 a 4 contratos "activos" simultaneos cada uno. Ejemplo
+-- AT060: 4 contratos activos (#131, #133, #81, #163), todos obras distintas
+-- con fechaInicio_Contrato ya pasada. Confirma que es un problema sistemico de
+-- falta de cierre manual, no un caso aislado - pero sigue sin ser seguro de
+-- automatizar (ver razonamiento arriba).
 -- ----------------------------------------------------------------------------
 
 

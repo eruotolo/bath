@@ -3,7 +3,7 @@
 **Cliente:** Blanco Servicios e Inversiones SPA
 **Referencia:** `.doc/cotizacion-mejoras-julio-2026.md` (cotización original)
 **Última actualización:** 08-07-2026
-**Estado general:** en desarrollo — cambios probados y verificados en ambiente de testing, pendiente de despliegue a producción.
+**Estado general:** Fase 1 y Fase 2 completas — cambios probados y verificados en ambiente de testing, pendiente de despliegue a producción.
 
 ---
 
@@ -12,7 +12,7 @@
 | Fase | Estado |
 |---|---|
 | Fase 1 — Ajustes rápidos de listados y validaciones | ✅ Completa (ítems 1 a 6) |
-| Fase 2 — Historial y reglas de negocio | En curso (ítems 7, 8 y 9 completos; 10 a 13 pendientes) |
+| Fase 2 — Historial y reglas de negocio | ✅ Completa (ítems 7 a 13) |
 | Fase 3 — Carga masiva de facturas por Excel | Pendiente |
 
 ---
@@ -60,13 +60,27 @@ Cuando a una obra se le quita el último baño asignado, el contrato ahora pasa 
 
 **Corrección de datos históricos:** además, se revisaron los contratos ya existentes en el sistema y se corrigieron **62 contratos** que figuraban como "Activos" sin tener ningún baño asignado (trabajos ya completados que nunca se habían cerrado manualmente). Quedaron marcados correctamente como "Terminados".
 
+**Hallazgo pendiente de decisión (no corregido automáticamente):** al revisar esto en detalle se encontraron **41 baños** que figuran asignados a más de una obra "activa" al mismo tiempo (por ejemplo, un mismo baño en 4 obras distintas que ya terminaron pero nunca se cerraron a mano). No se corrigió de forma automática porque cada caso puede tener una explicación distinta y requiere que alguien del equipo revise cuál es la asignación vigente real. Podemos revisar esta lista juntos cuando quieras.
+
+### 10. Baños: filtros rápidos
+Se agregaron botones de filtro sobre el listado de baños químicos: por Estado (Activo/Inactivo) y por Asignación (Asignado/Disponible), combinables entre sí, sin necesidad de recargar la página.
+
+### 11. Facturas: botón Editar
+Ahora se puede editar una factura ya cargada (número, fecha, cliente, obra y monto) desde un botón nuevo en el listado, sin tener que anularla y crear una nueva.
+
+### 12. Facturas: no perder servicios al anular
+Al anular una factura, los servicios que tenía asociados quedan liberados automáticamente y disponibles para facturarse de nuevo — antes quedaban bloqueados para siempre sin poder usarse.
+
+### 13. Facturas: campo Fecha de Pago
+Se agregó una columna "Fecha de Pago" editable directamente desde el listado de facturas, con un botón que abre un cuadro simple para fijarla o borrarla.
+
 ---
 
 ## Pendiente
 
-- **Fase 2, ítems 10-13:** filtros rápidos en Baños, edición de facturas, campo Fecha de Pago, no perder servicios al anular una factura.
 - **Fase 3:** módulo de carga masiva de facturas por Excel.
 - **Despliegue a producción:** todo lo anterior está probado en el ambiente de desarrollo/testing. Para pasar a producción hay un script de base de datos ya preparado con todos los cambios necesarios, listo para aplicarse cuando se coordine la ventana de despliegue.
+- **Decisión pendiente:** revisar los 41 casos de baños en más de una obra activa simultánea (ver hallazgo arriba).
 
 ---
 

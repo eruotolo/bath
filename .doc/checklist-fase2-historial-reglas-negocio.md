@@ -1,7 +1,7 @@
 # Checklist — Fase 2: Historial y reglas de negocio (Contratos, Baños, Facturas)
 
 **Origen:** `.doc/cotizacion-mejoras-julio-2026.md` (ítems 7-13) + `.doc/tecnico-mejoras-julio-2026.md` + cambios de Edgardo del 2026-07-07 (reemplazan el enfoque original del ítem 8)
-**Estado:** en revisión — agregar/modificar ítems antes de empezar a implementar. Este archivo cubre solo los ítems 7-9 (Contratos/Baños); 10-13 (Baños filtros, Facturas) se agregan cuando toque esa fase.
+**Estado:** ✅ Fase 2 completa (ítems 7-13) — implementado y verificado en navegador (2026-07-08).
 
 ---
 
@@ -86,8 +86,37 @@ ORDER BY BT.codigo_Bath ASC
 - [x] **Prueba end-to-end real, caso negativo:** contrato #17 con 5 baños → al desasignar 1 (AT003), el contrato se mantuvo `estado_Contrato = 2` (Activo) con las 4 relaciones restantes intactas — no se cierra de más
 - [x] **Limpieza retroactiva aplicada en testing (2026-07-08):** 62 contratos que estaban "Activos" sin ningún baño asignado pasaron a "Terminado". Verificado después: 0 contratos activos sin baños restantes
 - [x] **Script para producción:** `mysql/migrations/2026-07-fase1-fase2.sql` — consolida TODOS los cambios de esquema/datos de Fase 1 y Fase 2 (columnas `created_at`, `retiro_Tipo`, `codigo_Bath_unique`, y esta limpieza retroactiva), con verificaciones previas de seguridad. Se va a seguir ampliando con cada cambio nuevo de las próximas fases, en vez de crear un archivo por ítem
-- [ ] Nota sin resolver (documentada en el script): baños en más de un contrato "activo" simultáneo (caso `AT060`) no se corrige con esta limpieza — requiere decisión caso por caso, no es seguro automatizarlo
-- [ ] **QA en navegador de este ítem queda pendiente para la etapa de testing final consolidada** (a pedido de Edgardo, en vez de probar cada punto por separado)
+- [x] **Nota sin resolver, investigada a fondo (2026-07-08):** baños en más de un contrato "activo" simultáneo (caso `AT060`) no se corrige con esta limpieza — requiere decisión caso por caso, no es seguro automatizarlo. Alcance real confirmado por consulta a la base: **41 baños distintos** (no solo AT060) con entre 2 y 4 contratos "activos" simultáneos cada uno. Ejemplo AT060: 4 contratos (#131, #133, #81, #163), todas obras distintas con `fechaInicio_Contrato` ya pasada — confirma que es un problema sistémico de falta de cierre manual histórico, no un caso aislado. **Queda fuera de este alcance a propósito** (ver razonamiento en `mysql/migrations/2026-07-fase1-fase2.sql`), pendiente de decisión de negocio de Edgardo sobre qué hacer con cada caso.
+- [x] **QA en navegador de este ítem, etapa de testing final consolidada (2026-07-08):** se probó en vivo el flujo completo con el contrato #60 (1 solo baño, "FOSA-SEPTICA") — al desasignar el baño desde `dash-contracts-item.php`, el contrato pasó automáticamente a "Terminado" (verificado en base). Se reasignó el mismo baño vía la UI para restaurar el dato de prueba; como es esperable, la reasignación **no** reactiva el contrato automáticamente (fuera de alcance de este ítem), así que se reactivó manualmente a "Activo" desde `dash-contracts-edit.php` para dejar todo como estaba antes de la prueba.
+
+---
+
+## Ítem 10 — Baños: filtros tipo pestañas — ✅ implementado y verificado en navegador (2026-07-08)
+
+- [x] `dash-bathrooms.php`: dos grupos de botones de filtro client-side (sin cambios de backend) — Estado (Todos/Activo/Inactivo) y Asignación (Todos/Asignado/Disponible), combinables entre sí
+- [x] Implementado con `data-estado`/`data-asignado` en cada `<tr>` + `$.fn.dataTable.ext.search.push(...)` para filtrar sobre el DataTable ya inicializado
+- [x] De paso se agregó `htmlspecialchars()` a las columnas de esa vista que no lo tenían (código, fecha de compra, observaciones) — deuda XSS pendiente, corregida en esta vista al tocarla
+- [x] Verificado en navegador: filtro "Inactivo" solo, y combinación "Activo" + "Asignado" — ambos funcionan correctamente
+
+## Ítem 11 — Facturas: botón Editar — ✅ implementado y verificado en navegador (2026-07-08)
+
+- [x] Archivo nuevo `dash-invoices-edit.php` + `controller/invoice-update.php` (prepared statements desde el día uno), siguiendo el patrón de `dash-invoices-add.php`/`invoice-new.php`
+- [x] Campos editables: `numero_Factura`, `fecha_Factura`, `id_Cliente`, `id_Contrato`, `valor_Factura` — el select de Contrato se precarga vía AJAX reutilizando `controller/obtener_contratos.php`, seleccionando el contrato actual de la factura
+- [x] Botón "Editar" (lápiz) agregado en `dash-invoices-list.php`, columna "Otros"
+- [x] Verificado en navegador: edición de la factura #1896 (monto), guardó y reflejó el cambio en el listado; valor de prueba revertido al original
+
+## Ítem 12 — Facturas: no perder servicios al anular — ✅ implementado y verificado en navegador (2026-07-08)
+
+- [x] `controller/invoice-delete.php` e `invoice-estado.php`: al setear `estado_Factura = 3` (Anulado), se ejecuta `DELETE FROM factura_servicio WHERE id_Factura = ?` para liberar los servicios asociados (vuelven a estar disponibles para facturar, mismo filtro `NOT EXISTS` que ya usa `dash-services.php`)
+- [x] De paso ambos controllers se migraron a prepared statements (antes tenían SQL injection vía `$_GET`)
+- [x] **Prueba end-to-end real en navegador:** factura #1887 (11 servicios asociados) anulada desde el dropdown de Acciones → verificado en base que `factura_servicio` quedó en 0 relaciones para esa factura. Dato de prueba restaurado después (factura vuelta a "Pendiente" con sus 11 relaciones originales, confirmado por Edgardo dado que la restauración requería una escritura directa en la base)
+
+## Ítem 13 — Facturas: campo Fecha de Pago — ✅ implementado y verificado en navegador (2026-07-08)
+
+- [x] Migración `fecha_Pago DATE NULL` en `facturas` (Sección 5 de `mysql/migrations/2026-07-fase1-fase2.sql`), aplicada en la base de testing
+- [x] Columna nueva "Fecha de Pago" en `dash-invoices-list.php` con botón de lápiz que abre un modal Bootstrap compartido (patrón ya usado en `dash-invoices-detail.php`), precargado con la fecha actual vía `show.bs.modal` + `data-*` attributes
+- [x] `controller/invoice-fecha-pago.php` (prepared statements), permite tanto fijar como limpiar la fecha (vuelve a "Sin definir")
+- [x] Verificado en navegador: fijar fecha en factura #1897, guardar, ver reflejo en el listado, y volver a limpiarla — ambos casos funcionan
 
 ---
 
