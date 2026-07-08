@@ -73,6 +73,23 @@
 
                 </div>
 
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <div class="btn-group" role="group" aria-label="Filtro por estado">
+                            <button type="button" class="btn btn-outline-secondary btn-sm filter-estado active" data-estado="all">Todos</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm filter-estado" data-estado="1">Activo</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm filter-estado" data-estado="0">Inactivo</button>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="btn-group" role="group" aria-label="Filtro por asignación">
+                            <button type="button" class="btn btn-outline-secondary btn-sm filter-asignado active" data-asignado="all">Todos</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm filter-asignado" data-asignado="1">Asignado</button>
+                            <button type="button" class="btn btn-outline-secondary btn-sm filter-asignado" data-asignado="0">Disponible</button>
+                        </div>
+                    </div>
+                </div>
+
                 <div class="table-responsive mb-4">
                     <table id="datatable-buttons"
                            class="table align-middle datatable dt-responsive table-check nowrap w-100"
@@ -99,16 +116,16 @@
                         $result_task = mysqli_query($link, $query);
                         while ($row = mysqli_fetch_Array($result_task)) {
                             ?>
-                            <tr>
+                            <tr data-estado="<?php echo (int)$row['estado_Bath'] ?>" data-asignado="<?php echo (int)$row['asignado_Bath'] ?>">
                                 <th scope="row">
                                     <div class="form-check font-size-16">
                                         <input type="checkbox" class="form-check-input" id="contacusercheck1">
                                         <label class="form-check-label" for="contacusercheck1"></label>
                                     </div>
                                 </th>
-                                <td><?php echo $row['codigo_Bath'] ?></td>
-                                <td><?php echo $row['fechaCompra_Bath'] ?></td>
-                                <td><?php echo $row['observacion_Bath'] ?></td>
+                                <td><?php echo htmlspecialchars($row['codigo_Bath']) ?></td>
+                                <td><?php echo htmlspecialchars($row['fechaCompra_Bath']) ?></td>
+                                <td><?php echo htmlspecialchars($row['observacion_Bath']) ?></td>
                                 <?php
                                 if ($row['estado_Bath'] == 1) { ?>
                                     <td>
@@ -246,6 +263,37 @@
 		table.buttons().container().appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
 
 		$('.dataTables_length select').addClass('form-select form-select-sm');
+
+		var filtroEstado = 'all';
+		var filtroAsignado = 'all';
+
+		$.fn.dataTable.ext.search.push(function (settings, searchData, dataIndex, rowData, counter) {
+			if (settings.nTable.id !== 'datatable-buttons') {
+				return true;
+			}
+			var $row = $(table.row(dataIndex).node());
+			if (filtroEstado !== 'all' && $row.data('estado').toString() !== filtroEstado) {
+				return false;
+			}
+			if (filtroAsignado !== 'all' && $row.data('asignado').toString() !== filtroAsignado) {
+				return false;
+			}
+			return true;
+		});
+
+		$('.filter-estado').on('click', function () {
+			$('.filter-estado').removeClass('active');
+			$(this).addClass('active');
+			filtroEstado = $(this).data('estado').toString();
+			table.draw();
+		});
+
+		$('.filter-asignado').on('click', function () {
+			$('.filter-asignado').removeClass('active');
+			$(this).addClass('active');
+			filtroAsignado = $(this).data('asignado').toString();
+			table.draw();
+		});
 	});
 
 </script>
