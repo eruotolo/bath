@@ -146,6 +146,9 @@ include 'layouts/session.php'; ?>
                                                 <a href="dash-invoices-detail.php?id_Factura=<?php echo $row['id_Factura'] ?>&id_Contrato=<?php echo $row['id_Contrato']; ?>" class="btn btn-outline-secondary btn-sm" title="Agregar Servicios a la Factura">
                                                     <i class="fas fa-plus"></i>
                                                 </a>
+                                                <a href="dash-invoices-edit.php?id_Factura=<?php echo $row['id_Factura'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar Factura">
+                                                    <i class="fas fa-pencil-alt"></i>
+                                                </a>
                                                 <a href="controller/invoice-delete.php?id_Factura=<?php echo $row['id_Factura'] ?>" title="Eliminar Factura" class="btn btn-outline-secondary btn-sm"><i class="fas fa-trash-alt"></i></a>
                                             </td>
 
