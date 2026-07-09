@@ -166,7 +166,29 @@ body {
 .mb-4.is-invalid .invalid-feedback {
     display: block;
 }
+
+/* Sprint 2 plan-mejoras-frontend: fila de filtros por columna en datatable.js */
+.dt-column-filters th {
+    padding-top: 4px;
+    padding-bottom: 8px;
+}
+.dt-column-filters input {
+    font-weight: normal;
+}
 .mb-4.is-valid .form-control,
 .mb-4.is-valid .form-select {
     border-color: #34c38f;
+}
+
+/* Sprint 4 plan-mejoras-frontend: preview de PDF (facturas/certificados) con GLightbox.
+   El slide type "external" de esta build de GLightbox colapsa a 0px de alto dentro
+   de un ginner-container flex-column: el título (.gslide-description) toma flex-basis
+   100% y no deja espacio para el iframe. Se fuerza el alto explícito acá. */
+.glightbox-container .gslide-description.description-bottom {
+    flex: none !important;
+    height: auto !important;
+}
+.glightbox-container .gslide-media.gslide-external {
+    flex: none !important;
+    height: 80vh !important;
 }

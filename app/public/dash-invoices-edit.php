@@ -96,7 +96,7 @@ if (!$factura) {
                                     <div class="row mb-4">
                                         <label for="id_Cliente" class="col-sm-3 col-form-label">Seleccione el Cliente:</label>
                                         <div class="col-sm-5">
-                                            <select name="id_Cliente" id="id_Cliente" class="form-select">
+                                            <select name="id_Cliente" id="id_Cliente" class="form-select" data-enhanced-select data-search-placeholder="Buscar cliente...">
                                                 <option value="">Seleccionar el Cliente</option>
                                                 <?php
                                                 $sqlClientes = "SELECT * FROM clientes ORDER BY nombre_Cliente ASC";
@@ -117,7 +117,7 @@ if (!$factura) {
                                     <div class="row mb-4">
                                         <label for="id_Contrato" class="col-sm-3 col-form-label">Seleccione el Contrato:</label>
                                         <div class="col-sm-5">
-                                            <select name="id_Contrato" id="id_Contrato" class="form-select">
+                                            <select name="id_Contrato" id="id_Contrato" class="form-select" data-enhanced-select data-search-placeholder="Buscar contrato...">
                                                 <!-- Opciones se cargarán dinámicamente con JavaScript -->
                                             </select>
                                         </div>
@@ -177,10 +177,7 @@ if (!$factura) {
 			type: 'POST',
 			data: {idCliente: idCliente},
 			success: function (response) {
-				$('#id_Contrato').html(response);
-				if (seleccionar) {
-					$('#id_Contrato').val(seleccionar);
-				}
+				SelectEnhanced.setOptionsFromHtml('id_Contrato', response, seleccionar);
 			}
 		});
 	}

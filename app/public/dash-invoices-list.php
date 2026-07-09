@@ -10,9 +10,6 @@ include 'layouts/session.php'; ?>
 
     <?php include 'layouts/head.php'; ?>
 
-    <!-- flatpickr css -->
-    <link href="assets/libs/flatpickr/flatpickr.min.css" rel="stylesheet" type="text/css">
-
     <!-- DataTables -->
     <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
 
@@ -88,7 +85,9 @@ include 'layouts/session.php'; ?>
                                 <div class="table-responsive mb-4">
                                     <table id="datatable-buttons"
                                            class="table align-middle datatable dt-responsive table-check nowrap w-100"
-                                           style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
+                                           style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;"
+                                           data-dt-state="true"
+                                           data-dt-column-filters="true">
                                         <thead>
                                         <tr>
                                             <th style="width: 120px;">Nro. Factura</th>
@@ -97,9 +96,9 @@ include 'layouts/session.php'; ?>
                                             <th>Obra</th>
                                             <th style="text-align: center">Monto Factura</th>
                                             <th style="text-align: center">Estado</th>
-                                            <th style="text-align: center">Fecha de Pago</th>
-                                            <th style="width: 150px; text-align: center">Otros</th>
-                                            <th style="width: 90px;" >Acciones</th>
+                                            <th style="text-align: center" class="no-filter">Fecha de Pago</th>
+                                            <th style="width: 150px; text-align: center" class="no-filter">Otros</th>
+                                            <th style="width: 90px;" class="no-filter">Acciones</th>
                                         </tr>
                                         </thead>
                                         <tbody>
@@ -141,7 +140,7 @@ include 'layouts/session.php'; ?>
                                                 </button>
                                             </td>
                                             <td style="text-align: center">
-                                                <a href="dash-invoices-print.php?id_Factura=<?php echo $row['id_Factura'] ?>&id_Contrato=<?php echo $row['id_Contrato']; ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir">
+                                                <a href="controller/invoice-pdf.php?id_Factura=<?php echo $row['id_Factura'] ?>&id_Contrato=<?php echo $row['id_Contrato']; ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir" data-glightbox-preview data-type="external" data-width="900px" data-height="90vh">
                                                     <i class="fa fa-print"></i>
                                                 </a>
                                                 <a href="dash-invoices-detail.php?id_Factura=<?php echo $row['id_Factura'] ?>&id_Contrato=<?php echo $row['id_Contrato']; ?>" class="btn btn-outline-secondary btn-sm" title="Agregar Servicios a la Factura">
@@ -233,9 +232,6 @@ include 'layouts/session.php'; ?>
 
 <?php include 'layouts/vendor-scripts.php'; ?>
 
-<!-- flatpickr js -->
-<script src="assets/libs/flatpickr/flatpickr.min.js"></script>
-
 <!-- Required datatable js -->
 <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
@@ -256,51 +252,16 @@ include 'layouts/session.php'; ?>
 
 <script src="assets/js/app.js"></script>
 
+<script src="assets/js/components/datatable.js"></script>
 <script>
 	$(document).ready(function () {
-		var table = $('#datatable-buttons').DataTable({
-			lengthMenu: [
-				[50, 100, -1],
-				[50, 100, 'All'],
-			], // Define los valores para la opción "Show Entries"
-			responsive: true,
+		DataTable.init('#datatable-buttons', {
 			order: [], // Preservar el orden por created_at DESC que ya viene del SQL
 			columnDefs: [ {
 				targets: 1, //La columna Fecha Factura
 				type: 'date' // Asignarle el tipo de dato Date (para permitir ordenar manualmente por esta columna)
 			} ],
-			buttons: [
-				{
-					extend: 'collection',
-					text: 'Exportar',
-					buttons: ['copy', 'excel', 'pdf'],
-				}
-			],
-			language: {
-				search: 'Buscar:',
-				lengthMenu: 'Mostrar _MENU_ entradas', // Personaliza el texto de "Show Entries"
-				info: 'Mostrando _PAGE_ de _PAGES_ páginas',
-				infoEmpty: 'Mostrando 0 a 0 de 0 elementos',
-				infoFiltered: '(filtrado de _MAX_ elementos en total)',
-				emptyTable: 'No hay datos disponibles en la tabla',
-				loadingRecords: 'Cargando...',
-				zeroRecords: 'No se encontraron registros coincidentes',
-				aria: {
-					sortAscending: ': permite ordenar la columna en orden ascendente',
-					sortDescending: ': habilita ordenar la columna en orden descendente',
-				},
-				paginate: {
-					first: 'Primero',
-					previous: 'Anterior',
-					next: 'Siguiente',
-					last: 'Último',
-				},
-			},
 		});
-
-		table.buttons().container().appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
-
-		$('.dataTables_length select').addClass('form-select form-select-sm');
 
 		$('#modalFechaPago').on('show.bs.modal', function (event) {
 			var button = $(event.relatedTarget);

@@ -147,6 +147,7 @@
                     <ul class="sub-menu" aria-expanded="false">
                         <li><a href="dash-invoices-list.php">Listado Facturas</a></li>
                         <li><a href="dash-invoices-add.php">Nueva Factura</a></li>
+                        <li><a href="dash-invoices-upload.php">Cargar Facturas</a></li>
                     </ul>
                 </li>
 

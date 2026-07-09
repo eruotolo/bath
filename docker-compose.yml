@@ -1,20 +1,17 @@
-version: "3.8"
-
 networks:
-    my-bathnet:  # Nuevo nombre de la red
+    my-bathnet:
         driver: bridge
 
 services:
     mysql:
         image: mariadb:11.2
         container_name: mariadb-${SITE_NAME}
+        restart: unless-stopped
         environment:
             MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
             MARIADB_DATABASE: ${USER_DB_NAME}
             MYSQL_USER: ${USER_DB_USER}
             MYSQL_PASSWORD: ${USER_DB_PASSWORD}
-        ports:
-            - "3306:3306"
         volumes:
             - ./mysql/mysql-data:/var/lib/mysql
             - ./mysql/database/donbano.sql:/docker-entrypoint-initdb.d/dump_file.sql
@@ -24,13 +21,12 @@ services:
     phpmyadmin:
         image: phpmyadmin:5.2.1
         container_name: myadmin-${SITE_NAME}
-        ports:
-            - "8080:80"
+        restart: unless-stopped
         environment:
             PMA_HOST: ${MYSQL_DB_HOST}
             PMA_ARBITRARY: 1
         depends_on:
-            - php
+            - mysql
         networks:
             - my-bathnet
 
@@ -39,23 +35,30 @@ services:
             context: .
             dockerfile: Dockerfile
         container_name: php-${SITE_NAME}
-        ports:
-            - "9000:9000"
+        restart: unless-stopped
         volumes:
             - ./app/public:/var/www/html/
             - ./php/php.ini:/usr/local/etc/php/php.ini:ro
+        healthcheck:
+            test: ["CMD-SHELL", "pidof php-fpm || exit 1"]
+            interval: 10s
+            timeout: 5s
+            retries: 5
+            start_period: 15s
         networks:
             - my-bathnet
 
     nginx:
         image: nginx:1.25.3-alpine
         container_name: nginx-${SITE_NAME}
+        restart: unless-stopped
         ports:
             - "80:80"
         volumes:
             - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
             - ./app/public:/var/www/html/
         depends_on:
-            - php
+            php:
+                condition: service_healthy
         networks:
             - my-bathnet

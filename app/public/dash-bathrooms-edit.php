@@ -85,7 +85,7 @@ if($query_run){
                                     <div class="row mb-4">
                                         <label for="fechaCompra_Bath" class="col-sm-3 col-form-label">Fecha de compra:</label>
                                         <div class="col-sm-6">
-                                            <input type="date" class="form-control" id="fechaCompra_Bath" name="fechaCompra_Bath" value="<?php echo $row['fechaCompra_Bath'];?>">
+                                            <input type="date" class="form-control" id="fechaCompra_Bath" name="fechaCompra_Bath" value="<?php echo $row['fechaCompra_Bath'];?>" data-datepicker-max="today">
                                         </div>
                                     </div>
 

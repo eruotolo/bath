@@ -14,3 +14,21 @@
 <script src="assets/js/components/feedback.js"></script>
 <script src="assets/js/components/form-validator.js"></script>
 <script src="assets/js/components/rut-mask.js"></script>
+
+<!-- selects con buscador (Sprint 3 plan-mejoras-frontend) -->
+<script src="assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>
+<script src="assets/js/components/select-enhanced.js"></script>
+
+<!-- date picker + modal editor unificado (Sprint 4 plan-mejoras-frontend) -->
+<script src="assets/libs/flatpickr/flatpickr.min.js"></script>
+<script src="assets/libs/flatpickr/l10n/es.js"></script>
+<script src="assets/js/components/datepicker.js"></script>
+<script src="assets/js/components/modal-editor.js"></script>
+
+<!-- drag & drop de imagen de perfil (Sprint 4 plan-mejoras-frontend) -->
+<script src="assets/libs/dropzone/min/dropzone.min.js"></script>
+<script src="assets/js/components/dropzone-upload.js"></script>
+
+<!-- preview de PDF (facturas/certificados) (Sprint 4 plan-mejoras-frontend) -->
+<script src="assets/libs/glightbox/js/glightbox.min.js"></script>
+<script src="assets/js/components/lightbox-preview.js"></script>

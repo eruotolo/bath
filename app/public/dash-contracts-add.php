@@ -60,7 +60,7 @@ include 'layouts/session.php'; ?>
                                     <div class="row mb-4">
                                         <label for="id_Cliente" class="col-sm-3 col-form-label">Seleccionar el Cliente:</label>
                                         <div class="col-sm-5">
-                                            <select name="id_Cliente" id="id_Cliente" class="form-select">
+                                            <select name="id_Cliente" id="id_Cliente" class="form-select" data-enhanced-select data-search-placeholder="Buscar cliente...">
                                                 <option value="" selected>Seleccionar un Cliente</option>
                                                 <?php
                                                     $sql = "SELECT * FROM clientes";
@@ -94,7 +94,7 @@ include 'layouts/session.php'; ?>
                                     <div class="row mb-4">
                                         <label for="estado_Contrato" class="col-sm-3 col-form-label">Estado del contrato / OC compra:</label>
                                         <div class="col-sm-5">
-                                            <select name="estado_Contrato" id="estado_Contrato" class="form-select">
+                                            <select name="estado_Contrato" id="estado_Contrato" class="form-select" data-enhanced-select>
                                                 <option value="">Seleccione el estado</option>
                                                 <option value="2">Activo</option>
                                                 <option value="1">Terminado</option>
@@ -112,7 +112,7 @@ include 'layouts/session.php'; ?>
                                     <div class="row mb-4">
                                         <label for="fechaFin_Contrato" class="col-sm-3 col-form-label">Fecha de inicio del contrato / OC compra:</label>
                                         <div class="col-sm-5">
-                                            <input class="form-control" type="date" id="fechaFin_Contrato" name="fechaFin_Contrato" required>
+                                            <input class="form-control" type="date" id="fechaFin_Contrato" name="fechaFin_Contrato" required data-datepicker-min-from="#fechaInicio_Contrato">
                                         </div>
                                     </div>
 

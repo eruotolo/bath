@@ -16,7 +16,7 @@
                     <div class="row mb-4">
                         <label for="id_Bath" class="col-sm-4 col-form-label">Seleccionar el baño:</label>
                         <div class="col-sm-8">
-                            <select name="id_Bath" id="id_Bath" class="form-select">
+                            <select name="id_Bath" id="id_Bath" class="form-select" data-enhanced-select data-search-placeholder="Buscar baño...">
                                 <?php
                                     $sql = "SELECT id_Bath, codigo_Bath FROM bathrooms WHERE asignado_Bath = 0";
                                     $result_task = mysqli_query($link, $sql);

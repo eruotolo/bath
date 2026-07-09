@@ -77,7 +77,9 @@ include 'layouts/session.php'; ?>
                 <div class="table-responsive mb-4">
                     <table id="datatable-buttons"
                            class="table align-middle datatable dt-responsive table-check nowrap w-100"
-                           style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
+                           style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;"
+                           data-dt-state="true"
+                           data-dt-column-filters="true">
 
                         <thead>
                             <tr>
@@ -86,7 +88,7 @@ include 'layouts/session.php'; ?>
                                 <th scope="col">Nombre de la Obra</th>
                                 <th scope="col">Factura</th>
                                 <th scope="col" class="text-center">Fecha Seguimiento</th>
-                                <th style="width:140px; min-width: 140px;" class="text-center">Acción</th>
+                                <th style="width:140px; min-width: 140px;" class="text-center no-filter">Acción</th>
                             </tr>
                         </thead>
 
@@ -192,51 +194,16 @@ include 'layouts/session.php'; ?>
 
 <script src="assets/js/app.js"></script>
 
+<script src="assets/js/components/datatable.js"></script>
 <script>
 	$(document).ready(function () {
-		var table = $('#datatable-buttons').DataTable({
-			lengthMenu: [
-				[50, 100, -1],
-				[50, 100, 'All'],
-			], // Define los valores para la opción "Show Entries"
-			responsive: true,
+		DataTable.init('#datatable-buttons', {
 			order: [], // Preservar el orden por created_at DESC que ya viene del SQL
 			columnDefs: [ {
 				targets: 4, //La columna Fecha Seguimiento
 				type: 'date' // Asignarle el tipo de dato Date (para permitir ordenar manualmente por esta columna)
 			} ],
-			buttons: [
-				{
-					extend: 'collection',
-					text: 'Exportar',
-					buttons: ['copy', 'excel', 'pdf'],
-				}
-			],
-			language: {
-				search: 'Buscar:',
-				lengthMenu: 'Mostrar _MENU_ entradas', // Personaliza el texto de "Show Entries"
-				info: 'Mostrando _PAGE_ de _PAGES_ páginas',
-				infoEmpty: 'Mostrando 0 a 0 de 0 elementos',
-				infoFiltered: '(filtrado de _MAX_ elementos en total)',
-				emptyTable: 'No hay datos disponibles en la tabla',
-				loadingRecords: 'Cargando...',
-				zeroRecords: 'No se encontraron registros coincidentes',
-				aria: {
-					sortAscending: ': permite ordenar la columna en orden ascendente',
-					sortDescending: ': habilita ordenar la columna en orden descendente',
-				},
-				paginate: {
-					first: 'Primero',
-					previous: 'Anterior',
-					next: 'Siguiente',
-					last: 'Último',
-				},
-			},
 		});
-
-		table.buttons().container().appendTo('#datatable-buttons_wrapper .col-md-6:eq(0)');
-
-		$('.dataTables_length select').addClass('form-select form-select-sm');
 	});
 
 </script>

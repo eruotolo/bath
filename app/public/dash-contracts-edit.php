@@ -79,7 +79,7 @@ if($query_run){
                                         <div class="row mb-4">
                                             <label for="id_Cliente" class="col-sm-4 col-form-label">Nombre del Cliente:</label>
                                             <div class="col-sm-5">
-                                                <select name="id_Cliente" id="id_Cliente" class="form-select">
+                                                <select name="id_Cliente" id="id_Cliente" class="form-select" data-enhanced-select data-search-placeholder="Buscar cliente...">
                                                     <?php
                                                     $sql = "SELECT * From clientes";
                                                     $result = mysqli_query($link, $sql);
@@ -108,7 +108,7 @@ if($query_run){
                                         <div class="row mb-4">
                                             <label for="estado_Contrato" class="col-sm-4 col-form-label">Estado de la Obra:</label>
                                             <div class="col-sm-5">
-                                                <select name="estado_Contrato" id="estado_Contrato" class="form-select">
+                                                <select name="estado_Contrato" id="estado_Contrato" class="form-select" data-enhanced-select>
                                                     <option value="0" <?php if ($row['estado_Contrato'] == 0) echo 'selected'; ?>>Eliminado</option>
                                                     <option value="1" <?php if ($row['estado_Contrato'] == 1) echo 'selected'; ?>>Terminado</option>
                                                     <option value="2" <?php if ($row['estado_Contrato'] == 2) echo 'selected'; ?>>Activo</option>
@@ -126,7 +126,7 @@ if($query_run){
                                         <div class="row mb-4">
                                             <label for="fechaFin_Contrato" class="col-sm-4 col-form-label">Fecha de Fin de la Obra:</label>
                                             <div class="col-sm-5">
-                                                <input type="date" class="form-control" id="fechaFin_Contrato" name="fechaFin_Contrato" value="<?php echo $row['fechaFin_Contrato'];?>">
+                                                <input type="date" class="form-control" id="fechaFin_Contrato" name="fechaFin_Contrato" value="<?php echo $row['fechaFin_Contrato'];?>" data-datepicker-min-from="#fechaInicio_Contrato">
                                             </div>
                                         </div>
 

@@ -47,8 +47,8 @@ $resultSelect = mysqli_stmt_get_result($stmtSelect);
 // Construir opciones del select
 $contratos = mysqli_fetch_all($resultSelect, MYSQLI_ASSOC);
 foreach ($contratos as $contrato) {
-    $idContrato = $contrato['id_Contrato'];
-    $nombreContrato = $contrato['obra_Contrato'] ?? 'Nombre no disponible';
+    $idContrato = (int) $contrato['id_Contrato'];
+    $nombreContrato = htmlspecialchars($contrato['obra_Contrato'] ?? 'Nombre no disponible', ENT_QUOTES, 'UTF-8');
     echo '<option value="' . $idContrato . '">' . $nombreContrato . '</option>';
 }
 

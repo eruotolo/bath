@@ -103,9 +103,10 @@
                                     </div>
 
                                     <div class="row mb-4">
-                                        <label for="file" class="col-sm-3 col-form-label">Imagen de Perfil</label>
+                                        <label class="col-sm-3 col-form-label">Imagen de Perfil</label>
                                         <div class="col-sm-5">
-                                            <input type="file" class="form-control" id="file" name="file">
+                                            <div class="dropzone" data-dropzone-target="#file"></div>
+                                            <input type="file" id="file" name="file" hidden>
                                         </div>
                                     </div>
 

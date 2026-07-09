@@ -104,7 +104,7 @@ include 'layouts/session.php'; ?>
                                                 <a href="dash-certificates-item.php?id_Certificado=<?php echo $row['id_Certificado'] ?>&id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
                                                     <i class="fas fas fa-eye"></i>
                                                 </a>
-                                                <a href="dash-certificates-item.php?id_Certificado=<?php echo $row['id_Certificado'] ?>&id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir" target="_blank">
+                                                <a href="controller/certificate-pdf.php?id_Certificado=<?php echo $row['id_Certificado'] ?>&id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir" data-glightbox-preview data-type="external" data-width="900px" data-height="90vh">
                                                     <i class="fas fa-print"></i>
                                                 </a>
                                                 <a href="controller/certificate-remove.php?id_Certificado=<?php echo $row['id_Certificado'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">

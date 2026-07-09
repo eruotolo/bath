@@ -61,7 +61,7 @@ include 'layouts/session.php'; ?>
                                     <div class="row mb-4">
                                         <label for="id_Cliente" class="col-sm-3 col-form-label">Seleccionar el Cliente:</label>
                                         <div class="col-sm-6">
-                                            <select name="id_Cliente" id="id_Cliente" class="form-select">
+                                            <select name="id_Cliente" id="id_Cliente" class="form-select" data-enhanced-select data-search-placeholder="Buscar cliente...">
                                                 <option value="" selected>Seleccionar el cliente</option>
                                                 <?php
                                                 $sql = "SELECT * FROM clientes";
@@ -82,7 +82,7 @@ include 'layouts/session.php'; ?>
                                     <div class="row mb-4">
                                         <label for="id_Contrato" class="col-sm-3 col-form-label">Seleccione el Contrato:</label>
                                         <div class="col-sm-6">
-                                            <select name="id_Contrato" id="id_Contrato" class="form-select">
+                                            <select name="id_Contrato" id="id_Contrato" class="form-select" data-enhanced-select data-search-placeholder="Buscar contrato...">
                                                 <!-- Opciones se cargarán dinámicamente con JavaScript -->
                                             </select>
                                         </div>
@@ -138,20 +138,13 @@ include 'layouts/session.php'; ?>
 
 <script src="assets/js/app.js"></script>
 
-<<script>
+<script>
 	$(document).ready(function () {
-		$('#id_Cliente').change(function () {
-			var idCliente = $(this).val();
-			// Realizar una solicitud AJAX para obtener contratos basados en el idCliente
-			$.ajax({
-				url: 'controller/obtener_contratos.php', // Reemplaza con la ruta correcta de tu archivo PHP
-				type: 'POST',
-				data: {idCliente: idCliente},
-				success: function (response) {
-					// Actualizar las opciones del segundo select
-					$('#id_Contrato').html(response);
-				}
-			});
+		SelectEnhanced.cascade({
+			parent: 'id_Cliente',
+			child: 'id_Contrato',
+			endpoint: 'controller/obtener_contratos.php',
+			paramName: 'idCliente',
 		});
 	});
 </script>

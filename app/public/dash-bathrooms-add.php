@@ -67,14 +67,14 @@ include 'layouts/session.php'; ?>
                                     <div class="row mb-4">
                                         <label for="fechaCompra_Bath" class="col-sm-3 col-form-label">Fecha de compra:</label>
                                         <div class="col-sm-5">
-                                            <input class="form-control" type="date" id="fechaCompra_Bath" name="fechaCompra_Bath" required>
+                                            <input class="form-control" type="date" id="fechaCompra_Bath" name="fechaCompra_Bath" required data-datepicker-max="today">
                                         </div>
                                     </div>
 
                                     <div class="row mb-4">
                                         <label for="estado_Bath" class="col-sm-3 col-form-label">Estado del baño:</label>
                                         <div class="col-sm-5">
-                                            <select name="estado_Bath" id="estado_Bath" class="form-select">
+                                            <select name="estado_Bath" id="estado_Bath" class="form-select" data-enhanced-select>
                                                 <option value="">Seleccione el estado</option>
                                                 <option value="1">Activo</option>
                                                 <option value="0">Inactivo</option>

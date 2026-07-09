@@ -73,7 +73,8 @@ if ($query_run){
 
                                                 <div class="col-4 justify-content-center align-items-center img-perfil" style="margin-right: 40px">
                                                     <img src="uploads/users/<?php echo $row['image']?>" alt="Imagen de Perfil" class="img-fluid rounded-circle d-block" style="margin-bottom: 20px">
-                                                    <input type="file" class="form-control" id="file" name="file" >
+                                                    <div class="dropzone" data-dropzone-target="#file"></div>
+                                                    <input type="file" id="file" name="file" hidden>
                                                 </div>
 
                                                 <div class="col-6">

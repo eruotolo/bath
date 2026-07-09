@@ -13,3 +13,15 @@
 
 <!-- feedback (Sprint 1 plan-mejoras-frontend) -->
 <link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css">
+
+<!-- selects con buscador (Sprint 3 plan-mejoras-frontend) -->
+<link href="assets/libs/choices.js/public/assets/styles/choices.min.css" rel="stylesheet" type="text/css">
+
+<!-- date picker (Sprint 4 plan-mejoras-frontend) -->
+<link href="assets/libs/flatpickr/flatpickr.min.css" rel="stylesheet" type="text/css">
+
+<!-- drag & drop de imagen de perfil (Sprint 4 plan-mejoras-frontend) -->
+<link href="assets/libs/dropzone/min/dropzone.min.css" rel="stylesheet" type="text/css">
+
+<!-- preview de PDF (facturas/certificados) (Sprint 4 plan-mejoras-frontend) -->
+<link href="assets/libs/glightbox/css/glightbox.min.css" rel="stylesheet" type="text/css">

@@ -164,7 +164,7 @@ $id_Contrato = $_GET['id_Contrato'];
 
                                                         <label for="id_Servicio" class="col-sm-5 col-form-label">Selecciona el servicio:</label>
                                                         <div class="col-sm-7">
-                                                            <select name="id_Servicio" id="id_Servicio" class="form-select">
+                                                            <select name="id_Servicio" id="id_Servicio" class="form-select" data-enhanced-select data-search-placeholder="Buscar servicio...">
                                                                 <option value="">Selecciona un servicio</option>
                                                                 <?php
                                                                 $id_Cliente = $row['id_Cliente'];

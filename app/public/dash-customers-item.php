@@ -230,9 +230,55 @@ if ($query_run) {
         <?php include 'layouts/vendor-scripts.php'; ?>
         <script src="assets/js/app.js"></script>
 
-        <script src="assets/js/contactoVer.js"></script>
-        <script src="assets/js/contactoEdit.js"></script>
-        <script src="assets/js/customer-edit.js"></script>
+        <script>
+            ModalEditor.init({
+                triggerSelector: '.editarCliente',
+                endpoint: 'controller/customer-get.php',
+                idParam: 'id_Cliente',
+                fieldMap: {
+                    idCliente: 'id_Cliente',
+                    rutCliente: 'rut_Cliente',
+                    nombreCliente: 'nombre_Cliente',
+                    telefonoCliente: 'telefono_Cliente',
+                    emailCliente: 'email_Cliente',
+                    direccionCliente: 'direccion_Cliente',
+                    comunaCliente: 'comuna_Cliente',
+                    ciudadCliente: 'ciudad_Cliente',
+                    regionCliente: 'region_Cliente',
+                },
+            });
+
+            ModalEditor.init({
+                triggerSelector: '.editar',
+                endpoint: 'controller/contact-get.php',
+                idParam: 'id_Contacto',
+                fieldMap: {
+                    idC: 'id_Contacto',
+                    idCC: 'id_Cliente',
+                    nombreC: 'nombre_Contacto',
+                    apellidoC: 'apellido_Contacto',
+                    rutC: 'rut_Contacto',
+                    telefonoC: 'telefono_Contacto',
+                    direccionC: 'direccion_Contacto',
+                    observacionC: 'observacion_Contacto',
+                },
+            });
+
+            ModalEditor.init({
+                triggerSelector: '.view',
+                endpoint: 'controller/contact-get.php',
+                idParam: 'id_Contacto',
+                fieldMap: {
+                    id: 'id_Contacto',
+                    nombre: 'nombre_Contacto',
+                    apellido: 'apellido_Contacto',
+                    rut: 'rut_Contacto',
+                    telefono: 'telefono_Contacto',
+                    direccion: 'direccion_Contacto',
+                    observacion: 'observacion_Contacto',
+                },
+            });
+        </script>
 
         </body>
 

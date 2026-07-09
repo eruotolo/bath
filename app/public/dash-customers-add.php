@@ -93,7 +93,7 @@
                                     <div class="row mb-4">
                                         <label for="region_Cliente" class="col-sm-3 col-form-label">Región</label>
                                         <div class="col-sm-5">
-                                            <select class="form-select" name="region_Cliente" id="region_Cliente" >
+                                            <select class="form-select" name="region_Cliente" id="region_Cliente" data-enhanced-select data-search-placeholder="Buscar región...">
                                                 <option value="Ninguna" selected="selected">Regiones</option>
                                                 <option value="Región de Arica y Parinacota">Región de Arica y Parinacota</option>
                                                 <option value="Región de Tarapacá">Región de Tarapacá</option>
