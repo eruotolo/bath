@@ -1,5 +1,10 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Certificate\FindCertificateForPrint;
+use App\Infrastructure\Persistence\MysqliCertificateRepository;
+
 global $link;
 include('../layouts/config.php');
 require_once('../assets/tcpdf/tcpdf.php');
@@ -12,24 +17,15 @@ if (!$id_Certificado || !$id_Contrato) {
     exit('Parámetros inválidos.');
 }
 
-$sql = "SELECT CR.nro_Certificado, CR.fechahoy_Certificado, CR.fecha_Servicio, CR.mts_Certificado,
-               CL.nombre_Cliente, CL.rut_Cliente, CT.obra_Contrato
-        FROM certificados CR
-        JOIN clientes CL ON CR.id_Cliente = CL.id_Cliente
-        JOIN contratos CT ON CL.id_Cliente = CT.id_Cliente
-        WHERE CR.id_Certificado = ? AND CT.id_Contrato = ?";
-$stmt = mysqli_prepare($link, $sql);
-mysqli_stmt_bind_param($stmt, 'ii', $id_Certificado, $id_Contrato);
-mysqli_stmt_execute($stmt);
-$row = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+$useCase = new FindCertificateForPrint(new MysqliCertificateRepository($link));
+$row = $useCase->handle($id_Certificado, $id_Contrato);
 
 if (!$row) {
     http_response_code(404);
     exit('Certificado no encontrado.');
 }
 
-$fechaHoy = date('dmY', strtotime($row['fechahoy_Certificado']));
-$certificado = $fechaHoy . 'A' . $row['nro_Certificado'];
+$certificado = $row['certificado'];
 
 $logo_zl = __DIR__ . '/../assets/images/logo_zl.png';
 $logo_rc = __DIR__ . '/../assets/images/logo_rc.png';

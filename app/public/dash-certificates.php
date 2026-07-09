@@ -1,7 +1,16 @@
-<?php global $link;
+<?php
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Certificate\ListCertificates;
+use App\Infrastructure\Persistence\MysqliCertificateRepository;
+
+global $link;
 include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
-<?php include('layouts/config.php'); ?>
+<?php include('layouts/config.php');
+
+$certificates = (new ListCertificates(new MysqliCertificateRepository($link)))->handle();
+?>
 
 <head>
 
@@ -43,17 +52,9 @@ include 'layouts/session.php'; ?>
                     <div class="row align-items-center">
                         <div class="col-6">
                             <div class="mb-3">
-                                <?php
-                                $query = "SELECT COUNT(*) AS total FROM certificados;";
-                                $result_task1 = mysqli_query($link, $query);
-                                while ($row = mysqli_fetch_Array($result_task1)) {
-                                    ?>
-                                    <h5 class="card-title">Certificados <span
-                                            class="text-muted fw-normal ms-2">(<?php echo $row['total'] ?>)</span>
-                                    </h5>
-                                    <?php
-                                }
-                                ?>
+                                <h5 class="card-title">Certificados <span
+                                        class="text-muted fw-normal ms-2">(<?php echo $certificates['total'] ?>)</span>
+                                </h5>
                             </div>
                         </div>
 
@@ -82,39 +83,26 @@ include 'layouts/session.php'; ?>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <?php
-                                            $query = "SELECT * FROM certificados CR
-                                                            JOIN clientes CL ON CR.id_Cliente = CL.id_Cliente
-                                                            JOIN contratos CT ON CR.id_Contrato = CT.id_Contrato
-                                                        ORDER BY CR.created_at DESC, CR.id_Certificado DESC";
-                                            $result_task = mysqli_query($link, $query);
-                                            while ($row = mysqli_fetch_array($result_task)){
-                                                //$certificado = $row['fechahoy_Certificado'];
-                                                // Generar el número de certificado
-                                                $fechaHoy = date("dmY", strtotime($row['fechahoy_Certificado']));
-                                                $certificado = $fechaHoy . 'A' . $row['nro_Certificado'];
-                                        ?>
+                                        <?php foreach ($certificates['items'] as $row): ?>
                                         <tr>
-                                            <td>#<?php echo $certificado ?></td>
-                                            <td><?php echo $row['nombre_Cliente'] ?></td>
-                                            <td><?php echo $row['rut_Cliente'] ?></td>
-                                            <td><?php echo $row['obra_Contrato'] ?></td>
-                                            <td><?php echo $row['fecha_Servicio'] ?></td>
+                                            <td>#<?php echo htmlspecialchars($row['certificado']) ?></td>
+                                            <td><?php echo htmlspecialchars($row['nombre_Cliente']) ?></td>
+                                            <td><?php echo htmlspecialchars($row['rut_Cliente']) ?></td>
+                                            <td><?php echo htmlspecialchars($row['obra_Contrato']) ?></td>
+                                            <td><?php echo htmlspecialchars($row['fecha_Servicio']) ?></td>
                                             <td class="text-center">
-                                                <a href="dash-certificates-item.php?id_Certificado=<?php echo $row['id_Certificado'] ?>&id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
+                                                <a href="dash-certificates-item.php?id_Certificado=<?php echo (int) $row['id_Certificado'] ?>&id_Contrato=<?php echo (int) $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
                                                     <i class="fas fas fa-eye"></i>
                                                 </a>
-                                                <a href="controller/certificate-pdf.php?id_Certificado=<?php echo $row['id_Certificado'] ?>&id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir" data-glightbox-preview data-type="external" data-width="900px" data-height="90vh">
+                                                <a href="controller/certificate-pdf.php?id_Certificado=<?php echo (int) $row['id_Certificado'] ?>&id_Contrato=<?php echo (int) $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Imprimir" data-glightbox-preview data-type="external" data-width="900px" data-height="90vh">
                                                     <i class="fas fa-print"></i>
                                                 </a>
-                                                <a href="controller/certificate-remove.php?id_Certificado=<?php echo $row['id_Certificado'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
+                                                <a href="controller/certificate-remove.php?id_Certificado=<?php echo (int) $row['id_Certificado'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
                                                     <i class="fas fa-trash-alt"></i>
                                                 </a>
                                             </td>
                                         </tr>
-
-                                        <?php } ?>
-
+                                        <?php endforeach; ?>
                                     </tbody>
 
                                 </table>

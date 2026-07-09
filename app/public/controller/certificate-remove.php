@@ -1,21 +1,21 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Certificate\DeleteCertificate;
+use App\Infrastructure\Persistence\MysqliCertificateRepository;
+
 require '../layouts/config.php';
 global $link;
 
-$id_Certificado = $_GET['id_Certificado'];
+$id_Certificado = (int) $_GET['id_Certificado'];
+$useCase = new DeleteCertificate(new MysqliCertificateRepository($link));
 
-$sql = "DELETE FROM certificados WHERE id_Certificado = $id_Certificado";
-
-//echo $sql;
-//die();
-
-if ($link->query($sql) === TRUE) {
-    //echo "Registro eliminado correctamente.";
-    header("Location: ../dash-certificates.php");
-} else {
-    header("Location: ../index.php");
+try {
+    $useCase->handle($id_Certificado);
+    header('Location: ../dash-certificates.php');
+} catch (\mysqli_sql_exception $e) {
+    header('Location: ../index.php');
 }
 
-// Cerrar la conexión
 $link->close();

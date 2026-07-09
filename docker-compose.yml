@@ -39,6 +39,9 @@ services:
         volumes:
             - ./app/public:/var/www/html/
             - ./php/php.ini:/usr/local/etc/php/php.ini:ro
+            - ./composer.json:/var/www/composer.json
+            - ./app/src:/var/www/src
+            - ./vendor:/var/www/vendor
         healthcheck:
             test: ["CMD-SHELL", "pidof php-fpm || exit 1"]
             interval: 10s

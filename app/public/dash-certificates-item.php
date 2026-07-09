@@ -3,25 +3,23 @@
 
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Certificate\FindCertificateForPrint;
+use App\Infrastructure\Persistence\MysqliCertificateRepository;
+
 global $link;
 
 include('layouts/config.php');
 
-$id_Certificado = $_GET['id_Certificado'];
-$id_Contrato = $_GET['id_Contrato'];
+$id_Certificado = (int) $_GET['id_Certificado'];
+$id_Contrato = (int) $_GET['id_Contrato'];
 
-$query = "SELECT * FROM certificados CR
-    JOIN clientes CL ON CR.id_Cliente = CL.id_Cliente
-    JOIN contratos CT ON CL.id_Cliente = CT.id_Cliente
-WHERE id_Certificado = $id_Certificado AND CT.id_Contrato = $id_Contrato";
+$useCase = new FindCertificateForPrint(new MysqliCertificateRepository($link));
+$row = $useCase->handle($id_Certificado, $id_Contrato);
 
-$query_run = mysqli_query($link, $query);
-
-if ($query_run) {
-    $row = mysqli_fetch_array($query_run);
-    // Generar el número de certificado
-    $fechaHoy = date("dmY", strtotime($row['fechahoy_Certificado']));
-    $certificado = $fechaHoy . 'A' . $row['nro_Certificado'];
+if ($row) {
+    $certificado = $row['certificado'];
     ?>
 
     <head>
@@ -82,7 +80,7 @@ if ($query_run) {
 
                                     <div class="d-flex flex-column titulo-certificado align-items-center">
                                         <h4>Certificado de disposición final de residuos</h4>
-                                        <h5>NRO: <?php echo $certificado ?> - Fecha:
+                                        <h5>NRO: <?php echo htmlspecialchars($certificado) ?> - Fecha:
                                             <?php echo date("d/m/Y", strtotime($row['fechahoy_Certificado'])); ?>
                                         </h5>
                                     </div>
@@ -92,11 +90,11 @@ if ($query_run) {
                                             <p>BLANCO SERVICIOS E INVERSIONES SPA, RUT 76.654.452-7, con domicilio en Nercon Alto S/N, Castro, Chiloé, deja constancia que realizó una disposición final de residuos  a la empresa:</p>
                                         </div>
                                         <div class="col-12 datos-certificados">
-                                            <p><b>Cliente</b>: <?php echo $row['nombre_Cliente']; ?></p>
-                                            <p><b>Rut</b>: <?php echo $row['rut_Cliente']; ?></p>
-                                            <p><b>Fecha del Servicio</b>: <?php echo $row['fecha_Servicio']; ?></p>
-                                            <p><b>Cantidad metros cúbicos</b>: <?php echo $row['mts_Certificado']; ?> Mts</p>
-                                            <p><b>Sector de Origen</b>: <?php echo $row['obra_Contrato']; ?></p>
+                                            <p><b>Cliente</b>: <?php echo htmlspecialchars($row['nombre_Cliente']); ?></p>
+                                            <p><b>Rut</b>: <?php echo htmlspecialchars($row['rut_Cliente']); ?></p>
+                                            <p><b>Fecha del Servicio</b>: <?php echo htmlspecialchars($row['fecha_Servicio']); ?></p>
+                                            <p><b>Cantidad metros cúbicos</b>: <?php echo (int) $row['mts_Certificado']; ?> Mts</p>
+                                            <p><b>Sector de Origen</b>: <?php echo htmlspecialchars($row['obra_Contrato']); ?></p>
                                         </div>
                                         <div class="col-12">
                                             <p>Lo residuos retirados fueron trasladados y posteriormente tratados en la planta de tratamiento en Castro, de la empresa SURALIS, de acuerdo a contrato vigente.</p>

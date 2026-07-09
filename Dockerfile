@@ -1,4 +1,8 @@
+FROM composer:2 AS composer
+
 FROM php:8.1-fpm-alpine3.18
+
+COPY --from=composer /usr/bin/composer /usr/bin/composer
 
 # Update the system and install necessary dependencies
 RUN apk update && apk add --no-cache \
