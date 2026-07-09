@@ -1,19 +1,21 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Bathroom\DeleteBathroom;
+use App\Infrastructure\Persistence\MysqliBathroomRepository;
+
 include "../layouts/config.php";
 global $link;
 
-$id_Bath = $_GET['id_Bath'];
+$id_Bath = (int) $_GET['id_Bath'];
 
-// Ejecutar la consulta
-$sql = "DELETE FROM bathrooms WHERE id_Bath = $id_Bath";
+$useCase = new DeleteBathroom(new MysqliBathroomRepository($link));
 
-//echo $sql;
-//die();
-
-if ($link->query($sql) === TRUE) {
+try {
+    $useCase->handle($id_Bath);
     header('Location: ../dash-bathrooms.php?status=success&msg=' . urlencode('Baño eliminado correctamente'));
-}else{
+} catch (\mysqli_sql_exception $e) {
     header('Location: ../dash-bathrooms.php?status=error&msg=' . urlencode('No se pudo eliminar el baño'));
 }
 // Cerrar la conexión

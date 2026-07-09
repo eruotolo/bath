@@ -1,33 +1,30 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Bathroom\CreateBathroom;
+use App\Infrastructure\Persistence\MysqliBathroomRepository;
+
 global $link;
 
 include ('../layouts/config.php');
 
 if (isset($_POST['crear'])){
     $codigo_Bath = $_POST['codigo_Bath'];
-    $fechaCompra_Bath = $_POST['fechaCompra_Bath'];
-    $observacion_Bath = $_POST['observacion_Bath'];
-    $estado_Bath = $_POST['estado_Bath'];
 
-    $stmt_check = $link->prepare('SELECT COUNT(*) AS total FROM bathrooms WHERE codigo_Bath = ?');
-    $stmt_check->bind_param('s', $codigo_Bath);
-    $stmt_check->execute();
-    $existe = $stmt_check->get_result()->fetch_assoc()['total'] > 0;
-    $stmt_check->close();
+    $useCase = new CreateBathroom(new MysqliBathroomRepository($link));
 
-    if ($existe) {
-        header('Location: ../dash-bathrooms-add.php?status=error&msg=' . urlencode("Ya existe un baño con el código '$codigo_Bath'. Ingresá un código distinto."));
-        $link->close();
-        exit;
+    try {
+        $id = $useCase->handle($_POST);
+
+        if ($id === null) {
+            header('Location: ../dash-bathrooms-add.php?status=error&msg=' . urlencode("Ya existe un baño con el código '$codigo_Bath'. Ingresá un código distinto."));
+        } else {
+            header('Location: ../dash-bathrooms.php?status=success&msg=' . urlencode('Baño creado correctamente'));
+        }
+    } catch (\mysqli_sql_exception $e) {
+        header('Location: ../dash-bathrooms-add.php?status=error&msg=' . urlencode('No se pudo crear el baño'));
     }
-
-    $stmt = $link->prepare('INSERT INTO bathrooms (codigo_Bath, fechaCompra_Bath, observacion_Bath, estado_Bath) VALUES (?, ?, ?, ?)');
-    $stmt->bind_param('sssi', $codigo_Bath, $fechaCompra_Bath, $observacion_Bath, $estado_Bath);
-    $stmt->execute();
-    $stmt->close();
-
-    header('Location: ../dash-bathrooms.php?status=success&msg=' . urlencode('Baño creado correctamente'));
 
 }else{
     header('Location: ../dash-bathrooms-add.php?status=error&msg=' . urlencode('No se pudo crear el baño'));

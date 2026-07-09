@@ -2,18 +2,22 @@
 <?php include 'layouts/head-main.php'; ?>
 
 <?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Bathroom\FindBathroom;
+use App\Infrastructure\Persistence\MysqliBathroomRepository;
+
 include('layouts/config.php');
 global $link;
 
-$id_Bath = $_GET['id_Bath'];
+$id_Bath = (int) $_GET['id_Bath'];
 
-$query = "SELECT * FROM bathrooms WHERE id_Bath = $id_Bath";
-$query_run = mysqli_query($link, $query);
+$useCase = new FindBathroom(new MysqliBathroomRepository($link));
+$bathroom = $useCase->handle($id_Bath);
 
-if($query_run){
-    while ($row = mysqli_fetch_array($query_run)){
-
-        ?>
+if ($bathroom !== null) {
+    ?>
 
 <head>
 
@@ -70,29 +74,29 @@ if($query_run){
                                 <form action="controller/bath-update.php" method="post" id="bathForm" class="needs-validation mt-4 pt-2">
 
                                     <div class="row mb-4">
-                                        <input type="hidden" class="form-control" id="id_Bath" name="id_Bath"  value="<?php echo $row['id_Bath'];?>">
-                                        <input type="hidden" class="form-control" id="estado_Bath" name="estado_Bath"  value="<?php echo $row['estado_Bath'];?>">
+                                        <input type="hidden" class="form-control" id="id_Bath" name="id_Bath"  value="<?php echo $bathroom->id;?>">
+                                        <input type="hidden" class="form-control" id="estado_Bath" name="estado_Bath"  value="<?php echo $bathroom->estadoBath;?>">
                                     </div>
 
 
                                     <div class="row mb-4">
                                         <label for="codigo_Bath" class="col-sm-3 col-form-label">Código del Baño:</label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="codigo_Bath" name="codigo_Bath" value="<?php echo $row['codigo_Bath'];?>">
+                                            <input type="text" class="form-control" id="codigo_Bath" name="codigo_Bath" value="<?php echo htmlspecialchars($bathroom->codigoBath);?>">
                                         </div>
                                     </div>
 
                                     <div class="row mb-4">
                                         <label for="fechaCompra_Bath" class="col-sm-3 col-form-label">Fecha de compra:</label>
                                         <div class="col-sm-6">
-                                            <input type="date" class="form-control" id="fechaCompra_Bath" name="fechaCompra_Bath" value="<?php echo $row['fechaCompra_Bath'];?>" data-datepicker-max="today">
+                                            <input type="date" class="form-control" id="fechaCompra_Bath" name="fechaCompra_Bath" value="<?php echo htmlspecialchars($bathroom->fechaCompraBath);?>" data-datepicker-max="today">
                                         </div>
                                     </div>
 
                                     <div class="row mb-4">
                                         <label for="observacion_Bath" class="col-sm-3 col-form-label">Observaciones:</label>
                                         <div class="col-sm-6">
-                                            <input type="text" class="form-control" id="observacion_Bath" name="observacion_Bath" value="<?php echo $row['observacion_Bath'];?>">
+                                            <input type="text" class="form-control" id="observacion_Bath" name="observacion_Bath" value="<?php echo htmlspecialchars($bathroom->observacionBath);?>">
                                         </div>
                                     </div>
 
@@ -132,8 +136,7 @@ if($query_run){
 </html>
 
         <?php
-    }
-}  else{
+} else{
     echo '<script>alert ("Problema al cargar el Baño")</script>';
 }
 ?>

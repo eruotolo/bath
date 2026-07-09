@@ -1,24 +1,24 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Bathroom\AssignBathroomToContract;
+use App\Infrastructure\Persistence\MysqliBathroomRepository;
+
 global $link;
 
 include ('../layouts/config.php');
 
 if (isset($_POST['update'])){
-    $id_Contrato = $_POST['id_Contrato'];
-    $id_Bath = $_POST['id_Bath'];
-    $asignado_Bath = 1;
+    $id_Contrato = (int) $_POST['id_Contrato'];
+    $id_Bath = (int) $_POST['id_Bath'];
 
-    $update_query = "UPDATE bathrooms SET asignado_Bath = $asignado_Bath WHERE id_Bath = $id_Bath";
-    $insert_query = "INSERT INTO contrato_bathroom (id_Contrato, id_Bath) VALUE('$id_Contrato', '$id_Bath')";
+    $useCase = new AssignBathroomToContract(new MysqliBathroomRepository($link));
 
-    //echo $update_query;
-    //echo $insert_query;
-    //die();
-
-    if ($link->query($update_query) === true && $link->query($insert_query) === true){
+    try {
+        $useCase->handle($id_Contrato, $id_Bath);
         header("Location: ../dash-contracts-item.php?id_Contrato=$id_Contrato");
-    }else {
+    } catch (\mysqli_sql_exception $e) {
         header("Location: ../index.php");
     }
 

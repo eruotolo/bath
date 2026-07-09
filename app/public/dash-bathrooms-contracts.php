@@ -111,8 +111,8 @@
                                         <label class="form-check-label" for="contacusercheck1"></label>
                                     </div>
                                 </th>
-                                <td><?php echo $row['codigo_Bath'] ?></td>
-                                <td><?php echo $row['fechaInicio_Contrato'] ?></td>
+                                <td><?php echo htmlspecialchars($row['codigo_Bath']) ?></td>
+                                <td><?php echo htmlspecialchars($row['fechaInicio_Contrato']) ?></td>
                                 <?php
                                     if ($row['estado_Bath'] == 1) { ?>
                                         <td>
@@ -140,8 +140,8 @@
                                     </td>
                                 <?php } ?>
 
-                                <td><?php echo $row['obra_Contrato'] ?></td>
-                                <td><?php echo $row['nombre_Cliente'] ?></td>
+                                <td><?php echo htmlspecialchars($row['obra_Contrato']) ?></td>
+                                <td><?php echo htmlspecialchars($row['nombre_Cliente']) ?></td>
                             </tr>
                         <?php } ?>
                         </tbody>

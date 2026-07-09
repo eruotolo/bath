@@ -1,24 +1,21 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Bathroom\SetBathroomAssigned;
+use App\Infrastructure\Persistence\MysqliBathroomRepository;
 
 global $link;
 require '../layouts/config.php';
 
-$id_Bath = $_GET['id_Bath'];
+$id_Bath = (int) $_GET['id_Bath'];
 
-// ELIMINAR REGISTRO DE LA TABLA CONTRATO_BATHROOM
-//$delete_query = "DELETE FROM contrato_bathroom WHERE id_Relacion = $id_Relacion";
-$update_query = "UPDATE bathrooms SET asignado_Bath = 0 WHERE id_Bath = $id_Bath";
+$useCase = new SetBathroomAssigned(new MysqliBathroomRepository($link));
 
-//echo $delete_query;
-//echo $update_query;
-//die();
-
-//if ($link->query($delete_query) === TRUE && $link->query($update_query) === TRUE) {
-if ($link->query($update_query) === TRUE) {
-    //echo "Registro eliminado correctamente.";
+try {
+    $useCase->handle($id_Bath, 0);
     header("Location: ../dash-bathrooms.php");
-} else {
+} catch (\mysqli_sql_exception $e) {
     header("Location: ../index.php");
 }
 

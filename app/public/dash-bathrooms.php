@@ -1,6 +1,20 @@
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
-<?php include('layouts/config.php'); ?>
+
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Bathroom\ListBathrooms;
+use App\Infrastructure\Persistence\MysqliBathroomRepository;
+
+global $link;
+
+include('layouts/config.php');
+
+$useCase = new ListBathrooms(new MysqliBathroomRepository($link));
+$listado = $useCase->handle();
+?>
 
 
 
@@ -48,17 +62,9 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <?php
-                            $query = "SELECT COUNT(*) AS total FROM bathrooms;";
-                            $result_task = mysqli_query($link, $query);
-                            while ($row = mysqli_fetch_Array($result_task)) {
-                                ?>
-                                <h5 class="card-title">Cantidad de Baños <span
-                                            class="text-muted fw-normal ms-2">(<?php echo $row['total'] ?>)</span>
-                                </h5>
-                                <?php
-                            }
-                            ?>
+                            <h5 class="card-title">Cantidad de Baños <span
+                                        class="text-muted fw-normal ms-2">(<?php echo $listado['total'] ?>)</span>
+                            </h5>
                         </div>
                     </div>
 
@@ -113,9 +119,7 @@
                         </thead>
                         <tbody>
                         <?php
-                        $query = "SELECT * FROM bathrooms WHERE estado_Bath IN (0, 1) ORDER BY fechaCompra_Bath DESC";
-                        $result_task = mysqli_query($link, $query);
-                        while ($row = mysqli_fetch_Array($result_task)) {
+                        foreach ($listado['items'] as $row) {
                             ?>
                             <tr data-estado="<?php echo (int)$row['estado_Bath'] ?>" data-asignado="<?php echo (int)$row['asignado_Bath'] ?>">
                                 <th scope="row">
