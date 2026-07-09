@@ -1,7 +1,19 @@
 <?php global $link;
 include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
-<?php include 'layouts/config.php'; ?>
+
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\User\ListActiveUsers;
+use App\Infrastructure\Persistence\MysqliUserRepository;
+
+include 'layouts/config.php';
+
+$useCase = new ListActiveUsers(new MysqliUserRepository($link));
+$usuarios = $useCase->handle();
+?>
 
 <head>
 
@@ -89,12 +101,7 @@ include 'layouts/session.php'; ?>
                         </thead>
                         <tbody>
                         <?php
-                        $query = "SELECT *,U.id as 'uid' FROM users U
-                                    JOIN category C
-                                    on U.category = C.id_category
-                                    WHERE state = 1 ORDER BY name asc";
-                        $result_task = mysqli_query($link, $query);
-                        while ($row = mysqli_fetch_Array($result_task))  {
+                        foreach ($usuarios as $row) {
                             ?>
                         <tr>
                             <th scope="row">
@@ -104,12 +111,12 @@ include 'layouts/session.php'; ?>
                                 </div>
                             </th>
                             <td>
-                                <img src="uploads/users/<?php echo $row['image'];?>" alt="" class="avatar-sm rounded-circle me-2">
-                                <a href="#" class="text-body"><?php echo $row['username'];?></a>
+                                <img src="uploads/users/<?php echo htmlspecialchars($row['image']);?>" alt="" class="avatar-sm rounded-circle me-2">
+                                <a href="#" class="text-body"><?php echo htmlspecialchars($row['username']);?></a>
                             </td>
-                            <td><?php echo $row['name'];?> <?php echo $row['lastname'];?></td>
-                            <td><?php echo $row['useremail'];?></td>
-                            <td><?php echo $row['name_category'];?></td>
+                            <td><?php echo htmlspecialchars($row['name']);?> <?php echo htmlspecialchars($row['lastname']);?></td>
+                            <td><?php echo htmlspecialchars($row['useremail']);?></td>
+                            <td><?php echo htmlspecialchars($row['name_category']);?></td>
 
                             <td>
                                 <div class="dropdown">
@@ -125,7 +132,7 @@ include 'layouts/session.php'; ?>
                                             <li><a class="dropdown-item" href="dash-users-edit.php?id_User=<?php echo $row['id'] ?>">Editar</a></li>
                                             <li><a class="dropdown-item" href="controller/user-inactive.php?id_User=<?php echo $row['id'] ?>">Inactivar</a></li>
                                             <li><a class="dropdown-item" href="controller/user-default-pass.php?id_User=<?php echo $row['id'] ?>">Password Default</a></li>
-                                            <li><a class="dropdown-item cat-admin" href="controller/user-setadmin.php?id_User=<?php echo $row['id'] ?>&category=<?php echo $row['id_category'] ?>" style="color: #5156be">Set Admin/User</a></li>
+                                            <li><a class="dropdown-item cat-admin" href="controller/user-setadmin.php?id_User=<?php echo $row['id'] ?>&category=<?php echo $row['category'] ?>" style="color: #5156be">Set Admin/User</a></li>
                                             <?php
                                         }else{
                                             ?>

@@ -51,13 +51,13 @@
                                         <div class="d-flex align-items-start mt-3 mt-sm-0">
                                             <div class="flex-shrink-0">
                                                 <div class="avatar-xl me-3">
-                                                    <img src="uploads/users/<?php echo $_SESSION['image']; ?>" alt="Imagen de Usuario"
+                                                    <img src="uploads/users/<?php echo htmlspecialchars($_SESSION['image']); ?>" alt="Imagen de Usuario"
                                                          class="img-fluid rounded-circle d-block">
                                                 </div>
                                             </div>
                                             <div class="flex-grow-1">
                                                 <div>
-                                                    <h5 class="font-size-16 mb-1"><?php echo $_SESSION['name']; ?> <?php echo $_SESSION['lastname']; ?></h5>
+                                                    <h5 class="font-size-16 mb-1"><?php echo htmlspecialchars($_SESSION['name']); ?> <?php echo htmlspecialchars($_SESSION['lastname']); ?></h5>
 
                                                     <?php
                                                         if ($_SESSION['category'] == 1){ ?>
@@ -72,7 +72,7 @@
 
                                                     <div class="d-flex flex-wrap align-items-start gap-2 gap-lg-3 text-muted font-size-13">
                                                         <div>
-                                                            <i class="mdi mdi-circle-medium me-1 text-success align-middle"></i><?php echo $_SESSION['useremail']; ?>
+                                                            <i class="mdi mdi-circle-medium me-1 text-success align-middle"></i><?php echo htmlspecialchars($_SESSION['useremail']); ?>
                                                         </div>
                                                     </div>
                                                 </div>

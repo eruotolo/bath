@@ -1,11 +1,17 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\User\UpdateUser;
+use App\Infrastructure\Persistence\MysqliUserRepository;
+
 global $link;
 include "../layouts/config.php";
 
 if(isset($_POST['update'])){
-    $id = $_POST['id'];
+    $id = (int) $_POST['id'];
 
+    $imageFilename = null;
     if(isset($_FILES['file']) && $_FILES["file"]["error"] == 0){
         #file name with a random number so that similar dont get replaced
         $pname = rand(1000, 10000) . "-" . $_FILES["file"]["name"];
@@ -19,51 +25,15 @@ if(isset($_POST['update'])){
         #TO move the uploaded file to specific location
         move_uploaded_file($tname, $uploads_dir . '/' . $pname);
 
-        $image_update = ",image='$pname'";
+        $imageFilename = $pname;
     }
 
-    // Useremail
-    if (isset($_POST['useremail']) && $_POST['useremail'] <> '') {
-        $useremail_update = "useremail='{$_POST['useremail']}'";
-    } else {
-        $useremail_update = "useremail=NULL";
-    }
+    $useCase = new UpdateUser(new MysqliUserRepository($link));
 
-    //Username
-    if (isset($_POST['username']) && $_POST['username'] <> '') {
-        $username_update = ",username='{$_POST['username']}'";
-    } else {
-        $username_update = ",username=NULL";
-    }
-
-    // Name
-    if (isset($_POST['name']) && $_POST['name'] <> '') {
-        $name_update = ",name='{$_POST['name']}'";
-    } else {
-        $name_update = ",name=NULL";
-    }
-    // Lastname
-    if (isset($_POST['lastname']) && $_POST['lastname'] <> '') {
-        $lastname_update = ",lastname='{$_POST['lastname']}'";
-    } else {
-        $lastname_update = ",lastname=NULL";
-    }
-
-
-    $query = "UPDATE users SET {$useremail_update} {$username_update} {$name_update} {$lastname_update} {$image_update} WHERE id = $id";
-
-    //echo $query;
-    //die();
-
-    //$result = mysqli_query($link, $query) or ($error= mysqli_error($link));
-
-    //echo $error;
-    //die();
-
-    if(mysqli_query($link, $query) or ($error= mysqli_error($link))){
-        //echo "File Sucessfully uploaded";
+    try {
+        $useCase->handle($id, $_POST, $imageFilename);
         header('Location: ../dash-users-list.php');
-    }else{
+    } catch (\mysqli_sql_exception $e) {
         echo '<script> alert ("No se pudo crear el usuario")</script>';
         header('Location: ../index.php');
     }

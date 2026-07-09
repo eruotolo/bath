@@ -1,28 +1,27 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\User\ResetUserPassword;
+use App\Infrastructure\Persistence\MysqliUserRepository;
+
 global $link;
 include ('../layouts/config.php');
 
-// ELIMINAR PASS DEFAULT
+// RESETEAR PASSWORD A UN VALOR TEMPORAL ALEATORIO
 if (isset($_GET['id_User'])){
-    $id = $_GET['id_User'];
-    $password = 'JuanSanchez_2024';
-    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $id = (int) $_GET['id_User'];
 
+    $useCase = new ResetUserPassword(new MysqliUserRepository($link));
 
-    $sql = "UPDATE users SET password='$hash' WHERE id = $id";
-    //echo $sql;
-    //die();
-
-    if ($link->query($sql) === TRUE) {
-        //echo '<script> alert ("Usuario dado de baja")</script>';
-        header("Location: ../dash-users-list.php");
-    } else {
-        echo '<script> alert ("No se pudo dar de baja al usuario")</script>';
-        header('Location: ../index.php');
+    try {
+        $temporaryPassword = $useCase->handle($id);
+        header('Location: ../dash-users-list.php?status=success&msg=' . urlencode("Password reseteado. Nueva contraseña temporal: $temporaryPassword — comunicásela al usuario."));
+    } catch (\mysqli_sql_exception $e) {
+        header('Location: ../index.php?status=error&msg=' . urlencode('No se pudo resetear el password del usuario'));
     }
 
-// Cerrar la conexión
+    // Cerrar la conexión
     $link->close();
 
 }

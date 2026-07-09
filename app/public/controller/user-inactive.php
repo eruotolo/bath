@@ -1,26 +1,26 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\User\DeactivateUser;
+use App\Infrastructure\Persistence\MysqliUserRepository;
+
 global $link;
 include ('../layouts/config.php');
 
 if (isset($_GET['id_User'])){
-    $id = $_GET['id_User'];
-    $password = 'Guns026772';
-    $hash = password_hash($password, PASSWORD_DEFAULT);
-    $state = 0;
+    $id = (int) $_GET['id_User'];
 
-    $sql = "UPDATE users SET password = '$hash', state = '$state' WHERE id = '$id'";
-    //echo $sql;
-    //die();
+    $useCase = new DeactivateUser(new MysqliUserRepository($link));
 
-    if ($link->query($sql) === TRUE) {
-        //echo '<script> alert ("Usuario dado de baja")</script>';
+    try {
+        $useCase->handle($id);
         header("Location: ../dash-users-list.php");
-    } else {
+    } catch (\mysqli_sql_exception $e) {
         echo '<script> alert ("No se pudo dar de baja al usuario")</script>';
     }
 
-// Cerrar la conexión
+    // Cerrar la conexión
     $link->close();
 
 }

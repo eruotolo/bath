@@ -3,17 +3,20 @@
 
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\User\FindUser;
+use App\Infrastructure\Persistence\MysqliUserRepository;
+
 include('layouts/config.php');
 global $link;
 
-$id = $_GET['id_User'];
+$id = (int) $_GET['id_User'];
 
-$query = "SELECT * FROM users U JOIN category C ON U.category = C.id_category WHERE id = $id";
+$useCase = new FindUser(new MysqliUserRepository($link));
+$user = $useCase->handle($id);
 
-$query_run = mysqli_query($link, $query);
-
-if ($query_run){
-    while ($row = mysqli_fetch_array($query_run)) { ?>
+if ($user !== null) { ?>
 
         <head>
 
@@ -67,12 +70,12 @@ if ($query_run){
 
                                         <form action="controller/user-update.php" method="post" enctype="multipart/form-data"  class="needs-validation mt-4 pt-2">
 
-                                            <input type="number" class="form-control" id="id" name="id" value="<?php echo $row['id'];?>" hidden>
+                                            <input type="number" class="form-control" id="id" name="id" value="<?php echo $user->id;?>" hidden>
 
                                             <div class="row">
 
                                                 <div class="col-4 justify-content-center align-items-center img-perfil" style="margin-right: 40px">
-                                                    <img src="uploads/users/<?php echo $row['image']?>" alt="Imagen de Perfil" class="img-fluid rounded-circle d-block" style="margin-bottom: 20px">
+                                                    <img src="uploads/users/<?php echo htmlspecialchars($user->image ?? '')?>" alt="Imagen de Perfil" class="img-fluid rounded-circle d-block" style="margin-bottom: 20px">
                                                     <div class="dropzone" data-dropzone-target="#file"></div>
                                                     <input type="file" id="file" name="file" hidden>
                                                 </div>
@@ -81,28 +84,28 @@ if ($query_run){
                                                     <div class="row mb-4">
                                                         <label for="useremail" class="col-sm-5 col-form-label">Email Usuario:</label>
                                                         <div class="col-sm-6">
-                                                            <input type="email" class="form-control" name="useremail" id="useremail" value="<?php echo $row['useremail'];?>">
+                                                            <input type="email" class="form-control" name="useremail" id="useremail" value="<?php echo htmlspecialchars($user->useremail);?>">
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-4">
                                                         <label for="username" class="col-sm-5 col-form-label">Usuario:</label>
                                                         <div class="col-sm-6">
-                                                            <input type="text" class="form-control" name="username" id="username" value="<?php echo $row['username'];?>">
+                                                            <input type="text" class="form-control" name="username" id="username" value="<?php echo htmlspecialchars($user->username);?>">
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-4">
                                                         <label for="name" class="col-sm-5 col-form-label">Nombre del Usuario:</label>
                                                         <div class="col-sm-6">
-                                                            <input type="text" class="form-control" name="name" id="name" value="<?php echo $row['name'];?>">
+                                                            <input type="text" class="form-control" name="name" id="name" value="<?php echo htmlspecialchars($user->name ?? '');?>">
                                                         </div>
                                                     </div>
 
                                                     <div class="row mb-4">
                                                         <label for="lastname" class="col-sm-5 col-form-label">Apellido del Usuario:</label>
                                                         <div class="col-sm-6">
-                                                            <input type="text" class="form-control" name="lastname" id="lastname" value="<?php echo $row['lastname'];?>">
+                                                            <input type="text" class="form-control" name="lastname" id="lastname" value="<?php echo htmlspecialchars($user->lastname ?? '');?>">
                                                         </div>
                                                     </div>
 
@@ -145,8 +148,7 @@ if ($query_run){
         </html>
 
 <?php
-    }
-}else{
+} else {
     echo '<script>alert ("Problema al cargar el Servicio")</script>';
 }
 ?>

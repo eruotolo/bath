@@ -1,25 +1,23 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\User\ToggleUserAdmin;
+use App\Infrastructure\Persistence\MysqliUserRepository;
+
 global $link;
 include ('../layouts/config.php');
 
 if (isset($_GET['id_User'])){
-    $id = $_GET['id_User'];
-    $category = $_GET['category'];
+    $id = (int) $_GET['id_User'];
+    $category = (int) $_GET['category'];
 
-    if($category == 1){
-        $sql = "UPDATE users SET category = 2 WHERE id = $id";
-    }else{
-        $sql = "UPDATE users SET category = 1 WHERE id = $id";
-    }
+    $useCase = new ToggleUserAdmin(new MysqliUserRepository($link));
 
-    //echo $sql;
-    //die();
-
-    if ($link->query($sql) === TRUE) {
-        //echo '<script> alert ("Usuario dado de baja")</script>';
+    try {
+        $useCase->handle($id, $category);
         header("Location: ../dash-users-list.php");
-    } else {
+    } catch (\mysqli_sql_exception $e) {
         echo '<script> alert ("No se pudo setear como Admin")</script>';
     }
 

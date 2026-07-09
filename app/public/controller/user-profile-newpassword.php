@@ -1,23 +1,32 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\User\ChangeOwnPassword;
+use App\Infrastructure\Persistence\MysqliUserRepository;
+
 global $link;
 include "../layouts/config.php";
 
+session_start();
+
 if (isset($_POST['update'])){
-    $id = $_POST['id'];
-    $password = $_POST['password'];
-    $hash = password_hash($password, PASSWORD_DEFAULT);
+    $requestedId = (int) $_POST['id'];
+    $sessionUserId = (int) ($_SESSION['id'] ?? 0);
 
-    $query = "UPDATE users SET password='$hash' WHERE id = $id";
+    $useCase = new ChangeOwnPassword(new MysqliUserRepository($link));
 
-    //echo $query;
-    //die();
+    try {
+        $ok = $useCase->handle($sessionUserId, $requestedId, $_POST['password']);
 
-    $result = mysqli_query($link, $query);
-
-    //echo '<script> alert ("Actualizado")</script>';
-
-    header('Location:../logout.php');
+        if ($ok) {
+            header('Location:../logout.php');
+        } else {
+            header('Location: ../dash-users-profile.php?status=error&msg=' . urlencode('No se pudo actualizar el password'));
+        }
+    } catch (\mysqli_sql_exception $e) {
+        header('Location: ../dash-users-profile.php?status=error&msg=' . urlencode('No se pudo actualizar el password'));
+    }
 }else{
     echo '<script> alert ("No se pudo actualizar el password")</script>';
 }
