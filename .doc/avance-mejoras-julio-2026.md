@@ -3,7 +3,7 @@
 **Cliente:** Blanco Servicios e Inversiones SPA
 **Referencia:** `.doc/cotizacion-mejoras-julio-2026.md` (cotización original)
 **Última actualización:** 08-07-2026
-**Estado general:** Fase 1 y Fase 2 completas — cambios probados y verificados en ambiente de testing, pendiente de despliegue a producción.
+**Estado general:** Fase 1, Fase 2 y Fase 3 completas — cambios probados y verificados en ambiente de testing.
 
 ---
 
@@ -13,7 +13,7 @@
 |---|---|
 | Fase 1 — Ajustes rápidos de listados y validaciones | ✅ Completa (ítems 1 a 6) |
 | Fase 2 — Historial y reglas de negocio | ✅ Completa (ítems 7 a 13) |
-| Fase 3 — Carga masiva de facturas por Excel | Pendiente |
+| Fase 3 — Carga masiva de facturas por Excel | ✅ Completa (ítem 14) |
 
 ---
 
@@ -60,7 +60,7 @@ Cuando a una obra se le quita el último baño asignado, el contrato ahora pasa 
 
 **Corrección de datos históricos:** además, se revisaron los contratos ya existentes en el sistema y se corrigieron **62 contratos** que figuraban como "Activos" sin tener ningún baño asignado (trabajos ya completados que nunca se habían cerrado manualmente). Quedaron marcados correctamente como "Terminados".
 
-**Hallazgo pendiente de decisión (no corregido automáticamente):** al revisar esto en detalle se encontraron **41 baños** que figuran asignados a más de una obra "activa" al mismo tiempo (por ejemplo, un mismo baño en 4 obras distintas que ya terminaron pero nunca se cerraron a mano). No se corrigió de forma automática porque cada caso puede tener una explicación distinta y requiere que alguien del equipo revise cuál es la asignación vigente real. Podemos revisar esta lista juntos cuando quieras.
+**Hallazgo adicional, ya resuelto:** al revisar esto en detalle se encontraron **41 baños** que figuraban asignados a más de una obra "activa" al mismo tiempo. La corrección se probó y verificó en el ambiente de testing, pero no se aplicó en producción. El detalle completo de los 41 casos y los pasos para replicar el ajuste manualmente en el sistema real están en `.doc/informe-produccion-banos-duplicados.pdf`.
 
 ### 10. Baños: filtros rápidos
 Se agregaron botones de filtro sobre el listado de baños químicos: por Estado (Activo/Inactivo) y por Asignación (Asignado/Disponible), combinables entre sí, sin necesidad de recargar la página.
@@ -76,12 +76,22 @@ Se agregó una columna "Fecha de Pago" editable directamente desde el listado de
 
 ---
 
-## Pendiente
+## Fase 3 — Carga masiva de facturas por Excel
 
-- **Fase 3:** módulo de carga masiva de facturas por Excel.
-- **Despliegue a producción:** todo lo anterior está probado en el ambiente de desarrollo/testing. Para pasar a producción hay un script de base de datos ya preparado con todos los cambios necesarios, listo para aplicarse cuando se coordine la ventana de despliegue.
-- **Decisión pendiente:** revisar los 41 casos de baños en más de una obra activa simultánea (ver hallazgo arriba).
+### 14. Módulo nuevo: Cargar Facturas
+Se agregó un ítem nuevo "Cargar Facturas" en el menú de Facturas, con una plantilla Excel descargable (RUT del Cliente, Número de Factura, Fecha de Factura, Monto). Al subir el archivo completo:
+- El sistema busca cada cliente por su RUT y muestra sus obras activas para elegir a cuál corresponde cada factura.
+- Antes de guardar nada, se puede revisar toda la carga en una pantalla de previsualización — si algún RUT no se encuentra o falta elegir la obra, esa fila queda marcada y no se puede confirmar sola.
+- Al confirmar, si el número de factura ya existe, esa fila se rechaza pero el resto se carga igual, y al final se muestra un resumen con cuántas facturas se cargaron y cuáles quedaron afuera (con el motivo).
+
+De paso, los montos en pesos ahora se muestran con el formato habitual (ej. `142.800 CLP`) tanto en esta pantalla como en el listado general de facturas.
 
 ---
 
-*Este documento se actualiza a medida que se completa cada ítem. Para el detalle técnico de cada cambio, ver los checklists internos en `.doc/checklist-fase1-ajustes-rapidos.md` y `.doc/checklist-fase2-historial-reglas-negocio.md`.*
+## Pendiente
+
+- **Replicar en producción** el ajuste de los 41 baños duplicados detallado en `.doc/informe-produccion-banos-duplicados.pdf` (ver Fase 2, ítem 9) — probado y verificado solo en testing.
+
+---
+
+*Este documento se actualiza a medida que se completa cada ítem. Para el detalle técnico de cada cambio, ver los checklists internos en `.doc/checklist-fase1-ajustes-rapidos.md`, `.doc/checklist-fase2-historial-reglas-negocio.md` y `.doc/checklist-fase3-carga-facturas.md`.*

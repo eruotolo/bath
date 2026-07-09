@@ -1,7 +1,7 @@
 # Checklist — Fase 1: Ajustes rápidos de listados y validaciones
 
 **Origen:** `.doc/cotizacion-mejoras-julio-2026.md` (ítems 1-6) + `.doc/tecnico-mejoras-julio-2026.md`
-**Estado:** en revisión — agregar/modificar ítems antes de empezar a implementar.
+**Estado:** ✅ Fase 1 completa (ítems 1-7) — implementado y verificado en navegador (2026-07-08).
 
 ---
 
