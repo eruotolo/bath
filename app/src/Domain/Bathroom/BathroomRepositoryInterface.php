@@ -33,6 +33,18 @@ interface BathroomRepositoryInterface
     public function countAssignedToContract(int $idContrato): int;
 
     /**
+     * Baños relacionados a un contrato (join contrato_bathroom + bathrooms), para dash-contracts-item.php.
+     * @return array<int, array<string, mixed>>
+     */
+    public function listByContract(int $idContrato): array;
+
+    /**
+     * Desasigna todos los baños de un contrato (usado al inactivar un contrato):
+     * pone asignado_Bath = 0 en cada uno y borra la relación en contrato_bathroom.
+     */
+    public function unassignAllFromContract(int $idContrato): void;
+
+    /**
      * Cierra el contrato (estado_Contrato = 1) — cruza al dominio Contract, todavía no migrado.
      * Excepción documentada, mismo criterio que MysqliCertificateRepository con clientes/contratos.
      */

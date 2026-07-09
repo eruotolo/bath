@@ -11,7 +11,7 @@
 
                 <form action="controller/contract-bath-new-assign.php" class="mt-4 pt-2"  method="post" enctype="multipart/form-data">
 
-                    <input type="number" class="form-control" id="id_Contrato" name="id_Contrato" value="<?php echo $row['id_Contrato'] ?>" hidden>
+                    <input type="number" class="form-control" id="id_Contrato" name="id_Contrato" value="<?php echo $contrato['id_Contrato'] ?>" hidden>
 
                     <div class="row mb-4">
                         <label for="id_Bath" class="col-sm-4 col-form-label">Seleccionar el baño:</label>

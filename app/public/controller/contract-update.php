@@ -1,43 +1,25 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Contract\UpdateContract;
+use App\Infrastructure\Persistence\MysqliContractRepository;
+
 global $link;
 
 include ('../layouts/config.php');
 
 if (isset($_POST['update'])){
-    $id_Contrato = $_POST['id_Contrato'];
-    $id_Cliente = $_POST['id_Cliente'];
-    $obra_Contrato = $_POST['obra_Contrato'];
-    $direccion_Contrato = $_POST['direccion_Contrato'];
-    $estado_Contrato = $_POST['estado_Contrato'];
-    $fechaInicio_Contrato = $_POST['fechaInicio_Contrato'];
-    $fechaFin_Contrato = $_POST['fechaFin_Contrato'];
-    $valorMensual_Contrato = $_POST['valorMensual_Contrato'];
-    $valorTotal_Contrato = $_POST['valorTotal_Contrato'];
-    $observacion_Contrato = $_POST['observacion_Contrato'];
+    $id_Contrato = (int) $_POST['id_Contrato'];
 
-    $query = "UPDATE contratos SET 
-                     id_Contrato = '$id_Contrato',
-                     id_Cliente = '$id_Cliente',
-                     obra_Contrato = '$obra_Contrato',
-                     direccion_Contrato = '$direccion_Contrato',
-                     estado_Contrato = '$estado_Contrato',
-                     fechaInicio_Contrato = '$fechaInicio_Contrato',
-                     fechaFin_Contrato = '$fechaFin_Contrato',
-                     valorMensual_Contrato = '$valorMensual_Contrato',
-                     valorTotal_Contrato = '$valorTotal_Contrato',
-                     observacion_Contrato = '$observacion_Contrato'
-                     WHERE id_Contrato = '$id_Contrato'";
+    $useCase = new UpdateContract(new MysqliContractRepository($link));
 
-    // echo $query;
-    // die();
-
-    $result = mysqli_query($link, $query) or ($error = mysqli_error($link));
-
-    // echo $error;
-    // die();
-
-    header("Location: ../dash-contracts-edit.php?id_Contrato=$id_Contrato&status=success&msg=" . urlencode('Contrato actualizado correctamente'));
+    try {
+        $useCase->handle($id_Contrato, $_POST);
+        header("Location: ../dash-contracts-edit.php?id_Contrato=$id_Contrato&status=success&msg=" . urlencode('Contrato actualizado correctamente'));
+    } catch (\mysqli_sql_exception $e) {
+        header('Location: ../dash-contracts.php?status=error&msg=' . urlencode('No se pudo actualizar el contrato'));
+    }
 }else{
     header('Location: ../dash-contracts.php?status=error&msg=' . urlencode('No se pudo actualizar el contrato'));
 }

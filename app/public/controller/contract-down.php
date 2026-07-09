@@ -1,21 +1,24 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Contract\SetContractState;
+use App\Infrastructure\Persistence\MysqliContractRepository;
+
 require '../layouts/config.php';
+global $link;
 
-$id_Contrato = $_GET['id_Contrato'];
-$estado_Contrato = 0;
+$id_Contrato = (int) $_GET['id_Contrato'];
 
-$sql = "UPDATE contratos SET estado_Contrato = '$estado_Contrato' WHERE id_Contrato = '$id_Contrato'";
+$useCase = new SetContractState(new MysqliContractRepository($link));
 
-//echo $sql;
-//die();
-
-if ($link->query($sql) === TRUE) {
-    //echo "Registro eliminado correctamente.";
-    header("Location: ../dash-contracts.php");
-} else {
-    header("Location: ../dash-contracts.php");
+try {
+    $useCase->handle($id_Contrato, 0);
+} catch (\mysqli_sql_exception $e) {
+    // silencioso, igual que el original
 }
+
+header("Location: ../dash-contracts.php");
 
 // Cerrar la conexión
 $link->close();

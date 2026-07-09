@@ -1,7 +1,20 @@
 <?php global $link;
 include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
-<?php include('layouts/config.php'); ?>
+
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Contract\ListContracts;
+use App\Infrastructure\Persistence\MysqliContractRepository;
+
+include('layouts/config.php');
+
+$estado_Contrato_filtro = isset($_GET['estado']) ? (int) $_GET['estado'] : null;
+$useCase = new ListContracts(new MysqliContractRepository($link));
+$listado = $useCase->handle(in_array($estado_Contrato_filtro, [1, 2], true) ? $estado_Contrato_filtro : null);
+?>
 
 <head>
 
@@ -36,7 +49,6 @@ include 'layouts/session.php'; ?>
             <div class="container-fluid">
 
                 <?php
-                    $estado_Contrato_filtro = isset($_GET['estado']) ? (int) $_GET['estado'] : null;
                     $titulo_listado = 'Listado de contratos';
                     if ($estado_Contrato_filtro === 2) {
                         $titulo_listado = 'Contratos Activos';
@@ -57,17 +69,9 @@ include 'layouts/session.php'; ?>
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <?php
-                                $query = "SELECT COUNT(*) AS total FROM contratos;";
-                                $result_task1 = mysqli_query($link, $query);
-                                while ($row = mysqli_fetch_Array($result_task1)) {
-                                    ?>
-                                    <h5 class="card-title">Contratos <span
-                                            class="text-muted fw-normal ms-2">(<?php echo $row['total'] ?>)</span>
-                                    </h5>
-                            <?php
-                                }
-                            ?>
+                            <h5 class="card-title">Contratos <span
+                                    class="text-muted fw-normal ms-2">(<?php echo $listado['total'] ?>)</span>
+                            </h5>
                         </div>
                     </div>
                     <div class="col-md-6">
@@ -97,26 +101,12 @@ include 'layouts/session.php'; ?>
                                 </thead>
                                 <tbody>
                                     <?php
-                                        if ($estado_Contrato_filtro === 1 || $estado_Contrato_filtro === 2) {
-                                            $stmt = $link->prepare(
-                                                'SELECT CO.*, CL.nombre_Cliente FROM contratos CO
-                                                    JOIN clientes CL ON CO.id_Cliente = CL.id_Cliente
-                                                 WHERE CO.estado_Contrato = ?
-                                                 ORDER BY CO.created_at DESC, CO.id_Contrato DESC'
-                                            );
-                                            $stmt->bind_param('i', $estado_Contrato_filtro);
-                                            $stmt->execute();
-                                            $result_task = $stmt->get_result();
-                                        } else {
-                                            $query = "SELECT * FROM contratos CO JOIN clientes CL on CO.id_Cliente = CL.id_Cliente WHERE estado_Contrato IN (1, 2) ORDER BY CO.created_at DESC, CO.id_Contrato DESC";
-                                            $result_task = mysqli_query($link, $query);
-                                        }
-                                        while ($row = mysqli_fetch_array($result_task)){
+                                        foreach ($listado['items'] as $row) {
                                     ?>
                                     <tr>
 
-                                        <td><?php echo $row['nombre_Cliente'] ?></td>
-                                        <td><?php echo $row['obra_Contrato'] ?></td>
+                                        <td><?php echo htmlspecialchars($row['nombre_Cliente']) ?></td>
+                                        <td><?php echo htmlspecialchars($row['obra_Contrato']) ?></td>
 
                                         <?php
                                             if ($row['estado_Contrato'] == 2){ ?>
@@ -129,11 +119,11 @@ include 'layouts/session.php'; ?>
                                             }
                                         ?>
 
-                                        <td class="text-center"><?php echo $row['fechaInicio_Contrato'] ?></td>
-                                        <td class="text-center"><?php echo $row['fechaFin_Contrato'] ?></td>
+                                        <td class="text-center"><?php echo htmlspecialchars($row['fechaInicio_Contrato']) ?></td>
+                                        <td class="text-center"><?php echo htmlspecialchars($row['fechaFin_Contrato']) ?></td>
 
-                                        <td class="text-center">$ <?php echo $row['valorMensual_Contrato'] ?></td>
-                                        <td class="text-center">$ <?php echo $row['valorTotal_Contrato'] ?></td>
+                                        <td class="text-center">$ <?php echo (int) $row['valorMensual_Contrato'] ?></td>
+                                        <td class="text-center">$ <?php echo (int) $row['valorTotal_Contrato'] ?></td>
                                         <td class="text-center">
                                             <a href="dash-contracts-item.php?id_Contrato=<?php echo $row['id_Contrato'] ?>" class="btn btn-outline-secondary btn-sm" title="Agregar Baños Químicos">
                                                 <i class="fas fa-toilet"></i>

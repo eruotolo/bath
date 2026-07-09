@@ -3,18 +3,21 @@
 
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Contract\FindContract;
+use App\Infrastructure\Persistence\MysqliContractRepository;
+
 global $link;
 
 include('layouts/config.php');
 
-$id_Contrato = $_GET['id_Contrato'];
+$id_Contrato = (int) $_GET['id_Contrato'];
 
-$query = "SELECT * FROM contratos WHERE id_Contrato = $id_Contrato";
-$query_run = mysqli_query($link, $query);
+$useCase = new FindContract(new MysqliContractRepository($link));
+$contract = $useCase->handle($id_Contrato);
 
-if($query_run){
-    while ($row = mysqli_fetch_array($query_run)){
-
+if ($contract !== null) {
 ?>
 
 <head>
@@ -72,9 +75,9 @@ if($query_run){
 
                                     <form class="needs-validation" method="post" enctype="multipart/form-data" style="margin-top: 50px; margin-left: 15%" action="controller/contract-update.php">
 
-                                        <input type="text" class="form-control" id="id_Contrato" name="id_Contrato" value="<?php echo $row['id_Contrato'];?>" hidden>
+                                        <input type="text" class="form-control" id="id_Contrato" name="id_Contrato" value="<?php echo $contract->id;?>" hidden>
 
-                                        <input type="text" class="form-control" id="id_Cliente" name="id_Cliente" value="<?php echo $row['id_Cliente'];?>" hidden>
+                                        <input type="text" class="form-control" id="id_Cliente" name="id_Cliente" value="<?php echo $contract->customerId;?>" hidden>
 
                                         <div class="row mb-4">
                                             <label for="id_Cliente" class="col-sm-4 col-form-label">Nombre del Cliente:</label>
@@ -83,9 +86,9 @@ if($query_run){
                                                     <?php
                                                     $sql = "SELECT * From clientes";
                                                     $result = mysqli_query($link, $sql);
-                                                    $id_Cliente = mysqli_fetch_all($result, MYSQLI_ASSOC);
-                                                    foreach ($id_Cliente as $cliente){ ?>
-                                                        <option value="<?php echo $cliente['id_Cliente']; ?>" <?php if ($cliente['id_Cliente'] == $row['id_Cliente']){ echo 'selected'; } ?>><?php echo $cliente['nombre_Cliente']; ?></option>}
+                                                    $clientesOptions = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                                                    foreach ($clientesOptions as $cliente){ ?>
+                                                        <option value="<?php echo $cliente['id_Cliente']; ?>" <?php if ($cliente['id_Cliente'] == $contract->customerId){ echo 'selected'; } ?>><?php echo htmlspecialchars($cliente['nombre_Cliente']); ?></option>
                                                     <?php } ?>
                                                 </select>
                                             </div>
@@ -94,14 +97,14 @@ if($query_run){
                                         <div class="row mb-4">
                                             <label for="obra_Contrato" class="col-sm-4 col-form-label">Nombre de la Obra:</label>
                                             <div class="col-sm-5">
-                                                <input type="text" class="form-control" id="obra_Contrato" name="obra_Contrato" value="<?php echo $row['obra_Contrato'];?>">
+                                                <input type="text" class="form-control" id="obra_Contrato" name="obra_Contrato" value="<?php echo htmlspecialchars($contract->obra);?>">
                                             </div>
                                         </div>
 
                                         <div class="row mb-4">
                                             <label for="direccion_Contrato" class="col-sm-4 col-form-label">Dirección de la Obra:</label>
                                             <div class="col-sm-5">
-                                                <input type="text" class="form-control" id="direccion_Contrato" name="direccion_Contrato" value="<?php echo $row['direccion_Contrato'];?>">
+                                                <input type="text" class="form-control" id="direccion_Contrato" name="direccion_Contrato" value="<?php echo htmlspecialchars($contract->address);?>">
                                             </div>
                                         </div>
 
@@ -109,9 +112,9 @@ if($query_run){
                                             <label for="estado_Contrato" class="col-sm-4 col-form-label">Estado de la Obra:</label>
                                             <div class="col-sm-5">
                                                 <select name="estado_Contrato" id="estado_Contrato" class="form-select" data-enhanced-select>
-                                                    <option value="0" <?php if ($row['estado_Contrato'] == 0) echo 'selected'; ?>>Eliminado</option>
-                                                    <option value="1" <?php if ($row['estado_Contrato'] == 1) echo 'selected'; ?>>Terminado</option>
-                                                    <option value="2" <?php if ($row['estado_Contrato'] == 2) echo 'selected'; ?>>Activo</option>
+                                                    <option value="0" <?php if ($contract->state === 0) echo 'selected'; ?>>Eliminado</option>
+                                                    <option value="1" <?php if ($contract->state === 1) echo 'selected'; ?>>Terminado</option>
+                                                    <option value="2" <?php if ($contract->state === 2) echo 'selected'; ?>>Activo</option>
                                                 </select>
                                             </div>
                                         </div>
@@ -119,35 +122,35 @@ if($query_run){
                                         <div class="row mb-4">
                                             <label for="fechaInicio_Contrato" class="col-sm-4 col-form-label">Fecha de Inicio de la Obra:</label>
                                             <div class="col-sm-5">
-                                                <input type="date" class="form-control" id="fechaInicio_Contrato" name="fechaInicio_Contrato" value="<?php echo $row['fechaInicio_Contrato'];?>">
+                                                <input type="date" class="form-control" id="fechaInicio_Contrato" name="fechaInicio_Contrato" value="<?php echo htmlspecialchars($contract->startDate);?>">
                                             </div>
                                         </div>
 
                                         <div class="row mb-4">
                                             <label for="fechaFin_Contrato" class="col-sm-4 col-form-label">Fecha de Fin de la Obra:</label>
                                             <div class="col-sm-5">
-                                                <input type="date" class="form-control" id="fechaFin_Contrato" name="fechaFin_Contrato" value="<?php echo $row['fechaFin_Contrato'];?>" data-datepicker-min-from="#fechaInicio_Contrato">
+                                                <input type="date" class="form-control" id="fechaFin_Contrato" name="fechaFin_Contrato" value="<?php echo htmlspecialchars($contract->endDate);?>" data-datepicker-min-from="#fechaInicio_Contrato">
                                             </div>
                                         </div>
 
                                         <div class="row mb-4">
                                             <label for="valorMensual_Contrato" class="col-sm-4 col-form-label">Valor Mensual:</label>
                                             <div class="col-sm-5">
-                                                <input type="number" class="form-control text-end" id="valorMensual_Contrato" name="valorMensual_Contrato" value="<?php echo $row['valorMensual_Contrato'];?>">
+                                                <input type="number" class="form-control text-end" id="valorMensual_Contrato" name="valorMensual_Contrato" value="<?php echo $contract->monthlyValue;?>">
                                             </div>
                                         </div>
 
                                         <div class="row mb-4">
                                             <label for="valorTotal_Contrato" class="col-sm-4 col-form-label">Valor Total:</label>
                                             <div class="col-sm-5">
-                                                <input type="number" class="form-control text-end" id="valorTotal_Contrato" name="valorTotal_Contrato" value="<?php echo $row['valorTotal_Contrato'];?>">
+                                                <input type="number" class="form-control text-end" id="valorTotal_Contrato" name="valorTotal_Contrato" value="<?php echo $contract->totalValue;?>">
                                             </div>
                                         </div>
 
                                         <div class="row mb-4">
                                             <label for="observacion_Contrato" class="col-sm-4 col-form-label">Observaciones:</label>
                                             <div class="col-sm-5">
-                                                <textarea class="form-control" id="observacion_Contrato" name="observacion_Contrato" rows="15" ><?php echo $row['observacion_Contrato'];?></textarea>
+                                                <textarea class="form-control" id="observacion_Contrato" name="observacion_Contrato" rows="15" ><?php echo htmlspecialchars($contract->observation ?? '');?></textarea>
                                             </div>
                                         </div>
 
@@ -189,8 +192,7 @@ if($query_run){
 </html>
 
 <?php
-    }
-}  else{
+} else{
     echo '<script>alert ("Problema al cargar el Contrato")</script>';
 }
 ?>

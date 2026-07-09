@@ -149,4 +149,34 @@ final class MysqliBathroomRepository implements BathroomRepositoryInterface
         $stmt->bind_param('i', $idContrato);
         $stmt->execute();
     }
+
+    public function listByContract(int $idContrato): array
+    {
+        $stmt = $this->connection->prepare(
+            'SELECT CB.id_Relacion, CB.id_Contrato, CB.id_Bath, BT.codigo_Bath, BT.fechaCompra_Bath, BT.asignado_Bath
+             FROM contrato_bathroom CB
+             JOIN bathrooms BT ON CB.id_Bath = BT.id_Bath
+             WHERE CB.id_Contrato = ?'
+        );
+        $stmt->bind_param('i', $idContrato);
+        $stmt->execute();
+
+        return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function unassignAllFromContract(int $idContrato): void
+    {
+        $stmt = $this->connection->prepare('SELECT id_Bath FROM contrato_bathroom WHERE id_Contrato = ?');
+        $stmt->bind_param('i', $idContrato);
+        $stmt->execute();
+        $bathIds = array_column($stmt->get_result()->fetch_all(MYSQLI_ASSOC), 'id_Bath');
+
+        foreach ($bathIds as $idBath) {
+            $this->setAsignado((int) $idBath, 0);
+
+            $stmtDelete = $this->connection->prepare('DELETE FROM contrato_bathroom WHERE id_Contrato = ? AND id_Bath = ?');
+            $stmtDelete->bind_param('ii', $idContrato, $idBath);
+            $stmtDelete->execute();
+        }
+    }
 }

@@ -3,18 +3,23 @@
 
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Contract\FindContractWithCustomer;
+use App\Application\Bathroom\ListBathroomsByContract;
+use App\Infrastructure\Persistence\MysqliContractRepository;
+use App\Infrastructure\Persistence\MysqliBathroomRepository;
+
 global $link;
 
 include('layouts/config.php');
 
-$id_Contrato = $_GET['id_Contrato'];
+$id_Contrato = (int) $_GET['id_Contrato'];
 
-$query = "SELECT * FROM contratos CT JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente  WHERE id_Contrato = $id_Contrato";
-$query_run = mysqli_query($link, $query);
+$contrato = (new FindContractWithCustomer(new MysqliContractRepository($link)))->handle($id_Contrato);
 
-if($query_run){
-    while ($row = mysqli_fetch_array($query_run)){
-
+if ($contrato !== null) {
+    $banos = (new ListBathroomsByContract(new MysqliBathroomRepository($link)))->handle($id_Contrato);
 ?>
 
     <head>
@@ -72,63 +77,63 @@ if($query_run){
                                                 <div class="row mb-4">
                                                     <label for="id_Contrato" class="col-sm-4 col-form-label">Id Contrato:</label>
                                                     <div class="col-sm-7">
-                                                        <input type="text" class="form-control" value="<?php echo $row['id_Contrato'] ?>" readonly>
+                                                        <input type="text" class="form-control" value="<?php echo (int) $contrato['id_Contrato'] ?>" readonly>
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-4">
                                                     <label for="nombre_Cliente" class="col-sm-4 col-form-label">Nombre Cliente:</label>
                                                     <div class="col-sm-7">
-                                                        <input type="text" class="form-control" value="<?php echo $row['nombre_Cliente'] ?>" readonly>
+                                                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($contrato['nombre_Cliente']) ?>" readonly>
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-4">
                                                     <label for="obra_Contrato" class="col-sm-4 col-form-label">Nombre de la Obra:</label>
                                                     <div class="col-sm-7">
-                                                        <input type="text" class="form-control" value="<?php echo $row['obra_Contrato'] ?>" readonly>
+                                                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($contrato['obra_Contrato']) ?>" readonly>
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-4">
                                                     <label for="direccion_Contrato" class="col-sm-4 col-form-label">Dirección de la Obra:</label>
                                                     <div class="col-sm-7">
-                                                        <input type="text" class="form-control" value="<?php echo $row['direccion_Contrato'] ?>" readonly>
+                                                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($contrato['direccion_Contrato']) ?>" readonly>
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-4">
                                                     <label for="fechaInicio_Contrato" class="col-sm-4 col-form-label">Fecha de Inicio de la Obra:</label>
                                                     <div class="col-sm-7">
-                                                        <input type="text" class="form-control" value="<?php echo $row['fechaInicio_Contrato'];?>" readonly>
+                                                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($contrato['fechaInicio_Contrato']);?>" readonly>
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-4">
                                                     <label for="fechaFin_Contrato" class="col-sm-4 col-form-label">Fecha de Fin de la Obra:</label>
                                                     <div class="col-sm-7">
-                                                        <input type="text" class="form-control" value="<?php echo $row['fechaFin_Contrato'];?>" readonly>
+                                                        <input type="text" class="form-control" value="<?php echo htmlspecialchars($contrato['fechaFin_Contrato']);?>" readonly>
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-4">
                                                     <label for="valorMensual_Contrato" class="col-sm-4 col-form-label">Valor Mensual:</label>
                                                     <div class="col-sm-7">
-                                                        <input type="text" class="form-control" value="<?php echo $row['valorMensual_Contrato'];?>" readonly>
+                                                        <input type="text" class="form-control" value="<?php echo (int) $contrato['valorMensual_Contrato'];?>" readonly>
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-4">
                                                     <label for="valorTotal_Contrato" class="col-sm-4 col-form-label">Valor Total:</label>
                                                     <div class="col-sm-7">
-                                                        <input type="text" class="form-control" value="<?php echo $row['valorTotal_Contrato'];?>" readonly>
+                                                        <input type="text" class="form-control" value="<?php echo (int) $contrato['valorTotal_Contrato'];?>" readonly>
                                                     </div>
                                                 </div>
 
                                                 <div class="row mb-4">
                                                     <label for="observacion_Contrato" class="col-sm-4 col-form-label">Observaciones:</label>
                                                     <div class="col-sm-7">
-                                                        <textarea class="form-control" rows="10" readonly><?php echo $row['observacion_Contrato'];?></textarea>
+                                                        <textarea class="form-control" rows="10" readonly><?php echo htmlspecialchars($contrato['observacion_Contrato'] ?? '');?></textarea>
                                                     </div>
                                                 </div>
 
@@ -172,23 +177,15 @@ if($query_run){
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                        $sql = "SELECT * FROM contrato_bathroom CB
-                                                                    JOIN contratos CT ON CB.id_Contrato = CT.id_Contrato
-                                                                    JOIN bathrooms BT ON CB.id_Bath = BT.id_Bath
-                                                                WHERE CB.id_Contrato = $id_Contrato;";
-                                                        $result_task = mysqli_query($link, $sql);
-                                                        while ($row = mysqli_fetch_Array($result_task)) {
-                                                            $id_Contrato = $row['id_Contrato'];
-                                                            $id_Relacion = $row['id_Relacion'];
-                                                            $id_Bath = $row['id_Bath']
+                                                        foreach ($banos as $bano) {
                                                     ?>
                                                     <tr>
-                                                        <td><?php echo $row['id_Relacion'] ?></td>
-                                                        <td><?php echo $row['codigo_Bath'] ?></td>
-                                                        <td><?php echo $row['fechaCompra_Bath'] ?></td>
+                                                        <td><?php echo (int) $bano['id_Relacion'] ?></td>
+                                                        <td><?php echo htmlspecialchars($bano['codigo_Bath']) ?></td>
+                                                        <td><?php echo htmlspecialchars($bano['fechaCompra_Bath']) ?></td>
 
                                                         <?php
-                                                        if ($row['asignado_Bath'] == 1) { ?>
+                                                        if ($bano['asignado_Bath'] == 1) { ?>
                                                             <td>
                                                                 <div class="badge item-activo">Asignado</div>
                                                             </td>
@@ -203,7 +200,7 @@ if($query_run){
                                                         ?>
                                                         <td style="width: 70px; text-align: center">
                                                             <!-- Botón para eliminar relación -->
-                                                            <a href="controller/contract-bath-notassign.php?id_Contrato=<?php echo $row['id_Contrato'] ?>&id_Bath=<?php echo $row['id_Bath'] ?>&id_Relacion=<?php echo $row['id_Relacion'] ?>"
+                                                            <a href="controller/contract-bath-notassign.php?id_Contrato=<?php echo (int) $bano['id_Contrato'] ?>&id_Bath=<?php echo (int) $bano['id_Bath'] ?>&id_Relacion=<?php echo (int) $bano['id_Relacion'] ?>"
                                                                class="btn btn-outline-secondary btn-sm delete-contacto" title="No Asignar">
                                                                 <i class="fas fa-trash-alt"></i>
                                                             </a>
@@ -241,8 +238,7 @@ if($query_run){
     </html>
 
 <?php
-    }
-}  else{
+} else{
     echo '<script>alert ("Problema al cargar el Contrato")</script>';
 }
 ?>
