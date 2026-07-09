@@ -11,7 +11,7 @@
 
                 <form class="mt-4 pt-2" action="controller/contact-new.php" method="post" enctype="multipart/form-data">
 
-                    <input type="number" class="form-control" id="id_Cliente" name="id_Cliente" value="<?php echo $row['id_Cliente'] ?>" hidden>
+                    <input type="number" class="form-control" id="id_Cliente" name="id_Cliente" value="<?php echo $customer->id ?>" hidden>
 
                     <div class="row mb-4">
                         <label for="nombre_Contacto" class="col-sm-4 col-form-label">Nombre</label>

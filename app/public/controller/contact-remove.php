@@ -1,21 +1,23 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Contact\DeleteContact;
+use App\Infrastructure\Persistence\MysqliContactRepository;
+
 global $link;
 require '../layouts/config.php';
 
 // Obtención del identificador único de la fila a eliminar
-$id_Contacto = $_GET['id_Contacto'];
-$id_Cliente = $_GET['id_Cliente'];
+$id_Contacto = (int) $_GET['id_Contacto'];
+$id_Cliente = (int) $_GET['id_Cliente'];
 
-// Eliminar la fila de la tabla "Trazado"
-$sql = "DELETE FROM contactos WHERE id_Contacto = '$id_Contacto'";
-//echo $sql;
-//die();
+$useCase = new DeleteContact(new MysqliContactRepository($link));
 
-if ($link->query($sql) === TRUE) {
-    //echo "Registro eliminado correctamente.";
+try {
+    $useCase->handle($id_Contacto);
     header("Location: ../dash-customers-item.php?id_Cliente=$id_Cliente");
-} else {
+} catch (\mysqli_sql_exception $e) {
     header("Location: ../index.php");
 }
 

@@ -1,28 +1,31 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Customer\FindCustomer;
+use App\Infrastructure\Persistence\MysqliCustomerRepository;
+
 session_start();
 include ('../layouts/config.php');
+global $link;
 
-$id_Cliente = $_POST['id_Cliente'];
+$id_Cliente = (int) $_POST['id_Cliente'];
 
-$sql = "SELECT * FROM clientes WHERE id_Cliente = $id_Cliente";
-$result = mysqli_query($link, $sql);
-if (mysqli_num_rows($result ) > 0) {
-    $row = mysqli_fetch_array($result);
+$useCase = new FindCustomer(new MysqliCustomerRepository($link));
+$customer = $useCase->handle($id_Cliente);
 
-    $clienteData = array(
-        'id_Cliente' => $row['id_Cliente'],
-        'rut_Cliente' => $row['rut_Cliente'],
-        'nombre_Cliente' => $row['nombre_Cliente'],
-        'telefono_Cliente' => $row['telefono_Cliente'],
-        'email_Cliente' => $row['email_Cliente'],
-        'direccion_Cliente' => $row['direccion_Cliente'],
-        'comuna_Cliente' => $row['comuna_Cliente'],
-        'ciudad_Cliente' => $row['ciudad_Cliente'],
-        'region_Cliente' =>  $row['region_Cliente'],
-    );
-
-    echo json_encode($clienteData);
+if ($customer !== null) {
+    echo json_encode([
+        'id_Cliente' => $customer->id,
+        'rut_Cliente' => $customer->rut,
+        'nombre_Cliente' => $customer->name,
+        'telefono_Cliente' => $customer->phone,
+        'email_Cliente' => $customer->email,
+        'direccion_Cliente' => $customer->address,
+        'comuna_Cliente' => $customer->commune,
+        'ciudad_Cliente' => $customer->city,
+        'region_Cliente' => $customer->region,
+    ]);
 }else {
     echo "No se encontraron datos para este cliente";
 }

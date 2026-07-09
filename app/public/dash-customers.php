@@ -1,6 +1,20 @@
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
-<?php include('layouts/config.php'); ?>
+
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Customer\ListCustomers;
+use App\Infrastructure\Persistence\MysqliCustomerRepository;
+
+global $link;
+
+include('layouts/config.php');
+
+$useCase = new ListCustomers(new MysqliCustomerRepository($link));
+$listado = $useCase->handle();
+?>
 
 <head>
 
@@ -46,17 +60,9 @@
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <?php
-                            $query = "SELECT COUNT(*) AS total FROM clientes;";
-                            $result_task = mysqli_query($link, $query);
-                            while ($row = mysqli_fetch_Array($result_task)) {
-                                ?>
-                                <h5 class="card-title">Clientes <span
-                                            class="text-muted fw-normal ms-2">(<?php echo $row['total'] ?>)</span>
-                                </h5>
-                                <?php
-                            }
-                            ?>
+                            <h5 class="card-title">Clientes <span
+                                        class="text-muted fw-normal ms-2">(<?php echo $listado['total'] ?>)</span>
+                            </h5>
                         </div>
                     </div>
 
@@ -91,9 +97,7 @@
                         </thead>
                         <tbody>
                         <?php
-                        $query = "SELECT * FROM clientes WHERE estado_Cliente = 1;";
-                        $result_task = mysqli_query($link, $query);
-                        while ($row = mysqli_fetch_Array($result_task)) {
+                        foreach ($listado['items'] as $customer) {
                             ?>
                             <tr>
                                 <th scope="row">
@@ -103,17 +107,17 @@
                                     </div>
                                 </th>
                                 <td>
-                                    <a href="dash-customers-item.php?id_Cliente=<?php echo $row['id_Cliente'] ?>"
-                                       class="text-body"><?php echo $row['rut_Cliente'] ?></a>
+                                    <a href="dash-customers-item.php?id_Cliente=<?php echo $customer->id ?>"
+                                       class="text-body"><?php echo htmlspecialchars($customer->rut) ?></a>
                                 </td>
-                                <td><?php echo $row['nombre_Cliente'] ?></td>
-                                <td><?php echo $row['telefono_Cliente'] ?></td>
-                                <td><?php echo $row['email_Cliente'] ?></td>
+                                <td><?php echo htmlspecialchars($customer->name) ?></td>
+                                <td><?php echo htmlspecialchars($customer->phone) ?></td>
+                                <td><?php echo htmlspecialchars($customer->email) ?></td>
                                 <td>
-                                    <a href="dash-customers-item.php?id_Cliente=<?php echo $row['id_Cliente'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
+                                    <a href="dash-customers-item.php?id_Cliente=<?php echo $customer->id ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
                                         <i class="fas fas fa-eye"></i>
                                     </a>
-                                    <a href="controller/customer-inactive.php?id_Cliente=<?php echo $row['id_Cliente'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
+                                    <a href="controller/customer-inactive.php?id_Cliente=<?php echo $customer->id ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>

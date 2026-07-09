@@ -1,20 +1,21 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Customer\DeactivateCustomer;
+use App\Infrastructure\Persistence\MysqliCustomerRepository;
+
 require '../layouts/config.php';
 global $link;
 
-$id_Cliente = $_GET['id_Cliente'];
-$estado_Cliente = 0;
+$id_Cliente = (int) $_GET['id_Cliente'];
 
-$sql = "UPDATE clientes SET estado_Cliente='$estado_Cliente' WHERE id_Cliente = '$id_Cliente'";
+$useCase = new DeactivateCustomer(new MysqliCustomerRepository($link));
 
-//echo $sql;
-//die();
-
-if ($link->query($sql) === TRUE) {
-    //echo "Registro eliminado correctamente.";
+try {
+    $useCase->handle($id_Cliente);
     header("Location: ../dash-customers.php");
-} else {
+} catch (\mysqli_sql_exception $e) {
     header("Location: ../index.php");
 }
 

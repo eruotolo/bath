@@ -1,41 +1,25 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Customer\UpdateCustomer;
+use App\Infrastructure\Persistence\MysqliCustomerRepository;
+
 session_start();
 include ('../layouts/config.php');
+global $link;
 
 if (isset($_POST['update'])){
-    $id_Cliente = $_POST['idCliente'];
-    $rut_Cliente = $_POST['rutCliente'];
-    $nombre_Cliente = $_POST['nombreCliente'];
-    $direccion_Cliente = $_POST['direccionCliente'];
-    $comuna_Cliente = $_POST['comunaCliente'];
-    $ciudad_Cliente = $_POST['ciudadCliente'];
-    $region_Cliente = $_POST['regionCliente'];
-    $telefono_Cliente = $_POST['telefonoCliente'];
-    $email_Cliente = $_POST['emailCliente'];
-    $estado_Cliente = 1;
+    $id_Cliente = (int) $_POST['idCliente'];
 
-    $query = "UPDATE clientes SET 
-                    id_Cliente = '$id_Cliente',
-                    rut_Cliente = '$rut_Cliente',
-                    nombre_Cliente = '$nombre_Cliente',
-                    direccion_Cliente = '$direccion_Cliente',
-                    comuna_Cliente = '$comuna_Cliente',
-                    ciudad_Cliente = '$ciudad_Cliente',
-                    region_Cliente = '$region_Cliente',
-                    telefono_Cliente = '$telefono_Cliente',
-                    email_Cliente = '$email_Cliente',
-                    estado_Cliente = '$estado_Cliente'
-                    WHERE id_Cliente = $id_Cliente";
-    //echo $query;
-    //die();
+    $useCase = new UpdateCustomer(new MysqliCustomerRepository($link));
 
-    $result = mysqli_query($link, $query) or ($error= mysqli_error($link));
-
-    //echo $error;
-    //die();
-
-    header("Location: ../dash-customers-item.php?id_Cliente=$id_Cliente&status=success&msg=" . urlencode('Cliente actualizado correctamente'));
+    try {
+        $useCase->handle($id_Cliente, $_POST);
+        header("Location: ../dash-customers-item.php?id_Cliente=$id_Cliente&status=success&msg=" . urlencode('Cliente actualizado correctamente'));
+    } catch (\mysqli_sql_exception $e) {
+        header('Location: ../dash-customers.php?status=error&msg=' . urlencode('No se pudo actualizar el cliente'));
+    }
 }else{
     header('Location: ../dash-customers.php?status=error&msg=' . urlencode('No se pudo actualizar el cliente'));
 }

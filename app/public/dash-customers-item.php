@@ -3,17 +3,23 @@ include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
 
 <?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Customer\FindCustomer;
+use App\Application\Contact\ListContactsByCustomer;
+use App\Infrastructure\Persistence\MysqliCustomerRepository;
+use App\Infrastructure\Persistence\MysqliContactRepository;
+
 include('layouts/config.php');
 
-$id_Cliente = $_GET['id_Cliente'];
+$id_Cliente = (int) $_GET['id_Cliente'];
 
-$query = "SELECT * FROM  clientes WHERE id_Cliente = $id_Cliente";
+$customer = (new FindCustomer(new MysqliCustomerRepository($link)))->handle($id_Cliente);
 
-$query_run = mysqli_query($link, $query);
-
-if ($query_run) {
-    while ($row = mysqli_fetch_array($query_run)) {
-        ?>
+if ($customer !== null) {
+    $contactos = (new ListContactsByCustomer(new MysqliContactRepository($link)))->handle($id_Cliente);
+    ?>
 
         <head>
 
@@ -71,7 +77,7 @@ if ($query_run) {
                                                class="btn btn-light float-end editarCliente"
                                                data-bs-toggle="modal"
                                                data-bs-target="#editarCliente"
-                                               data-id="<?php echo $row['id_Cliente']?>"
+                                               data-id="<?php echo $customer->id?>"
                                                title="Editar">
                                                 <i class='bx bx-edit'></i> Editar Cliente</a>
                                         </div>
@@ -86,35 +92,35 @@ if ($query_run) {
                                                     <tbody class="table-cliente">
                                                     <tr>
                                                         <td><b>Nombre:</b></td>
-                                                        <td><?php echo $row['nombre_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($customer->name) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>RUT:</b></td>
-                                                        <td><?php echo $row['rut_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($customer->rut) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>Email:</b></td>
-                                                        <td><?php echo $row['email_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($customer->email) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>Teléfono:</b></td>
-                                                        <td><?php echo $row['telefono_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($customer->phone) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>Dirección:</b></td>
-                                                        <td><?php echo $row['direccion_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($customer->address) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>Comuna:</b></td>
-                                                        <td><?php echo $row['comuna_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($customer->commune) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>Ciudad:</b></td>
-                                                        <td><?php echo $row['ciudad_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($customer->city) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>Región:</b></td>
-                                                        <td><?php echo $row['region_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($customer->region) ?></td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -154,15 +160,12 @@ if ($query_run) {
                                                 </thead>
                                                 <tbody>
                                                     <?php
-                                                        $sql = "SELECT * FROM contactos WHERE id_Cliente = $id_Cliente and estado_Contacto = 1";
-                                                        $result_task = mysqli_query($link, $sql);
-                                                        while ($row = mysqli_fetch_Array($result_task)) {
-                                                            $id_Contacto = $row['id_Contacto'];
+                                                        foreach ($contactos as $contacto) {
                                                     ?>
                                                     <tr>
-                                                        <td><?php echo $row['rut_Contacto'] ?></td>
-                                                        <td><?php echo $row['nombre_Contacto'] ?> <?php echo $row['apellido_Contacto'] ?></td>
-                                                        <td><?php echo $row['telefono_Contacto'] ?></td>
+                                                        <td><?php echo htmlspecialchars($contacto->rut) ?></td>
+                                                        <td><?php echo htmlspecialchars($contacto->name) ?> <?php echo htmlspecialchars($contacto->lastname) ?></td>
+                                                        <td><?php echo htmlspecialchars($contacto->phone) ?></td>
                                                         <td style="width: 100px">
 
                                                             <!-- Botón para ver el contacto -->
@@ -170,7 +173,7 @@ if ($query_run) {
                                                                class="btn btn-outline-secondary btn-sm view"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#verContacto"
-                                                               data-id="<?php echo $row['id_Contacto']?>"
+                                                               data-id="<?php echo $contacto->id?>"
                                                                title="Ver">
                                                                 <i class="fas fas fa-eye"></i>
                                                             </a>
@@ -180,13 +183,13 @@ if ($query_run) {
                                                                class="btn btn-outline-secondary btn-sm editar"
                                                                data-bs-toggle="modal"
                                                                data-bs-target="#editarContacto"
-                                                               data-id="<?php echo $row['id_Contacto']?>"
+                                                               data-id="<?php echo $contacto->id?>"
                                                                title="Editar">
                                                                 <i class="fas fa-pencil-alt"></i>
                                                             </a>
 
                                                             <!-- Botón para eliminar el contacto -->
-                                                            <a href="controller/contact-remove.php?id_Contacto=<?php echo $row['id_Contacto'] ?>&id_Cliente=<?php echo $row['id_Cliente'] ?>"
+                                                            <a href="controller/contact-remove.php?id_Contacto=<?php echo $contacto->id ?>&id_Cliente=<?php echo $contacto->customerId ?>"
                                                                class="btn btn-outline-secondary btn-sm delete-contacto" title="Eliminar">
                                                                 <i class="fas fa-trash-alt"></i>
                                                             </a>
@@ -284,7 +287,6 @@ if ($query_run) {
 
         </html>
         <?php
-    }
 } else {
     echo '<script>alert ("Problema al cargar el cliente")</script>';
 }

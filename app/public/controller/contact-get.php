@@ -1,27 +1,29 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Contact\FindContact;
+use App\Infrastructure\Persistence\MysqliContactRepository;
+
 include ('../layouts/config.php');
+global $link;
 
-$id_Contacto = $_POST['id_Contacto'];
+$id_Contacto = (int) $_POST['id_Contacto'];
 
-$sql = "SELECT * FROM contactos WHERE id_Contacto = $id_Contacto";
-$result = mysqli_query($link, $sql);
-if (mysqli_num_rows($result ) > 0) {
-    $row = mysqli_fetch_array($result);
-    //echo "<h4>Nombre: ".$row['nombre_Contacto']."</h4>";
-    $contactData = array(
-        'id_Contacto' => $row['id_Contacto'],
-        'id_Cliente' => $row['id_Cliente'],
-        'nombre_Contacto' => $row['nombre_Contacto'],
-        'apellido_Contacto' => $row['apellido_Contacto'],
-        'rut_Contacto' => $row['rut_Contacto'],
-        'telefono_Contacto' => $row['telefono_Contacto'],
-        'direccion_Contacto' => $row['direccion_Contacto'],
-        'observacion_Contacto' => $row['observacion_Contacto']
-    );
+$useCase = new FindContact(new MysqliContactRepository($link));
+$contact = $useCase->handle($id_Contacto);
 
-    echo json_encode($contactData);
-
+if ($contact !== null) {
+    echo json_encode([
+        'id_Contacto' => $contact->id,
+        'id_Cliente' => $contact->customerId,
+        'nombre_Contacto' => $contact->name,
+        'apellido_Contacto' => $contact->lastname,
+        'rut_Contacto' => $contact->rut,
+        'telefono_Contacto' => $contact->phone,
+        'direccion_Contacto' => $contact->address,
+        'observacion_Contacto' => $contact->observation,
+    ]);
 }else {
     echo "No se encontraron datos para este usuario";
 }
