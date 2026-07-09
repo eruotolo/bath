@@ -26,9 +26,9 @@ if ($ok) {
         mysqli_stmt_close($stmtLiberar);
     }
 
-    header("Location: ../dash-invoices-list.php");
+    header('Location: ../dash-invoices-list.php?status=success&msg=' . urlencode('Estado de la factura actualizado'));
 } else {
-    echo '<script>alert("No se pudo actualizar el estado de la factura")</script>';
+    header('Location: ../dash-invoices-list.php?status=error&msg=' . urlencode('No se pudo actualizar el estado de la factura'));
 }
 
 $link->close();

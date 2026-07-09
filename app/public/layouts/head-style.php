@@ -10,3 +10,6 @@
 
 <!-- Css Personalizado-->
 <link href="assets/css/style.css" rel="stylesheet"  type="text/css">
+
+<!-- feedback (Sprint 1 plan-mejoras-frontend) -->
+<link href="assets/libs/sweetalert2/sweetalert2.min.css" rel="stylesheet" type="text/css">

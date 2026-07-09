@@ -29,7 +29,7 @@
                         <label for="rut" class="col-sm-4 col-form-label">RUT:</label>
 
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="rut" name="rut" readonly>
+                            <input type="text" class="form-control" id="rut" name="rut" readonly data-rut-mask>
                         </div>
                     </div>
                     <div class="row mb-4">

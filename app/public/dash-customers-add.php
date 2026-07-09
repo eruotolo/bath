@@ -58,7 +58,7 @@
                                     <div class="row mb-4">
                                         <label for="rut_Cliente" class="col-sm-3 col-form-label">RUT del Cliente</label>
                                         <div class="col-sm-5">
-                                            <input type="number" class="form-control" id="rut_Cliente" placeholder="Ingrese el Rut del cliente" required name="rut_Cliente">
+                                            <input type="text" class="form-control" id="rut_Cliente" placeholder="12.345.678-9" required name="rut_Cliente" data-rut-mask>
                                         </div>
                                     </div>
 

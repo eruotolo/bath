@@ -18,7 +18,7 @@
                     <div class="row mb-4">
                         <label for="rutCliente" class="col-sm-4 col-form-label">RUT del cliente:</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="rutCliente" name="rutCliente" >
+                            <input type="text" class="form-control" id="rutCliente" name="rutCliente" data-rut-mask>
                         </div>
                     </div>
 

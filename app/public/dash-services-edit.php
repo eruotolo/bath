@@ -70,7 +70,7 @@ if ($query_run) {
                                     <div class="card-body">
                                         <h5 class="font-size-14 mb-4"><i class="mdi mdi-arrow-right text-primary me-1"></i> Ingresar datos en los campos</h5>
 
-                                        <form action="controller/service-update.php" class="mt-4 pt-2" method="post" enctype="multipart/form-data">
+                                        <form action="controller/service-update.php" class="needs-validation mt-4 pt-2" method="post" enctype="multipart/form-data">
                                             <input class="form-control" type="hidden" id="id_Servicio" name="id_Servicio" value="<?php echo $row['id_Servicio']?>" readonly >
                                             <input class="form-control" type="hidden" id="nro_Servicio" name="nro_Servicio" value="<?php echo $row['nro_Servicio']?>" readonly >
 

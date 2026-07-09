@@ -30,7 +30,7 @@
                     <div class="row mb-4">
                         <label for="rut_Contacto" class="col-sm-4 col-form-label">RUT</label>
                         <div class="col-sm-8">
-                            <input type="number" class="form-control" id="rut_Contacto" name="rut_Contacto" required>
+                            <input type="text" class="form-control" id="rut_Contacto" name="rut_Contacto" placeholder="12.345.678-9" required data-rut-mask>
                         </div>
                     </div>
 

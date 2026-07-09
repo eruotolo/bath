@@ -37,9 +37,9 @@ if (isset($_POST['update'])){
     // echo $error;
     // die();
 
-    header("Location: ../dash-contracts-edit.php?id_Contrato=$id_Contrato");
+    header("Location: ../dash-contracts-edit.php?id_Contrato=$id_Contrato&status=success&msg=" . urlencode('Contrato actualizado correctamente'));
 }else{
-    echo '<script>alert("No se pudo actualizar el contrato)</script>';
+    header('Location: ../dash-contracts.php?status=error&msg=' . urlencode('No se pudo actualizar el contrato'));
 }
 // Cerrar la conexión
 $link->close();

@@ -19,9 +19,9 @@ if ($ok) {
     mysqli_stmt_execute($stmtLiberar);
     mysqli_stmt_close($stmtLiberar);
 
-    header("Location: ../dash-invoices-list.php");
+    header('Location: ../dash-invoices-list.php?status=success&msg=' . urlencode('Factura anulada correctamente'));
 } else {
-    echo '<script>alert("No se pudo anular la factura")</script>';
+    header('Location: ../dash-invoices-list.php?status=error&msg=' . urlencode('No se pudo anular la factura'));
 }
 
 $link->close();

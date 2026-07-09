@@ -53,10 +53,10 @@ if (isset($_POST['update'])){
     if ($link->query($servicio_query) === TRUE && $link->query($tipo_query) === TRUE) {
 
         // ACTUALIZACIÓN CORRECTA
-        header("Location: ../dash-services-bath.php?id_Servicio=$id_Servicio");
+        header("Location: ../dash-services-bath.php?id_Servicio=$id_Servicio&status=success&msg=" . urlencode('Servicio actualizado correctamente'));
     } else {
         // ERROR EN LA ACTUALIZACIÓN
-        echo '<script>alert("No se pudo actualizar el servicio: ' . $link->error . '")</script>';
+        header("Location: ../dash-services-bath.php?id_Servicio=$id_Servicio&status=error&msg=" . urlencode('No se pudo actualizar el servicio'));
     }
 
 }

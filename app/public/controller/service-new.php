@@ -34,14 +34,14 @@ if (isset($_POST['crear'])){
 
         if ($link->query($tipo_query) === TRUE) {
             // REGISTRO EN SERVICIO Y TIPO DE SERVICIO CORRECTO;
-            header("Location: ../dash-services-bath.php?id_Servicio=$id_Servicio");
+            header("Location: ../dash-services-bath.php?id_Servicio=$id_Servicio&status=success&msg=" . urlencode('Servicio creado correctamente'));
         } else {
             // REGISTRO EN TIPO DE SERVICIO INCORRECTO;
-            echo '<script>alert("No se pudo crear el tipo de servicio")</script>';
+            header('Location: ../dash-services-add.php?status=error&msg=' . urlencode('No se pudo crear el tipo de servicio'));
         }
     } else {
         // REGISTRO EN SERVICIO INCORRECTO;
-        echo '<script>alert("No se pudo crear el servicio")</script>';
+        header('Location: ../dash-services-add.php?status=error&msg=' . urlencode('No se pudo crear el servicio'));
     }
 
 }

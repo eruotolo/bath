@@ -26,10 +26,10 @@ if (isset($_POST['crear'])){
     //echo $error;
     //die();
 
-    header('Location: ../dash-customers.php');
+    header('Location: ../dash-customers.php?status=success&msg=' . urlencode('Cliente creado correctamente'));
 
 }else{
-    echo '<script>alert("No se pudo crear el cliente")</script>';
+    header('Location: ../dash-customers-add.php?status=error&msg=' . urlencode('No se pudo crear el cliente'));
 }
 // Cerrar la conexión
 $link->close();

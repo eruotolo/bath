@@ -17,8 +17,7 @@ if (isset($_POST['update'])){
     $stmt_check->close();
 
     if ($existe) {
-        echo '<script>alert("Ya existe un baño con el código \'' . addslashes($codigo_Bath) . '\'. Ingresá un código distinto.")</script>';
-        echo '<script>window.location.href = "../dash-bathrooms-edit.php?id_Bath=' . (int) $id_Bath . '";</script>';
+        header('Location: ../dash-bathrooms-edit.php?id_Bath=' . (int) $id_Bath . '&status=error&msg=' . urlencode("Ya existe un baño con el código '$codigo_Bath'. Ingresá un código distinto."));
         $link->close();
         exit;
     }
@@ -28,9 +27,9 @@ if (isset($_POST['update'])){
     $stmt->execute();
     $stmt->close();
 
-    header("Location: ../dash-bathrooms.php");
+    header('Location: ../dash-bathrooms.php?status=success&msg=' . urlencode('Baño actualizado correctamente'));
 }else{
-    echo '<script>alert("No se pudo actualizar el baño)</script>';
+    header('Location: ../dash-bathrooms.php?status=error&msg=' . urlencode('No se pudo actualizar el baño'));
 }
 // Cerrar la conexión
 $link->close();

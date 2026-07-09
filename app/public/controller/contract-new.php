@@ -25,10 +25,10 @@ if(isset($_POST['crear'])) {
     //echo $error;
     //die();
 
-    header("Location: ../dash-contracts-item.php?id_Contrato=$id_Contrato");
+    header("Location: ../dash-contracts-item.php?id_Contrato=$id_Contrato&status=success&msg=" . urlencode('Contrato creado correctamente'));
 
 }else{
-    echo '<script>alert("No se pudo crear el contrato")</script>';
+    header('Location: ../dash-contracts-add.php?status=error&msg=' . urlencode('No se pudo crear el contrato'));
 }
 // Cerrar la conexión
 $link->close();

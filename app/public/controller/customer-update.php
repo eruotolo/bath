@@ -35,9 +35,9 @@ if (isset($_POST['update'])){
     //echo $error;
     //die();
 
-    header("Location: ../dash-customers-item.php?id_Cliente=$id_Cliente");
+    header("Location: ../dash-customers-item.php?id_Cliente=$id_Cliente&status=success&msg=" . urlencode('Cliente actualizado correctamente'));
 }else{
-    echo '<script>alert("No se pudo actualizar el contacto)</script>';
+    header('Location: ../dash-customers.php?status=error&msg=' . urlencode('No se pudo actualizar el cliente'));
 }
 // Cerrar la conexión
 $link->close();

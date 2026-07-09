@@ -7,3 +7,10 @@
 <script src="assets/libs/feather-icons/feather.min.js"></script>
 <!-- pace js -->
 <script src="assets/libs/pace-js/pace.min.js"></script>
+
+<!-- feedback / validación (Sprint 1 plan-mejoras-frontend) -->
+<script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
+<script src="assets/libs/pristinejs/pristine.min.js"></script>
+<script src="assets/js/components/feedback.js"></script>
+<script src="assets/js/components/form-validator.js"></script>
+<script src="assets/js/components/rut-mask.js"></script>

@@ -67,7 +67,7 @@ if($query_run){
                             <div class="card-body py-4">
                                 <h5 class="font-size-14 mb-4"><i class="mdi mdi-arrow-right text-primary me-1"></i> Ingresar datos en los campos</h5>
 
-                                <form action="controller/bath-update.php" method="post" id="bathForm" class="mt-4 pt-2">
+                                <form action="controller/bath-update.php" method="post" id="bathForm" class="needs-validation mt-4 pt-2">
 
                                     <div class="row mb-4">
                                         <input type="hidden" class="form-control" id="id_Bath" name="id_Bath"  value="<?php echo $row['id_Bath'];?>">

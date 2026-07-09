@@ -37,11 +37,10 @@ if (isset($_POST['crear'])){
     //echo $error;
     //die();
 
-    header('Location: ../dash-users-list.php');
+    header('Location: ../dash-users-list.php?status=success&msg=' . urlencode('Usuario creado correctamente'));
 
 }else{
-    echo '<script>alert("No se pudo crear el cliente")</script>';
-    header('Location: ../index.php');
+    header('Location: ../index.php?status=error&msg=' . urlencode('No se pudo crear el usuario'));
 }
 // Cerrar la conexión
 $link->close();

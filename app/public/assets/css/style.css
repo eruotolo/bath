@@ -155,3 +155,18 @@ body {
     display: inline;
     margin-right: 50px;
 }
+
+/* Sprint 1 plan-mejoras-frontend: PristineJS agrega errorClass/successClass al
+   contenedor (classTo: "mb-4"), no al input. Bootstrap 5 solo muestra
+   .invalid-feedback cuando .is-invalid es hermano directo, no ancestro. */
+.mb-4.is-invalid .form-control,
+.mb-4.is-invalid .form-select {
+    border-color: #f46a6a;
+}
+.mb-4.is-invalid .invalid-feedback {
+    display: block;
+}
+.mb-4.is-valid .form-control,
+.mb-4.is-valid .form-select {
+    border-color: #34c38f;
+}

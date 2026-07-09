@@ -17,8 +17,7 @@ if (isset($_POST['crear'])){
     $stmt_check->close();
 
     if ($existe) {
-        echo '<script>alert("Ya existe un baño con el código \'' . addslashes($codigo_Bath) . '\'. Ingresá un código distinto.")</script>';
-        echo '<script>window.location.href = "../dash-bathrooms-add.php";</script>';
+        header('Location: ../dash-bathrooms-add.php?status=error&msg=' . urlencode("Ya existe un baño con el código '$codigo_Bath'. Ingresá un código distinto."));
         $link->close();
         exit;
     }
@@ -28,10 +27,10 @@ if (isset($_POST['crear'])){
     $stmt->execute();
     $stmt->close();
 
-    header('Location: ../dash-bathrooms.php');
+    header('Location: ../dash-bathrooms.php?status=success&msg=' . urlencode('Baño creado correctamente'));
 
 }else{
-    echo '<script>alert("No se pudo crear el cliente")</script>';
+    header('Location: ../dash-bathrooms-add.php?status=error&msg=' . urlencode('No se pudo crear el baño'));
 }
 // Cerrar la conexión
 $link->close();

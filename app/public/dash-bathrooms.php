@@ -167,7 +167,10 @@
                                     <a href="controller/bath-notassign.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Deshacer la asignación">
                                         <i class="fas fa-level-down-alt"></i>
                                     </a>
-                                    <a href="controller/bath-delete.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
+                                    <a href="controller/bath-delete.php?id_Bath=<?php echo $row['id_Bath'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar"
+                                       data-confirm-delete
+                                       data-confirm-title="¿Eliminar este baño?"
+                                       data-confirm-text="Esta acción no se puede deshacer.">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>

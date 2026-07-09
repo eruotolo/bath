@@ -2,6 +2,7 @@
 include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
 <?php include('layouts/config.php'); ?>
+<?php include('layouts/helpers.php'); ?>
 
 <head>
 
@@ -116,7 +117,7 @@ include 'layouts/session.php'; ?>
                                             <td style="text-align: center"><?php echo $row['fecha_Factura'] ?></td>
                                             <td><?php echo $row['nombre_Cliente'] ?></td>
                                             <td><?php echo $row['obra_Contrato'] ?></td>
-                                            <td style="text-align: center"><?php echo $row['valor_Factura'] ?></td>
+                                            <td style="text-align: center"><?php echo format_clp($row['valor_Factura']) ?></td>
                                             <td style="text-align: center">
                                                 <?php
                                                     if ($row['estado_Factura'] == 1){
@@ -149,7 +150,11 @@ include 'layouts/session.php'; ?>
                                                 <a href="dash-invoices-edit.php?id_Factura=<?php echo $row['id_Factura'] ?>" class="btn btn-outline-secondary btn-sm" title="Editar Factura">
                                                     <i class="fas fa-pencil-alt"></i>
                                                 </a>
-                                                <a href="controller/invoice-delete.php?id_Factura=<?php echo $row['id_Factura'] ?>" title="Eliminar Factura" class="btn btn-outline-secondary btn-sm"><i class="fas fa-trash-alt"></i></a>
+                                                <a href="controller/invoice-delete.php?id_Factura=<?php echo $row['id_Factura'] ?>" title="Anular Factura" class="btn btn-outline-secondary btn-sm"
+                                                   data-confirm-delete
+                                                   data-confirm-title="¿Anular esta factura?"
+                                                   data-confirm-text="Los servicios asociados quedarán liberados para volver a facturarse."
+                                                   data-confirm-confirm-text="Sí, anular"><i class="fas fa-trash-alt"></i></a>
                                             </td>
 
                                             <td>
