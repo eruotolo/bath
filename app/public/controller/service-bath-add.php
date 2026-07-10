@@ -1,26 +1,27 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Service\AssignBathroomsToService;
+use App\Infrastructure\Persistence\MysqliServiceRepository;
+
 include ('../layouts/config.php');
 
 global $link;
 
 if (isset($_POST['update'])){
-    $id_Servicio = $_POST['id_Servicio'];
+    $id_Servicio = (int) $_POST['id_Servicio'];
 
     // Verifica si $_POST['id_Bath'] está definido y es un array
     if (isset($_POST['id_Bath']) && is_array($_POST['id_Bath'])) {
-        // Itera sobre cada valor seleccionado y realiza la inserción en la base de datos
-        foreach ($_POST['id_Bath'] as $id_Bath) {
-            $query = "INSERT INTO servicios_bathrooms (id_Servicio, id_Bath) VALUES ('$id_Servicio', '$id_Bath')";
+        $useCase = new AssignBathroomsToService(new MysqliServiceRepository($link));
 
-            if ($link->query($query) !== true){
-                // Manejar el error aquí si es necesario
-                echo "Error al insertar: " . $link->error;
-            }
+        try {
+            $useCase->handle($id_Servicio, $_POST['id_Bath']);
+            header("Location: ../dash-services-bath.php?id_Servicio=$id_Servicio");
+        } catch (\mysqli_sql_exception $e) {
+            header("Location: ../dash-services-bath.php?id_Servicio=$id_Servicio&status=error&msg=" . urlencode('No se pudieron asignar los baños'));
         }
-
-        // Redirige después de realizar todas las inserciones
-        header("Location: ../dash-services-bath.php?id_Servicio=$id_Servicio");
     } else {
         // Maneja el caso donde no se seleccionó ningún baño
         echo "No se seleccionaron baños";
@@ -29,4 +30,3 @@ if (isset($_POST['update'])){
     // Maneja el caso donde no se activó el formulario
     header("../index.php");
 }
-?>

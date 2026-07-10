@@ -3,22 +3,19 @@
 
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Service\FindServiceWithContractAndCustomer;
+use App\Infrastructure\Persistence\MysqliServiceRepository;
+
 include 'layouts/config.php';
 global $link;
 
-$id_Servicio = $_GET['id_Servicio'];
+$id_Servicio = (int) $_GET['id_Servicio'];
 
+$row = (new FindServiceWithContractAndCustomer(new MysqliServiceRepository($link)))->handle($id_Servicio);
 
-$query = "SELECT * FROM servicios SR 
-            JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
-            JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
-            JOIN tipo_servicio TS ON SR.nro_Servicio = TS.nro_Servicio
-         WHERE id_Servicio = $id_Servicio";
-
-$query_run = mysqli_query($link, $query);
-
-if ($query_run) {
-    $row = mysqli_fetch_array($query_run);
+if ($row !== null) {
     $nro_Servicio = $row['nro_Servicio'];
 ?>
 
@@ -77,42 +74,37 @@ if ($query_run) {
                                             <div class="row mb-4">
                                                 <label for="id_Cliente" class="col-sm-3 col-form-label">Cliente:</label>
                                                 <div class="col-sm-6">
-                                                    <input class="form-control" type="text" id="id_Cliente" name="id_Cliente" value="<?php echo $row['nombre_Cliente']?>" readonly>
+                                                    <input class="form-control" type="text" id="id_Cliente" name="id_Cliente" value="<?php echo htmlspecialchars($row['nombre_Cliente'])?>" readonly>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-4">
                                                 <label for="id_Contrato" class="col-sm-3 col-form-label">Contrato:</label>
                                                 <div class="col-sm-6">
-                                                    <input class="form-control" type="hidden" id="id_Contrato" name="id_Contrato" value="<?php echo $row['id_Contrato']?>" readonly>
-                                                    <input class="form-control" type="text" value="<?php echo $row['obra_Contrato']?>" readonly>
+                                                    <input class="form-control" type="hidden" id="id_Contrato" name="id_Contrato" value="<?php echo (int) $row['id_Contrato']?>" readonly>
+                                                    <input class="form-control" type="text" value="<?php echo htmlspecialchars($row['obra_Contrato'])?>" readonly>
                                                 </div>
                                             </div>
 
                                             <div class="row mb-4">
                                                 <label for="tipo_servicio" class="col-sm-3 col-form-label">Tipo de Servicios: *</label>
-                                                <?php
-                                                    $query = "SELECT * FROM tipo_servicio WHERE nro_Servicio = $nro_Servicio";
-                                                    $result = mysqli_query($link, $query);
-                                                    while ($rowTipoServicio = mysqli_fetch_array($result)) {
-                                                ?>
                                                 <div class="col-sm-2">
                                                     <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="<?php echo $rowTipoServicio['instalacion_Tipo']?>" id="instalacion_Tipo" name="instalacion_Tipo" <?php echo $rowTipoServicio['instalacion_Tipo'] == 1 ? 'checked' : ''; ?>>
+                                                        <input class="form-check-input" type="checkbox" value="1" id="instalacion_Tipo" name="instalacion_Tipo" <?php echo $row['instalacion_Tipo'] == 1 ? 'checked' : ''; ?>>
                                                         <label class="form-check-label" for="instalacion_Tipo">
                                                             Instalación
                                                         </label>
                                                     </div>
 
                                                     <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="<?php echo $rowTipoServicio['reparacion_Tipo']?>" id="reparacion_Tipo" name="reparacion_Tipo" <?php echo $rowTipoServicio['reparacion_Tipo'] == 1 ? 'checked' : ''; ?>>
+                                                        <input class="form-check-input" type="checkbox" value="1" id="reparacion_Tipo" name="reparacion_Tipo" <?php echo $row['reparacion_Tipo'] == 1 ? 'checked' : ''; ?>>
                                                         <label class="form-check-label" for="reparacion_Tipo">
                                                             Reparación
                                                         </label>
                                                     </div>
 
                                                     <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="<?php echo $rowTipoServicio['limpieza_Tipo']?>" id="limpieza_Tipo" name="limpieza_Tipo" <?php echo $rowTipoServicio['limpieza_Tipo'] == 1 ? 'checked' : ''; ?>>
+                                                        <input class="form-check-input" type="checkbox" value="1" id="limpieza_Tipo" name="limpieza_Tipo" <?php echo $row['limpieza_Tipo'] == 1 ? 'checked' : ''; ?>>
                                                         <label class="form-check-label" for="limpieza_Tipo">
                                                             Limpieza
                                                         </label>
@@ -121,21 +113,21 @@ if ($query_run) {
 
                                                 <div class="col-sm-2">
                                                     <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="<?php echo $rowTipoServicio['desinfeccion_Tipo']?>" id="desinfeccion_Tipo" name="desinfeccion_Tipo" <?php echo $rowTipoServicio['desinfeccion_Tipo'] == 1 ? 'checked' : ''; ?>>
+                                                        <input class="form-check-input" type="checkbox" value="1" id="desinfeccion_Tipo" name="desinfeccion_Tipo" <?php echo $row['desinfeccion_Tipo'] == 1 ? 'checked' : ''; ?>>
                                                         <label class="form-check-label" for="desinfeccion_Tipo">
                                                             Desinfección
                                                         </label>
                                                     </div>
 
                                                     <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="<?php echo $rowTipoServicio['sanitizacion_Tipo']?>" id="sanitizacion_Tipo" name="sanitizacion_Tipo" <?php echo $rowTipoServicio['sanitizacion_Tipo'] == 1 ? 'checked' : ''; ?>>
+                                                        <input class="form-check-input" type="checkbox" value="1" id="sanitizacion_Tipo" name="sanitizacion_Tipo" <?php echo $row['sanitizacion_Tipo'] == 1 ? 'checked' : ''; ?>>
                                                         <label class="form-check-label" for="sanitizacion_Tipo">
                                                             Sanitización
                                                         </label>
                                                     </div>
 
                                                     <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="<?php echo $rowTipoServicio['higienico_Tipo']?>" id="higienico_Tipo" name="higienico_Tipo" <?php echo $rowTipoServicio['higienico_Tipo'] == 1 ? 'checked' : ''; ?>>
+                                                        <input class="form-check-input" type="checkbox" value="1" id="higienico_Tipo" name="higienico_Tipo" <?php echo $row['higienico_Tipo'] == 1 ? 'checked' : ''; ?>>
                                                         <label class="form-check-label" for="higienico_Tipo">
                                                             Entrega Papel Higiénico
                                                         </label>
@@ -144,42 +136,39 @@ if ($query_run) {
 
                                                 <div class="col-sm-2">
                                                     <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="<?php echo $rowTipoServicio['jabon_Tipo']?>" id="jabon_Tipo" name="jabon_Tipo" <?php echo $rowTipoServicio['jabon_Tipo'] == 1 ? 'checked' : ''; ?>>
+                                                        <input class="form-check-input" type="checkbox" value="1" id="jabon_Tipo" name="jabon_Tipo" <?php echo $row['jabon_Tipo'] == 1 ? 'checked' : ''; ?>>
                                                         <label class="form-check-label" for="jabon_Tipo">
                                                             Entrega de Jabón Liquido
                                                         </label>
                                                     </div>
 
                                                     <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="<?php echo $rowTipoServicio['otros_Tipo']?>" id="otros_Tipo" name="otros_Tipo" <?php echo $rowTipoServicio['otros_Tipo'] == 1 ? 'checked' : ''; ?>>
+                                                        <input class="form-check-input" type="checkbox" value="1" id="otros_Tipo" name="otros_Tipo" <?php echo $row['otros_Tipo'] == 1 ? 'checked' : ''; ?>>
                                                         <label class="form-check-label" for="otros_Tipo">
                                                             Otros
                                                         </label>
                                                     </div>
 
                                                     <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="<?php echo $rowTipoServicio['retiro_Tipo']?>" id="retiro_Tipo" name="retiro_Tipo" <?php echo $rowTipoServicio['retiro_Tipo'] == 1 ? 'checked' : ''; ?>>
+                                                        <input class="form-check-input" type="checkbox" value="1" id="retiro_Tipo" name="retiro_Tipo" <?php echo $row['retiro_Tipo'] == 1 ? 'checked' : ''; ?>>
                                                         <label class="form-check-label" for="retiro_Tipo">
                                                             Retiro de Baños
                                                         </label>
                                                     </div>
                                                 </div>
-                                                <?php
-                                                    }
-                                                ?>
                                             </div>
 
                                             <div class="row mb-4">
                                                 <label for="fecha_Servicio" class="col-sm-3 col-form-label">Fecha del Servicio: *</label>
                                                 <div class="col-sm-6">
-                                                    <input class="form-control" type="date" id="fecha_Servicio" name="fecha_Servicio" value="<?php echo $row['fecha_Servicio']?>">
+                                                    <input class="form-control" type="date" id="fecha_Servicio" name="fecha_Servicio" value="<?php echo htmlspecialchars($row['fecha_Servicio'])?>">
                                                 </div>
                                             </div>
 
                                             <div class="row mb-4">
                                                 <label for="observaciones_Servicio" class="col-sm-3 col-form-label">Observaciones: *</label>
                                                 <div class="col-sm-6">
-                                                    <textarea class="form-control" id="observaciones_Servicio" name="observaciones_Servicio" rows="5"><?php echo $row['observaciones_Servicio']?></textarea>
+                                                    <textarea class="form-control" id="observaciones_Servicio" name="observaciones_Servicio" rows="5"><?php echo htmlspecialchars($row['observaciones_Servicio'] ?? '')?></textarea>
                                                 </div>
                                             </div>
 

@@ -3,21 +3,24 @@
 
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Service\FindServiceWithContractAndCustomer;
+use App\Application\Service\ListAssignedBathrooms;
+use App\Application\Bathroom\ListBathroomsByContract;
+use App\Infrastructure\Persistence\MysqliServiceRepository;
+use App\Infrastructure\Persistence\MysqliBathroomRepository;
+
 include('layouts/config.php');
 global $link;
 
-$id_Servicio = $_GET['id_Servicio'];
+$id_Servicio = (int) $_GET['id_Servicio'];
 
-$query = "SELECT * FROM servicios SR
-    JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
-    JOIN tipo_servicio TS ON SR.nro_Servicio = TS.nro_Servicio
-    JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
- WHERE id_Servicio = $id_Servicio";
+$row = (new FindServiceWithContractAndCustomer(new MysqliServiceRepository($link)))->handle($id_Servicio);
 
-$query_run = mysqli_query($link, $query);
-
-if ($query_run) {
-    while ($row = mysqli_fetch_array($query_run)) {
+if ($row !== null) {
+    $banosDelContrato = (new ListBathroomsByContract(new MysqliBathroomRepository($link)))->handle((int) $row['id_Contrato']);
+    $banosAsignados = (new ListAssignedBathrooms(new MysqliServiceRepository($link)))->handle($id_Servicio);
 ?>
 
     <head>
@@ -72,28 +75,28 @@ if ($query_run) {
                                         <div class="row mb-4">
                                             <label for="nro_Servicio" class="col-sm-4 col-form-label">Número de Servicio:</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" value="<?php echo $row['nro_Servicio'] ?>" readonly>
+                                                <input type="text" class="form-control" value="<?php echo (int) $row['nro_Servicio'] ?>" readonly>
                                             </div>
                                         </div>
 
                                         <div class="row mb-4">
                                             <label for="nombre_Cliente" class="col-sm-4 col-form-label">Nombre del Cliente:</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" value="<?php echo $row['nombre_Cliente'] ?>" readonly>
+                                                <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['nombre_Cliente']) ?>" readonly>
                                             </div>
                                         </div>
 
                                         <div class="row mb-4">
                                             <label for="obra_Contrato" class="col-sm-4 col-form-label">Obra:</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" value="<?php echo $row['obra_Contrato'] ?>" readonly>
+                                                <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['obra_Contrato']) ?>" readonly>
                                             </div>
                                         </div>
 
                                         <div class="row mb-4">
                                             <label for="direccion_Contrato" class="col-sm-4 col-form-label">Dirección de la Obra:</label>
                                             <div class="col-sm-7">
-                                                <input type="text" class="form-control" value="<?php echo $row['direccion_Contrato'] ?>" readonly>
+                                                <input type="text" class="form-control" value="<?php echo htmlspecialchars($row['direccion_Contrato']) ?>" readonly>
                                             </div>
                                         </div>
 
@@ -208,19 +211,12 @@ if ($query_run) {
 
 
                                                                             <?php
-                                                                            $sql = "SELECT * FROM bathrooms BT
-                                                                                JOIN contrato_bathroom CB ON BT.id_Bath = CB.id_Bath
-                                                                                JOIN contratos CT ON CB.id_Contrato = CT.id_Contrato
-                                                                                JOIN servicios SR ON CT.id_Contrato = SR.id_Contrato
-                                                                            WHERE id_Servicio = $id_Servicio";
-                                                                            $result_task = mysqli_query($link, $sql);
-
-                                                                            while ($row = mysqli_fetch_Array($result_task)) {
+                                                                            foreach ($banosDelContrato as $bano) {
                                                                                 ?>
 
                                                                                 <div class="form-check">
-                                                                                    <input class="form-check-input" type="checkbox" name="id_Bath[]" value="<?php echo $row['id_Bath'] ?>" id="bath_<?php echo $row['id_Bath'] ?>">
-                                                                                    <label class="form-check-label" for="bath_<?php echo $row['id_Bath'] ?>"><?php echo $row['codigo_Bath'] ?></label>
+                                                                                    <input class="form-check-input" type="checkbox" name="id_Bath[]" value="<?php echo (int) $bano['id_Bath'] ?>" id="bath_<?php echo (int) $bano['id_Bath'] ?>">
+                                                                                    <label class="form-check-label" for="bath_<?php echo (int) $bano['id_Bath'] ?>"><?php echo htmlspecialchars($bano['codigo_Bath']) ?></label>
                                                                                 </div>
 
                                                                                 <?php
@@ -280,23 +276,15 @@ if ($query_run) {
                                                 </thead>
                                                 <tbody>
                                                 <?php
-                                                $sql = "SELECT * FROM servicios_bathrooms SB
-                                                            JOIN bathrooms BT ON SB.id_Bath = BT.id_Bath
-                                                            JOIN servicios SR ON SB.id_Servicio = SR.id_Servicio
-                                                        WHERE SB.id_Servicio =$id_Servicio;";
-                                                $result_task = mysqli_query($link, $sql);
-                                                while ($row = mysqli_fetch_Array($result_task)) {
-                                                    $id_Contrato = $row['id_Contrato'];
-                                                    $id_Relacion = $row['id_Relacion'];
-                                                    $id_Bath = $row['id_Bath']
+                                                foreach ($banosAsignados as $asignado) {
                                                     ?>
                                                     <tr>
-                                                        <td><?php echo $row['codigo_Bath'] ?></td>
-                                                        <td><?php echo $row['fechaCompra_Bath'] ?></td>
+                                                        <td><?php echo htmlspecialchars($asignado['codigo_Bath']) ?></td>
+                                                        <td><?php echo htmlspecialchars($asignado['fechaCompra_Bath']) ?></td>
                                                         <td style="width: 70px; text-align: center">
                                                             <!-- Botón para eliminar relación -->
 
-                                                            <a href="controller/service-bath-remove.php?id_Relacion=<?php echo $row['id_Relacion'] ?>&id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
+                                                            <a href="controller/service-bath-remove.php?id_Relacion=<?php echo (int) $asignado['id_Relacion'] ?>&id_Servicio=<?php echo (int) $asignado['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
                                                                 <i class="fas fa-trash-alt"></i>
                                                             </a>
                                                         </td>
@@ -335,7 +323,6 @@ if ($query_run) {
 
 
 <?php
-    }
 } else {
     echo '<script>alert ("Problema al cargar el Servicio")</script>';
 }

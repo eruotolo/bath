@@ -3,23 +3,21 @@
 
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Service\FindServiceForPrint;
+use App\Infrastructure\Persistence\MysqliServiceRepository;
+
 include('layouts/config.php');
 global $link;
 
-$id_Servicio = $_GET['id_Servicio'];
+$id_Servicio = (int) $_GET['id_Servicio'];
 
-$query = "SELECT * FROM servicios SR
-    JOIN servicios_bathrooms SB ON SR.id_Servicio = SB.id_Servicio
-    JOIN tipo_servicio TS ON SR.nro_Servicio = TS.nro_Servicio
-    JOIN bathrooms BT ON SB.id_Bath = BT.id_Bath
-    JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
-    JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
-WHERE SB.id_Servicio = $id_Servicio";
+$impresion = (new FindServiceForPrint(new MysqliServiceRepository($link)))->handle($id_Servicio);
 
-$query_run = mysqli_query($link, $query);
-
-if ($query_run) {
-    $row = mysqli_fetch_array($query_run);
+if ($impresion !== null) {
+    $row = $impresion['service'];
+    $banosTratados = $impresion['bathrooms'];
 
 ?>
 
@@ -91,7 +89,7 @@ if ($query_run) {
                                             </div>
 
                                             <div class="d-flex titulo-comprobante justify-content-center titulo-certificado">
-                                                <h4>Comprobante de Ejecución N°: <?php echo $row['nro_Servicio']; ?></h4>
+                                                <h4>Comprobante de Ejecución N°: <?php echo (int) $row['nro_Servicio']; ?></h4>
                                             </div>
 
                                         </div>
@@ -103,20 +101,20 @@ if ($query_run) {
                                         <div class="row">
                                             <div class="col-sm-6">
                                                 <h5 class="font-size-14 mb-3"><b>Cliente:</b></h5>
-                                                <h5 class="font-size-14 mb-2"><?php echo $row['nombre_Cliente']; ?></h5>
-                                                <p class="mb-1"><?php echo $row['direccion_Cliente']; ?></p>
-                                                <p class="mb-1"><?php echo $row['email_Cliente']; ?></p>
-                                                <p class="mb-1">+56 <?php echo $row['telefono_Cliente']; ?></p>
-                                                <p class="mb-1"><?php echo $row['ciudad_Cliente']; ?> | <?php echo $row['region_Cliente']; ?></p>
+                                                <h5 class="font-size-14 mb-2"><?php echo htmlspecialchars($row['nombre_Cliente']); ?></h5>
+                                                <p class="mb-1"><?php echo htmlspecialchars($row['direccion_Cliente']); ?></p>
+                                                <p class="mb-1"><?php echo htmlspecialchars($row['email_Cliente']); ?></p>
+                                                <p class="mb-1">+56 <?php echo htmlspecialchars($row['telefono_Cliente']); ?></p>
+                                                <p class="mb-1"><?php echo htmlspecialchars($row['ciudad_Cliente']); ?> | <?php echo htmlspecialchars($row['region_Cliente']); ?></p>
                                             </div>
                                             <div class="col-sm-6">
                                                 <div>
                                                     <h5 class="font-size-15 mb-3"><b>Información:</b></h5>
                                                     <p class="mb-1">
-                                                        <b>Obra: </b><?php echo $row['obra_Contrato']; ?>
+                                                        <b>Obra: </b><?php echo htmlspecialchars($row['obra_Contrato']); ?>
                                                     </p>
                                                     <p class="mb-1">
-                                                        <b>Dirección de la obra:</b>  <?php echo $row['direccion_Contrato']; ?>
+                                                        <b>Dirección de la obra:</b>  <?php echo htmlspecialchars($row['direccion_Contrato']); ?>
                                                     </p>
                                                     <p class="mb-1">
                                                         <b>Fecha del Servicio:</b> <?php echo date("d/m/Y", strtotime($row['fecha_Servicio'])); ?>
@@ -174,18 +172,9 @@ if ($query_run) {
 
                                                     <ul class="list-service-print mb-1">
                                                         <li><b>Baños Tratados:</b></li>
-                                                        <?php
-                                                            $sql = "SELECT * FROM servicios_bathrooms SB 
-                                                                            JOIN servicios SR ON SB.id_Servicio = SR.id_Servicio 
-                                                                            JOIN bathrooms BT ON SB.id_Bath = BT.id_Bath 
-                                                                      WHERE SB.id_Servicio = $id_Servicio";
-                                                            $result_taskaa = mysqli_query($link, $sql);
-                                                            while ($ron = mysqli_fetch_array($result_taskaa)){
-                                                        ?>
-                                                        <li><?php echo $ron['codigo_Bath']; ?></li>
-                                                        <?php
-                                                        }
-                                                        ?>
+                                                        <?php foreach ($banosTratados as $bano) { ?>
+                                                        <li><?php echo htmlspecialchars($bano['codigo_Bath']); ?></li>
+                                                        <?php } ?>
                                                     </ul>
 
 
@@ -195,7 +184,7 @@ if ($query_run) {
 
                                         <div class="p-4 border rounded mt-5">
                                             <h5 class="font-size-15">Observaciones Generales:</h5>
-                                            <p><?php echo $row['observaciones_Servicio']; ?></p>
+                                            <p><?php echo htmlspecialchars($row['observaciones_Servicio'] ?? ''); ?></p>
                                         </div>
                                         
                                         <div class="row my-3 sub-pie">

@@ -1,7 +1,18 @@
 <?php global $link;
 include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
-<?php include('layouts/config.php'); ?>
+
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Service\ListServices;
+use App\Infrastructure\Persistence\MysqliServiceRepository;
+
+include('layouts/config.php');
+
+$servicios = (new ListServices(new MysqliServiceRepository($link)))->handle();
+?>
 
 <head>
 
@@ -48,17 +59,9 @@ include 'layouts/session.php'; ?>
                 <div class="row align-items-center">
                     <div class="col-md-6">
                         <div class="mb-3">
-                            <?php
-                                $query = "SELECT COUNT(*) AS total FROM servicios WHERE estado_Servicio = 1";
-                                $result_task1 = mysqli_query($link, $query);
-                            while ($row = mysqli_fetch_Array($result_task1)) {
-                                ?>
-                                <h5 class="card-title">Cantidad de Servicios <span
-                                        class="text-muted fw-normal ms-2">(<?php echo $row['total'] ?>)</span>
-                                </h5>
-                                <?php
-                            }
-                            ?>
+                            <h5 class="card-title">Cantidad de Servicios <span
+                                    class="text-muted fw-normal ms-2">(<?php echo count($servicios) ?>)</span>
+                            </h5>
                         </div>
                     </div>
 
@@ -94,40 +97,21 @@ include 'layouts/session.php'; ?>
 
                         <tbody>
                         <?php
-                            $query = "SELECT SR.*, CT.*, CL.*
-                                            FROM servicios SR
-                                                JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
-                                                JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
-                                                
-                                            WHERE estado_Servicio = 1
-                                            ORDER BY SR.created_at DESC, SR.id_Servicio DESC;";
-                            $result_task = mysqli_query($link, $query);
-                            while ($row = mysqli_fetch_array($result_task)){
-                                    $id_Servicio = $row['id_Servicio'];
+                            foreach ($servicios as $row) {
                         ?>
 
                             <tr>
-                                <td>#<?php echo $row['nro_Servicio'] ?></td>
-                                <td><?php echo $row['nombre_Cliente'] ?></td>
-                                <td><?php echo $row['obra_Contrato'] ?></td>
+                                <td>#<?php echo (int) $row['nro_Servicio'] ?></td>
+                                <td><?php echo htmlspecialchars($row['nombre_Cliente']) ?></td>
+                                <td><?php echo htmlspecialchars($row['obra_Contrato']) ?></td>
 
-                                <?php
-                                $query_factura = "SELECT * FROM factura_servicio WHERE id_Servicio = $id_Servicio";
-                                $result_task1 = mysqli_query($link, $query_factura);
-                                $factura_status = mysqli_fetch_assoc($result_task1);
-
-                                if (!$factura_status) {
-                                    ?>
+                                <?php if (!$row['facturado']) { ?>
                                     <td><div class="badge item-inactivo">No Facturado</div></td>
-                                    <?php
-                                } else {
-                                    ?>
+                                <?php } else { ?>
                                     <td><div class="badge item-activo">Facturado</div></td>
-                                    <?php
-                                }
-                                ?>
+                                <?php } ?>
 
-                                <td style="text-align: center"><?php echo $row['fecha_Servicio'] ?></td>
+                                <td style="text-align: center"><?php echo htmlspecialchars($row['fecha_Servicio']) ?></td>
                                 <td style="width: 140px; text-align: center">
 
                                     <a href="dash-services-bath.php?id_Servicio=<?php echo $row['id_Servicio'] ?>" class="btn btn-outline-secondary btn-sm" title="Asignar Baños a Servicios">

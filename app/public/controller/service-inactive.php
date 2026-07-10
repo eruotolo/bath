@@ -1,20 +1,21 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Service\DeactivateService;
+use App\Infrastructure\Persistence\MysqliServiceRepository;
+
 require '../layouts/config.php';
 global $link;
 
-$id_Servicio = $_GET['id_Servicio'];
-$estado_Servicio = 0;
+$id_Servicio = (int) $_GET['id_Servicio'];
 
-$sql = "UPDATE servicios SET estado_Servicio = '$estado_Servicio' WHERE id_Servicio = '$id_Servicio'";
+$useCase = new DeactivateService(new MysqliServiceRepository($link));
 
-    //echo $sql;
-    //die();
-
-if ($link->query($sql) === TRUE) {
-    //echo "Registro eliminado correctamente.";
+try {
+    $useCase->handle($id_Servicio);
     header("Location: ../dash-services.php");
-} else {
+} catch (\mysqli_sql_exception $e) {
     header("Location: ../index.php");
 }
 

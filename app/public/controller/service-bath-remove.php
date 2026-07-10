@@ -1,19 +1,22 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Service\RemoveAssignedBathroom;
+use App\Infrastructure\Persistence\MysqliServiceRepository;
+
 require '../layouts/config.php';
 global $link;
 
-$id_Relacion = $_GET['id_Relacion'];
-$id_Servicio = $_GET['id_Servicio'];
+$id_Relacion = (int) $_GET['id_Relacion'];
+$id_Servicio = (int) $_GET['id_Servicio'];
 
-$sql = "DELETE FROM servicios_bathrooms WHERE id_Relacion = '$id_Relacion'";
-//echo $sql;
-//die();
+$useCase = new RemoveAssignedBathroom(new MysqliServiceRepository($link));
 
-if ($link->query($sql) === TRUE) {
-    //echo "Registro eliminado correctamente.";
+try {
+    $useCase->handle($id_Relacion);
     header("Location: ../dash-services-bath.php?id_Servicio=$id_Servicio");
-} else {
+} catch (\mysqli_sql_exception $e) {
     header("Location: ../index.php");
 }
 
