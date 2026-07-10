@@ -3,20 +3,23 @@
 
 <?php
 
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Invoice\FindInvoiceWithCustomerAndContract;
+use App\Application\Invoice\ListAssignedServices;
+use App\Infrastructure\Persistence\MysqliInvoiceRepository;
+
 include('layouts/config.php');
 global $link;
 
-$id_Factura = $_GET['id_Factura'];
-$id_Contrato = $_GET['id_Contrato'];
+$id_Factura = (int) $_GET['id_Factura'];
+$id_Contrato = (int) $_GET['id_Contrato'];
 
-    $query = "SELECT * FROM facturas FT
-        JOIN clientes CL ON FT.id_Cliente = CL.id_Cliente
-        JOIN contratos CT ON CL.id_Cliente = CT.id_Cliente
-    WHERE id_Factura = $id_Factura and CT.id_Contrato = $id_Contrato";
-    $query_run = mysqli_query($link, $query);
+$invoiceRepository = new MysqliInvoiceRepository($link);
+$row = (new FindInvoiceWithCustomerAndContract($invoiceRepository))->handle($id_Factura, $id_Contrato);
 
-    if ($query_run) {
-    $row = mysqli_fetch_array($query_run);
+if ($row !== null) {
+    $serviciosAsignados = (new ListAssignedServices($invoiceRepository))->handle($id_Factura);
 ?>
 
 <head>
@@ -87,7 +90,7 @@ $id_Contrato = $_GET['id_Contrato'];
                                     </div>
                                     <div class="flex-shrink-0 info-nrofactura" >
                                         <div class="mb-4">
-                                            <h4 class="float-end">N° DE FACTURA: <?php echo $row['numero_Factura'] ?></h4>
+                                            <h4 class="float-end">N° DE FACTURA: <?php echo htmlspecialchars($row['numero_Factura']) ?></h4>
                                         </div>
                                     </div>
                                 </div>
@@ -100,11 +103,11 @@ $id_Contrato = $_GET['id_Contrato'];
                                 <div class="col-sm-6">
                                     <div>
                                         <h5 class="font-size-15 mb-3">Factura a:</h5>
-                                        <h5 class="font-size-14 mb-2"><?php echo $row['nombre_Cliente'] ?></h5>
-                                        <p class="mb-1">RUT: <?php echo $row['rut_Cliente'] ?></p>
-                                        <p class="mb-1">Dir: <?php echo $row['direccion_Cliente'] ?></p>
-                                        <p class="mb-1">Email: <?php echo $row['email_Cliente'] ?></p>
-                                        <p>Teléfono: +<?php echo $row['telefono_Cliente'] ?></p>
+                                        <h5 class="font-size-14 mb-2"><?php echo htmlspecialchars($row['nombre_Cliente']) ?></h5>
+                                        <p class="mb-1">RUT: <?php echo htmlspecialchars($row['rut_Cliente']) ?></p>
+                                        <p class="mb-1">Dir: <?php echo htmlspecialchars($row['direccion_Cliente']) ?></p>
+                                        <p class="mb-1">Email: <?php echo htmlspecialchars($row['email_Cliente']) ?></p>
+                                        <p>Teléfono: +<?php echo htmlspecialchars($row['telefono_Cliente']) ?></p>
                                     </div>
                                 </div>
                                 <div class="col-sm-6">
@@ -118,8 +121,8 @@ $id_Contrato = $_GET['id_Contrato'];
 
                                         <div class="mt-4">
                                             <h5 class="font-size-15">Contrato:</h5>
-                                            <p class="mb-1"><?php echo $row['obra_Contrato'] ?></p>
-                                            <p>Dir: <?php echo $row['direccion_Contrato'] ?></p>
+                                            <p class="mb-1"><?php echo htmlspecialchars($row['obra_Contrato']) ?></p>
+                                            <p>Dir: <?php echo htmlspecialchars($row['direccion_Contrato']) ?></p>
                                         </div>
                                     </div>
                                 </div>
@@ -142,17 +145,12 @@ $id_Contrato = $_GET['id_Contrato'];
                                         </thead>
                                         <tbody>
                                             <?php
-                                                $sql = "SELECT * FROM factura_servicio FS 
-                                                            JOIN facturas FT ON FS.id_Factura = FT.id_Factura
-                                                            JOIN servicios SR ON FS.id_Servicio = SR.id_Servicio
-                                                        WHERE FS.id_Factura = $id_Factura";
-                                                $result_tasks = mysqli_query($link, $sql);
-                                                while ($rows = mysqli_fetch_Array($result_tasks)) {
+                                                foreach ($serviciosAsignados as $rows) {
                                             ?>
                                             <tr>
-                                                <td><?php echo $rows['nro_Servicio'] ?></td>
+                                                <td><?php echo (int) $rows['nro_Servicio'] ?></td>
                                                 <td><?php echo date("d/m/Y", strtotime($rows['fecha_Servicio'])); ?></td>
-                                                <td><?php echo $rows['observaciones_Servicio'] ?></td>
+                                                <td><?php echo htmlspecialchars($rows['observaciones_Servicio'] ?? '') ?></td>
                                             </tr>
                                             <?php }?>
                                         </tbody>

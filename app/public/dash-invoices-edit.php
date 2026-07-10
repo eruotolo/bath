@@ -1,24 +1,26 @@
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
-<?php global $link; include 'layouts/config.php'; ?>
 
 <?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Invoice\FindInvoice;
+use App\Infrastructure\Persistence\MysqliInvoiceRepository;
+
+global $link;
+include 'layouts/config.php';
+
 if (!isset($_GET['id_Factura']) || !is_numeric($_GET['id_Factura'])) {
     header("Location: dash-invoices-list.php");
     exit();
 }
 
-$id_Factura = intval($_GET['id_Factura']);
+$id_Factura = (int) $_GET['id_Factura'];
 
-$sql = "SELECT * FROM facturas WHERE id_Factura = ?";
-$stmt = mysqli_prepare($link, $sql);
-mysqli_stmt_bind_param($stmt, "i", $id_Factura);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$factura = mysqli_fetch_assoc($result);
-mysqli_stmt_close($stmt);
+$factura = (new FindInvoice(new MysqliInvoiceRepository($link)))->handle($id_Factura);
 
-if (!$factura) {
+if ($factura === null) {
     header("Location: dash-invoices-list.php");
     exit();
 }
@@ -77,19 +79,19 @@ if (!$factura) {
 
                                 <form action="controller/invoice-update.php" method="POST" class="needs-validation mt-4 pt-2">
 
-                                    <input type="hidden" name="id_Factura" value="<?php echo (int)$factura['id_Factura'] ?>">
+                                    <input type="hidden" name="id_Factura" value="<?php echo $factura->id ?>">
 
                                     <div class="row mb-4">
                                         <label for="numero_Factura" class="col-sm-3 col-form-label">Ingrese el Número de Factura:</label>
                                         <div class="col-sm-5">
-                                            <input type="text" class="form-control" id="numero_Factura" name="numero_Factura" value="<?php echo htmlspecialchars($factura['numero_Factura']) ?>" required>
+                                            <input type="text" class="form-control" id="numero_Factura" name="numero_Factura" value="<?php echo htmlspecialchars($factura->number) ?>" required>
                                         </div>
                                     </div>
 
                                     <div class="row mb-4">
                                         <label for="fecha_Factura" class="col-sm-3 col-form-label">Ingrese la Fecha de Factura:</label>
                                         <div class="col-sm-5">
-                                            <input type="date" class="form-control" id="fecha_Factura" name="fecha_Factura" value="<?php echo htmlspecialchars($factura['fecha_Factura']) ?>" required>
+                                            <input type="date" class="form-control" id="fecha_Factura" name="fecha_Factura" value="<?php echo htmlspecialchars($factura->date) ?>" required>
                                         </div>
                                     </div>
 
@@ -103,7 +105,7 @@ if (!$factura) {
                                                 $resultClientes = mysqli_query($link, $sqlClientes);
                                                 $clientes = mysqli_fetch_all($resultClientes, MYSQLI_ASSOC);
                                                 foreach ($clientes as $cliente) { ?>
-                                                    <option value="<?php echo (int)$cliente['id_Cliente']; ?>" <?php echo ((int)$cliente['id_Cliente'] === (int)$factura['id_Cliente']) ? 'selected' : ''; ?>>
+                                                    <option value="<?php echo (int)$cliente['id_Cliente']; ?>" <?php echo ((int)$cliente['id_Cliente'] === $factura->customerId) ? 'selected' : ''; ?>>
                                                         <?php echo htmlspecialchars($cliente['nombre_Cliente']) ?>
                                                     </option>
                                                     <?php
@@ -126,7 +128,7 @@ if (!$factura) {
                                     <div class="row mb-4">
                                         <label for="valor_Factura" class="col-sm-3 col-form-label">Ingrese el Monto de Factura:</label>
                                         <div class="col-sm-5">
-                                            <input type="number" class="form-control" id="valor_Factura" name="valor_Factura" value="<?php echo (int)$factura['valor_Factura'] ?>" required>
+                                            <input type="number" class="form-control" id="valor_Factura" name="valor_Factura" value="<?php echo $factura->value ?>" required>
                                         </div>
                                     </div>
 
@@ -169,7 +171,7 @@ if (!$factura) {
 <script src="assets/js/app.js"></script>
 
 <script>
-	var idContratoActual = <?php echo json_encode((int)$factura['id_Contrato']); ?>;
+	var idContratoActual = <?php echo json_encode($factura->contractId); ?>;
 
 	function cargarContratos(idCliente, seleccionar) {
 		$.ajax({

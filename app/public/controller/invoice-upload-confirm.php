@@ -1,8 +1,15 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Domain\Invoice\Invoice;
+use App\Infrastructure\Persistence\MysqliInvoiceRepository;
+
 session_start();
 include '../layouts/config.php';
 global $link;
+
+$invoiceRepository = new MysqliInvoiceRepository($link);
 
 if (!isset($_SESSION['carga_facturas'])) {
     header('Location: ../dash-invoices-upload.php');
@@ -41,13 +48,7 @@ foreach ($filas as $indice => $fila) {
         continue;
     }
 
-    $stmtCount = mysqli_prepare($link, "SELECT COUNT(*) AS total FROM facturas WHERE numero_Factura = ?");
-    mysqli_stmt_bind_param($stmtCount, "s", $fila['numero_Factura']);
-    mysqli_stmt_execute($stmtCount);
-    $existe = mysqli_stmt_get_result($stmtCount)->fetch_assoc()['total'] > 0;
-    mysqli_stmt_close($stmtCount);
-
-    if ($existe) {
+    if ($invoiceRepository->existsByNumber($fila['numero_Factura'])) {
         $rechazadas[] = [
             'numero_Factura' => $fila['numero_Factura'],
             'motivo' => 'Ya existe una factura con ese número',
@@ -55,20 +56,15 @@ foreach ($filas as $indice => $fila) {
         continue;
     }
 
-    $estado_Factura = 1;
-    $stmt = mysqli_prepare($link, "INSERT INTO facturas (id_Cliente, id_Contrato, numero_Factura, fecha_Factura, valor_Factura, estado_Factura) VALUES (?, ?, ?, ?, ?, ?)");
-    mysqli_stmt_bind_param(
-        $stmt,
-        "iissii",
-        $fila['id_Cliente'],
-        $id_Contrato,
-        $fila['numero_Factura'],
-        $fila['fecha_Factura'],
-        $fila['valor_Factura'],
-        $estado_Factura
-    );
-    mysqli_stmt_execute($stmt);
-    mysqli_stmt_close($stmt);
+    $invoiceRepository->insert(new Invoice(
+        id: null,
+        customerId: (int) $fila['id_Cliente'],
+        contractId: $id_Contrato,
+        number: $fila['numero_Factura'],
+        date: $fila['fecha_Factura'],
+        value: (int) $fila['valor_Factura'],
+        state: 1,
+    ));
 
     $cargadas++;
 }

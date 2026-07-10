@@ -1,27 +1,24 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Invoice\CreateInvoice;
+use App\Infrastructure\Persistence\MysqliInvoiceRepository;
+
 include '../layouts/config.php';
 global $link;
 
 if(isset($_POST['crear'])){
-    $id_Cliente = $_POST['id_Cliente'];
-    $id_Contrato = $_POST['id_Contrato'];
-    $numero_Factura = $_POST['numero_Factura'];
-    $fecha_Factura = $_POST['fecha_Factura'];
-    $valor_Factura = $_POST['valor_Factura'];
-    $estado_Factura = 1;
+    $id_Contrato = (int) $_POST['id_Contrato'];
 
-    $sql = "INSERT INTO facturas (id_Cliente, id_Contrato, numero_Factura, fecha_Factura, valor_Factura, estado_Factura) VALUES ($id_Cliente, $id_Contrato, '$numero_Factura', '$fecha_Factura', $valor_Factura, $estado_Factura)";
+    $useCase = new CreateInvoice(new MysqliInvoiceRepository($link));
 
-    //echo $sql;
-    //die();
-
-    $result = mysqli_query($link, $sql) or ($error = mysqli_error($link));
-
-    // Obtener el ID de la factura creada
-    $id_factura_creada = mysqli_insert_id($link);
-
-    header("Location: ../dash-invoices-detail.php?id_Factura=$id_factura_creada&id_Contrato=$id_Contrato");
+    try {
+        $id_factura_creada = $useCase->handle($_POST);
+        header("Location: ../dash-invoices-detail.php?id_Factura=$id_factura_creada&id_Contrato=$id_Contrato");
+    } catch (\mysqli_sql_exception $e) {
+        header("Location: ../index.php");
+    }
 }else{
     header("Location: ../index.php");
 }

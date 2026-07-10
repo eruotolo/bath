@@ -1,26 +1,21 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Invoice\SetInvoiceState;
+use App\Infrastructure\Persistence\MysqliInvoiceRepository;
+
 include "../layouts/config.php";
 global $link;
 
-$id_Factura = intval($_GET['id_Factura']);
+$id_Factura = (int) $_GET['id_Factura'];
 
-$sql = "UPDATE facturas SET estado_Factura = 3 WHERE id_Factura = ?";
-$stmt = mysqli_prepare($link, $sql);
-mysqli_stmt_bind_param($stmt, "i", $id_Factura);
-$ok = mysqli_stmt_execute($stmt);
-mysqli_stmt_close($stmt);
+$useCase = new SetInvoiceState(new MysqliInvoiceRepository($link));
 
-if ($ok) {
-    // Al anular la factura, se liberan los servicios asociados para que puedan volver a facturarse
-    $sqlLiberar = "DELETE FROM factura_servicio WHERE id_Factura = ?";
-    $stmtLiberar = mysqli_prepare($link, $sqlLiberar);
-    mysqli_stmt_bind_param($stmtLiberar, "i", $id_Factura);
-    mysqli_stmt_execute($stmtLiberar);
-    mysqli_stmt_close($stmtLiberar);
-
+try {
+    $useCase->handle($id_Factura, 3);
     header('Location: ../dash-invoices-list.php?status=success&msg=' . urlencode('Factura anulada correctamente'));
-} else {
+} catch (\mysqli_sql_exception $e) {
     header('Location: ../dash-invoices-list.php?status=error&msg=' . urlencode('No se pudo anular la factura'));
 }
 

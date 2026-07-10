@@ -1,8 +1,19 @@
 <?php global $link;
 include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
-<?php include('layouts/config.php'); ?>
-<?php include('layouts/helpers.php'); ?>
+
+<?php
+
+require __DIR__ . '/../vendor/autoload.php';
+
+use App\Application\Invoice\ListInvoices;
+use App\Infrastructure\Persistence\MysqliInvoiceRepository;
+
+include('layouts/config.php');
+include('layouts/helpers.php');
+
+$facturas = (new ListInvoices(new MysqliInvoiceRepository($link)))->handle();
+?>
 
 <head>
 
@@ -103,19 +114,13 @@ include 'layouts/session.php'; ?>
                                         </thead>
                                         <tbody>
                                         <?php
-                                            $query = "SELECT * FROM facturas FT
-                                                                JOIN clientes CL ON FT.id_Cliente = CL.id_Cliente
-                                                                LEFT JOIN contratos CT ON FT.id_Contrato = CT.id_Contrato
-                                                        WHERE FT.estado_Factura IN (1,2)
-                                                        ORDER BY FT.created_at DESC, FT.id_Factura DESC ";
-                                            $result_task = mysqli_query($link, $query);
-                                            while ($row = mysqli_fetch_array($result_task)){
+                                            foreach ($facturas as $row) {
                                         ?>
                                         <tr>
-                                            <td>#<?php echo $row['numero_Factura'] ?></td>
-                                            <td style="text-align: center"><?php echo $row['fecha_Factura'] ?></td>
-                                            <td><?php echo $row['nombre_Cliente'] ?></td>
-                                            <td><?php echo $row['obra_Contrato'] ?></td>
+                                            <td>#<?php echo htmlspecialchars($row['numero_Factura']) ?></td>
+                                            <td style="text-align: center"><?php echo htmlspecialchars($row['fecha_Factura']) ?></td>
+                                            <td><?php echo htmlspecialchars($row['nombre_Cliente']) ?></td>
+                                            <td><?php echo htmlspecialchars($row['obra_Contrato'] ?? '') ?></td>
                                             <td style="text-align: center"><?php echo format_clp($row['valor_Factura']) ?></td>
                                             <td style="text-align: center">
                                                 <?php

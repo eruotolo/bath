@@ -1,5 +1,11 @@
 <?php
 
+require __DIR__ . '/../../vendor/autoload.php';
+
+use App\Application\Invoice\FindInvoiceWithCustomerAndContract;
+use App\Application\Invoice\ListAssignedServices;
+use App\Infrastructure\Persistence\MysqliInvoiceRepository;
+
 global $link;
 include('../layouts/config.php');
 require_once('../assets/tcpdf/tcpdf.php');
@@ -12,34 +18,18 @@ if (!$id_Factura || !$id_Contrato) {
     exit('Parámetros inválidos.');
 }
 
-$sql = "SELECT FT.numero_Factura, FT.fecha_Factura, FT.valor_Factura,
-               CL.nombre_Cliente, CL.rut_Cliente, CL.direccion_Cliente, CL.email_Cliente, CL.telefono_Cliente,
-               CT.obra_Contrato, CT.direccion_Contrato
-        FROM facturas FT
-        JOIN clientes CL ON FT.id_Cliente = CL.id_Cliente
-        JOIN contratos CT ON CL.id_Cliente = CT.id_Cliente
-        WHERE FT.id_Factura = ? AND CT.id_Contrato = ?";
-$stmt = mysqli_prepare($link, $sql);
-mysqli_stmt_bind_param($stmt, 'ii', $id_Factura, $id_Contrato);
-mysqli_stmt_execute($stmt);
-$row = mysqli_fetch_assoc(mysqli_stmt_get_result($stmt));
+$repository = new MysqliInvoiceRepository($link);
+$row = (new FindInvoiceWithCustomerAndContract($repository))->handle($id_Factura, $id_Contrato);
 
 if (!$row) {
     http_response_code(404);
     exit('Factura no encontrada.');
 }
 
-$sql_servicios = "SELECT SR.nro_Servicio, SR.fecha_Servicio, SR.observaciones_Servicio
-                   FROM factura_servicio FS
-                   JOIN servicios SR ON FS.id_Servicio = SR.id_Servicio
-                   WHERE FS.id_Factura = ?";
-$stmt2 = mysqli_prepare($link, $sql_servicios);
-mysqli_stmt_bind_param($stmt2, 'i', $id_Factura);
-mysqli_stmt_execute($stmt2);
-$servicios = mysqli_stmt_get_result($stmt2);
+$servicios = (new ListAssignedServices($repository))->handle($id_Factura);
 
 $rows_html = '';
-while ($s = mysqli_fetch_assoc($servicios)) {
+foreach ($servicios as $s) {
     $rows_html .= '<tr>
         <td>' . htmlspecialchars($s['nro_Servicio']) . '</td>
         <td>' . date('d/m/Y', strtotime($s['fecha_Servicio'])) . '</td>
