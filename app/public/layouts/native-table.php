@@ -96,8 +96,11 @@ function table_native_open(array $opts): void {
                             <?php
                                 $align = $col['align'] ?? 'left';
                                 $alignClass = $align === 'right' ? ' text-right' : ($align === 'center' ? ' text-center' : '');
+                                $labelContent = !empty($col['html'])
+                                    ? (string) $col['label']
+                                    : htmlspecialchars((string) $col['label'], ENT_QUOTES, 'UTF-8');
                             ?>
-                            <th class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase<?php echo $alignClass; ?>"><?php echo htmlspecialchars((string) $col['label'], ENT_QUOTES, 'UTF-8'); ?></th>
+                            <th class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase<?php echo $alignClass; ?>"><?php echo $labelContent; ?></th>
                         <?php endforeach; ?>
                     </tr>
                 </thead>
