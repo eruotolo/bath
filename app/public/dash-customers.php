@@ -17,6 +17,15 @@
 
     <?php include 'layouts/head-style.php'; ?>
 
+    <style>
+        #offcanvasNewCustomer.offcanvas {
+            transition: transform .45s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+        .offcanvas-backdrop {
+            transition: opacity .45s ease;
+        }
+    </style>
+
 </head>
 
 <?php include 'layouts/body.php'; ?>
@@ -63,7 +72,7 @@
                     <div class="col-md-6">
                         <div class="d-flex flex-wrap align-items-center justify-content-end gap-2 mb-3">
                             <div>
-                                <a href="dash-customers-add.php" class="btn btn-light"><i class="bx bx-plus me-1"></i> Agregar Nuevo Cliente</a>
+                                <button type="button" class="btn btn-light" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNewCustomer" aria-controls="offcanvasNewCustomer"><i class="bx bx-plus me-1"></i> Agregar Nuevo Cliente</button>
                             </div>
                         </div>
                     </div>
@@ -103,17 +112,17 @@
                                     </div>
                                 </th>
                                 <td>
-                                    <a href="dash-customers-item.php?id_Cliente=<?php echo $row['id_Cliente'] ?>"
-                                       class="text-body"><?php echo $row['rut_Cliente'] ?></a>
+                                    <a href="dash-customers-item.php?id_Cliente=<?php echo (int)$row['id_Cliente'] ?>"
+                                       class="text-body"><?php echo htmlspecialchars($row['rut_Cliente']) ?></a>
                                 </td>
-                                <td><?php echo $row['nombre_Cliente'] ?></td>
-                                <td><?php echo $row['telefono_Cliente'] ?></td>
-                                <td><?php echo $row['email_Cliente'] ?></td>
+                                <td><?php echo htmlspecialchars($row['nombre_Cliente']) ?></td>
+                                <td><?php echo htmlspecialchars($row['telefono_Cliente']) ?></td>
+                                <td><?php echo htmlspecialchars($row['email_Cliente']) ?></td>
                                 <td>
-                                    <a href="dash-customers-item.php?id_Cliente=<?php echo $row['id_Cliente'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
+                                    <a href="dash-customers-item.php?id_Cliente=<?php echo (int)$row['id_Cliente'] ?>" class="btn btn-outline-secondary btn-sm" title="Ver">
                                         <i class="fas fas fa-eye"></i>
                                     </a>
-                                    <a href="controller/customer-inactive.php?id_Cliente=<?php echo $row['id_Cliente'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
+                                    <a href="controller/customer-inactive.php?id_Cliente=<?php echo (int)$row['id_Cliente'] ?>" class="btn btn-outline-secondary btn-sm" title="Eliminar">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
                                 </td>
@@ -122,6 +131,81 @@
                         </tbody>
                     </table>
 
+                </div>
+
+                <!-- Offcanvas: Nuevo Cliente -->
+                <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasNewCustomer" aria-labelledby="offcanvasNewCustomerLabel">
+                    <div class="offcanvas-header border-bottom">
+                        <h5 id="offcanvasNewCustomerLabel" class="offcanvas-title">Nuevo Cliente</h5>
+                        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Cerrar"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <p class="text-muted small mb-4">Los campos con <span class="text-danger">*</span> son obligatorios.</p>
+
+                        <form action="controller/customer-new.php" method="post" enctype="multipart/form-data">
+                            <div class="mb-3">
+                                <label for="oc_rut_Cliente" class="form-label">RUT del Cliente <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="oc_rut_Cliente" name="rut_Cliente" placeholder="Ingrese el Rut del cliente" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="oc_nombre_Cliente" class="form-label">Nombre del Cliente <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="oc_nombre_Cliente" name="nombre_Cliente" placeholder="Ingrese el nombre del cliente" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="oc_telefono_Cliente" class="form-label">Teléfono <span class="text-danger">*</span></label>
+                                <input type="number" class="form-control" id="oc_telefono_Cliente" name="telefono_Cliente" placeholder="Ingrese el número de teléfono" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="oc_email_Cliente" class="form-label">Email <span class="text-danger">*</span></label>
+                                <input type="email" class="form-control" id="oc_email_Cliente" name="email_Cliente" placeholder="Ingrese un correo electrónico válido" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="oc_direccion_Cliente" class="form-label">Dirección <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="oc_direccion_Cliente" name="direccion_Cliente" placeholder="Ingrese la dirección" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="oc_region_Cliente" class="form-label">Región</label>
+                                <select class="form-select" id="oc_region_Cliente" name="region_Cliente">
+                                    <option value="Ninguna" selected>Regiones</option>
+                                    <option value="Región de Arica y Parinacota">Región de Arica y Parinacota</option>
+                                    <option value="Región de Tarapacá">Región de Tarapacá</option>
+                                    <option value="Región de Antofagasta">Región de Antofagasta</option>
+                                    <option value="Región de Atacama">Región de Atacama</option>
+                                    <option value="Región de Coquimbo">Región de Coquimbo</option>
+                                    <option value="Región de Valparaíso">Región de Valparaíso</option>
+                                    <option value="Región Metropolitana">Región Metropolitana</option>
+                                    <option value="Región de O’Higgins">Región de O’Higgins</option>
+                                    <option value="Región del Maule">Región del Maule</option>
+                                    <option value="Región del Ñuble">Región del Ñuble</option>
+                                    <option value="Región del Biobío">Región del Biobío</option>
+                                    <option value="Región de La Araucanía">Región de La Araucanía</option>
+                                    <option value="Región de Los Ríos">Región de Los Ríos</option>
+                                    <option value="Región de Los Lagos">Región de Los Lagos</option>
+                                    <option value="Región de Aysén">Región de Aysén</option>
+                                    <option value="Región de Magallanes">Región de Magallanes</option>
+                                </select>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="oc_ciudad_Cliente" class="form-label">Ciudad <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="oc_ciudad_Cliente" name="ciudad_Cliente" placeholder="Ingrese la ciudad" required>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="oc_comuna_Cliente" class="form-label">Comuna <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" id="oc_comuna_Cliente" name="comuna_Cliente" placeholder="Ingrese la comuna" required>
+                            </div>
+
+                            <div class="d-grid gap-2 mt-4">
+                                <button type="submit" name="crear" class="btn btn-primary">Registrar</button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
 
             </div>

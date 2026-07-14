@@ -3,10 +3,13 @@
 session_start();
 include ('../layouts/config.php');
 
-$id_Cliente = $_POST['id_Cliente'];
+$id_Cliente = intval($_POST['id_Cliente']);
 
-$sql = "SELECT * FROM clientes WHERE id_Cliente = $id_Cliente";
-$result = mysqli_query($link, $sql);
+$sql = "SELECT * FROM clientes WHERE id_Cliente = ?";
+$stmt = mysqli_prepare($link, $sql);
+mysqli_stmt_bind_param($stmt, "i", $id_Cliente);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 if (mysqli_num_rows($result ) > 0) {
     $row = mysqli_fetch_array($result);
 

@@ -5,11 +5,13 @@ include 'layouts/session.php'; ?>
 <?php
 include('layouts/config.php');
 
-$id_Cliente = $_GET['id_Cliente'];
+$id_Cliente = intval($_GET['id_Cliente']);
 
-$query = "SELECT * FROM  clientes WHERE id_Cliente = $id_Cliente";
-
-$query_run = mysqli_query($link, $query);
+$query = "SELECT * FROM  clientes WHERE id_Cliente = ?";
+$stmt = mysqli_prepare($link, $query);
+mysqli_stmt_bind_param($stmt, "i", $id_Cliente);
+mysqli_stmt_execute($stmt);
+$query_run = mysqli_stmt_get_result($stmt);
 
 if ($query_run) {
     while ($row = mysqli_fetch_array($query_run)) {
@@ -86,35 +88,35 @@ if ($query_run) {
                                                     <tbody class="table-cliente">
                                                     <tr>
                                                         <td><b>Nombre:</b></td>
-                                                        <td><?php echo $row['nombre_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($row['nombre_Cliente']) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>RUT:</b></td>
-                                                        <td><?php echo $row['rut_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($row['rut_Cliente']) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>Email:</b></td>
-                                                        <td><?php echo $row['email_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($row['email_Cliente']) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>Teléfono:</b></td>
-                                                        <td><?php echo $row['telefono_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($row['telefono_Cliente']) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>Dirección:</b></td>
-                                                        <td><?php echo $row['direccion_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($row['direccion_Cliente']) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>Comuna:</b></td>
-                                                        <td><?php echo $row['comuna_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($row['comuna_Cliente']) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>Ciudad:</b></td>
-                                                        <td><?php echo $row['ciudad_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($row['ciudad_Cliente']) ?></td>
                                                     </tr>
                                                     <tr>
                                                         <td><b>Región:</b></td>
-                                                        <td><?php echo $row['region_Cliente'] ?></td>
+                                                        <td><?php echo htmlspecialchars($row['region_Cliente']) ?></td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -160,9 +162,9 @@ if ($query_run) {
                                                             $id_Contacto = $row['id_Contacto'];
                                                     ?>
                                                     <tr>
-                                                        <td><?php echo $row['rut_Contacto'] ?></td>
-                                                        <td><?php echo $row['nombre_Contacto'] ?> <?php echo $row['apellido_Contacto'] ?></td>
-                                                        <td><?php echo $row['telefono_Contacto'] ?></td>
+                                                        <td><?php echo htmlspecialchars($row['rut_Contacto']) ?></td>
+                                                        <td><?php echo htmlspecialchars($row['nombre_Contacto']) ?> <?php echo htmlspecialchars($row['apellido_Contacto']) ?></td>
+                                                        <td><?php echo htmlspecialchars($row['telefono_Contacto']) ?></td>
                                                         <td style="width: 100px">
 
                                                             <!-- Botón para ver el contacto -->

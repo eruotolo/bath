@@ -16,15 +16,16 @@ if (isset($_POST['crear'])){
 
     // Insertar en la tabla de clientes
 
-    $sql = "INSERT INTO clientes (rut_Cliente, nombre_Cliente, direccion_Cliente, comuna_Cliente, ciudad_Cliente, region_Cliente, telefono_Cliente, email_Cliente, estado_Cliente) VALUE ('$rut_Cliente', '$nombre_Cliente', '$direccion_Cliente', '$comuna_Cliente', '$ciudad_Cliente', '$region_Cliente', '$telefono_Cliente', '$email_Cliente', '$estado_Cliente')";
+    $sql = "INSERT INTO clientes (rut_Cliente, nombre_Cliente, direccion_Cliente, comuna_Cliente, ciudad_Cliente, region_Cliente, telefono_Cliente, email_Cliente, estado_Cliente) VALUE (?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-    //echo $sql;
-    //die();
-
-    $result = mysqli_query($link, $sql) or ($error = mysqli_error($link));
-
-    //echo $error;
-    //die();
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param(
+        $stmt, "ssssssssi",
+        $rut_Cliente, $nombre_Cliente, $direccion_Cliente, $comuna_Cliente,
+        $ciudad_Cliente, $region_Cliente, $telefono_Cliente, $email_Cliente, $estado_Cliente
+    );
+    mysqli_stmt_execute($stmt);
+    mysqli_stmt_close($stmt);
 
     header('Location: ../dash-customers.php');
 
