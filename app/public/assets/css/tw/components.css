@@ -160,18 +160,21 @@
         font-variant-numeric: tabular-nums;
     }
 
-    /* Buscador reubicado por datatable.js dentro de .table-toolbar-search */
+    /* Buscador reubicado por datatable.js dentro de .table-toolbar-search.
+       !important necesario: esta regla vive en @layer components, que en cascada
+       CSS siempre pierde contra el CSS sin capa de dataTables.bootstrap4.min.css
+       (mismo motivo que el resto de .table-card mas abajo). */
     .table-toolbar-search .dataTables_filter label {
-        display: flex; align-items: center; gap: 6px;
-        margin: 0;
-        background: rgba(248, 250, 252, 0.6);
-        border: 1px solid var(--color-slate-200, #e2e8f0);
-        border-radius: 14px;
-        padding: 8px 14px 8px 34px;
-        font-weight: 400;
-        font-size: 13px;
-        color: var(--color-slate-500, #64748b);
-        position: relative;
+        display: flex !important; align-items: center !important; gap: 6px !important;
+        margin: 0 !important;
+        background: rgba(248, 250, 252, 0.6) !important;
+        border: 1px solid var(--color-slate-200, #e2e8f0) !important;
+        border-radius: 14px !important;
+        padding: 8px 14px 8px 34px !important;
+        font-weight: 400 !important;
+        font-size: 13px !important;
+        color: var(--color-slate-500, #64748b) !important;
+        position: relative !important;
     }
     .table-toolbar-search .dataTables_filter label::before {
         content: '';
@@ -181,18 +184,18 @@
         transform: translateY(-50%);
         width: 14px;
         height: 14px;
-        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat center / contain;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat center / contain !important;
     }
     .table-toolbar-search .dataTables_filter input {
-        border: none; outline: none; background: none;
-        font-size: 13px;
-        min-width: 220px;
-        font-family: var(--font-sans);
-        color: var(--color-slate-900, #0f172a);
+        border: none !important; outline: none !important; background: none !important;
+        font-size: 13px !important;
+        min-width: 220px !important;
+        font-family: var(--font-sans) !important;
+        color: var(--color-slate-900, #0f172a) !important;
     }
     .table-toolbar-search .dataTables_filter label:focus-within {
-        border-color: var(--color-primary-600, #4f46e5);
-        box-shadow: 0 0 0 3px rgba(79, 70, 229, .15);
+        border-color: var(--color-primary-600, #4f46e5) !important;
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, .15) !important;
     }
 
     /* ===== dt-icon-btn: boton cuadrado para toolbar de export ===== */
@@ -666,6 +669,13 @@
     }
     .dropdown-menu.show { display: block; }
     .dropdown-menu-end { right: 0; left: auto; }
+
+    /* ===== Tab shell — mismo caso que .dropdown-menu: bootstrap.css proveía
+       el display toggle de .tab-pane y se retiró en Fase 9. bs-shim.js solo
+       togglea .active/.show en el pane; el display: none/block va acá. */
+    .tab-pane { display: none; }
+    .tab-pane.active,
+    .tab-pane.show { display: block; }
     .dropdown-item {
         display: block;
         text-decoration: none;

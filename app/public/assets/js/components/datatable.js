@@ -75,7 +75,11 @@ window.DataTable = (function ($) {
 
     function relocateNativeControls($el) {
         var $wrapper = $el.closest('.dataTables_wrapper');
-        var $toolbarSearch = $('.table-toolbar-search').first();
+        // Si la tabla vive dentro de un .tab-pane (varias tablas por pagina, una por tab),
+        // el buscador se reubica en el .table-toolbar-search de ese mismo pane. Si no,
+        // cae al primero de la pagina (caso de una sola tabla, comportamiento previo).
+        var $scope = $el.closest('.tab-pane');
+        var $toolbarSearch = ($scope.length ? $scope.find('.table-toolbar-search') : $('.table-toolbar-search')).first();
 
         if ($toolbarSearch.length) {
             $wrapper.find('.dataTables_filter').appendTo($toolbarSearch);
