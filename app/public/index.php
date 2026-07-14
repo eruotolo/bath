@@ -29,7 +29,8 @@ $total_servicios       = db_count($link, 'SELECT COUNT(*) FROM servicios');
 
 $banos_asignados   = db_count($link, 'SELECT COUNT(*) FROM bathrooms WHERE asignado_Bath = 1 AND estado_Bath = 1');
 $banos_disponibles = db_count($link, 'SELECT COUNT(*) FROM bathrooms WHERE asignado_Bath = 0 AND estado_Bath = 1');
-$banos_mantencion  = db_count($link, 'SELECT COUNT(*) FROM bathrooms WHERE estado_Bath = 0');
+$banos_mantencion  = db_count($link, 'SELECT COUNT(*) FROM bathrooms WHERE estado_Bath = 2');
+$banos_inactivos   = db_count($link, 'SELECT COUNT(*) FROM bathrooms WHERE estado_Bath = 0');
 
 $total_facturado = db_sum($link, 'SELECT COALESCE(SUM(valor_Factura), 0) FROM facturas WHERE estado_Factura IN (1, 2)');
 $monto_pagado    = db_sum($link, 'SELECT COALESCE(SUM(valor_Factura), 0) FROM facturas WHERE estado_Factura = 2');
@@ -240,10 +241,17 @@ function db_sparkline_svg(array $points, string $color = '#6366f1'): string {
                                 </div>
                                 <div class="flex items-center justify-between font-sans text-xs">
                                     <div class="flex items-center space-x-2">
-                                        <span class="h-2.5 w-2.5 rounded-md bg-rose-200"></span>
+                                        <span class="h-2.5 w-2.5 rounded-md bg-amber-200"></span>
                                         <span class="font-medium text-slate-600">En Mantención</span>
                                     </div>
                                     <span class="font-mono font-bold text-slate-800"><?php echo $banos_mantencion; ?> Baños</span>
+                                </div>
+                                <div class="flex items-center justify-between font-sans text-xs">
+                                    <div class="flex items-center space-x-2">
+                                        <span class="h-2.5 w-2.5 rounded-md bg-rose-200"></span>
+                                        <span class="font-medium text-slate-600">Inactivos</span>
+                                    </div>
+                                    <span class="font-mono font-bold text-slate-800"><?php echo $banos_inactivos; ?> Baños</span>
                                 </div>
                             </div>
                         </div>

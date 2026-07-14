@@ -47,4 +47,4 @@
 
 <!-- Tailwind 4 (Fase 0 plan-migracion-bootstrap-tailwind): convive con Bootstrap sin Preflight;
      utilities en layer(utilities) con important para ganar a Bootstrap por cascade layers. -->
-<link href="assets/css/tailwind.css?v=20260713-preflight" rel="stylesheet" type="text/css">
+<link href="assets/css/tailwind.css?v=20260714-choices-reskin3" rel="stylesheet" type="text/css">

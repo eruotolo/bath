@@ -24,6 +24,24 @@ interface BathroomRepositoryInterface
      */
     public function listAll(): array;
 
+    /**
+     * Listado para dash-bathrooms.php (rebranding) con obra y cliente de la asignación activa.
+     * Una fila por baño: obra_Contrato/nombre_Cliente vienen null si no está asignado a un
+     * contrato con estado_Contrato = 2.
+     * @return array<int, array{id_Bath:int, codigo_Bath:string, fechaCompra_Bath:string,
+     *     observacion_Bath:string, estado_Bath:int, asignado_Bath:int,
+     *     obra_Contrato:?string, nombre_Cliente:?string}>
+     */
+    public function listAllWithAssignment(): array;
+
+    /**
+     * Relación activa (contrato_bathroom + contrato con estado_Contrato = 2) de un baño,
+     * o null si no está asignado a ningún contrato activo. Usado para resolver id_Relacion/
+     * id_Contrato al retirar un baño desde una vista que solo conoce id_Bath.
+     * @return array{id_Relacion:int, id_Contrato:int}|null
+     */
+    public function findActiveAssignment(int $idBath): ?array;
+
     public function count(): int;
 
     public function assignToContract(int $idContrato, int $idBath): void;
