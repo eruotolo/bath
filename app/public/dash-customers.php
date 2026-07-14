@@ -222,13 +222,6 @@ function sortUrl(string $column, string $currentSort, string $currentDir): strin
                                             <td class="px-6 py-4.5 text-right">
                                                 <div class="inline-flex items-center gap-1">
                                                     <a
-                                                        href="dash-customers-item.php?id_Cliente=<?php echo (int) $customer->id; ?>"
-                                                        class="p-1.5 rounded-lg border border-slate-100 text-slate-500 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50/40 transition-all inline-flex items-center justify-center"
-                                                        title="Ver Ficha Cliente"
-                                                    >
-                                                        <i data-lucide="eye" class="w-4 h-4"></i>
-                                                    </a>
-                                                    <a
                                                         href="?action=edit&id=<?php echo (int) $customer->id; ?><?php echo baseQueryString(['page', 'action', 'id']); ?>"
                                                         class="p-1.5 rounded-lg border border-slate-100 text-slate-500 hover:text-indigo-600 hover:border-indigo-100 hover:bg-indigo-50/40 transition-all inline-flex items-center justify-center"
                                                         title="Editar Cliente"
