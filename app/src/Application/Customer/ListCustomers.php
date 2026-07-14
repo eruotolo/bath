@@ -11,11 +11,11 @@ final class ListCustomers
     /**
      * @return array{total:int, items:\App\Domain\Customer\Customer[]}
      */
-    public function handle(): array
+    public function handle(string $sortBy = 'created_at', string $sortDir = 'DESC'): array
     {
         return [
             'total' => $this->repository->count(),
-            'items' => $this->repository->listActive(),
+            'items' => $this->repository->listActive($sortBy, $sortDir),
         ];
     }
 }

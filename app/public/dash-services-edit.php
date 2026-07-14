@@ -19,196 +19,111 @@ if ($row !== null) {
     $nro_Servicio = $row['nro_Servicio'];
 ?>
 
-    <head>
-        <title>Editar Servicio | Chubby - Admin & Dashboard</title>
+<head>
+    <title>Editar Servicio | Chubby - Admin & Dashboard</title>
+    <?php include 'layouts/head.php'; ?>
+    <?php include 'layouts/head-style.php'; ?>
+</head>
 
-        <?php include 'layouts/head.php'; ?>
-        <?php include 'layouts/head-style.php'; ?>
+<?php include 'layouts/body.php'; ?>
 
-    </head>
+<div id="layout-wrapper">
+    <?php include 'layouts/menu.php'; ?>
 
-    <?php include 'layouts/body.php'; ?>
+    <div class="main-content">
+        <div class="page-content">
+            <div class="container-fluid">
 
-        <!-- Begin page -->
+                <div class="dt-page-title">
+                    <h1>Editar Servicio</h1>
+                    <ol class="dt-breadcrumb">
+                        <li><a href="dash-services.php">Servicios</a></li>
+                        <li class="active">Editar Servicio</li>
+                    </ol>
+                </div>
 
-        <div id="layout-wrapper">
-            <?php include 'layouts/menu.php'; ?>
-            <!-- Start right Content here -->
-            <div class="main-content">
-                <div class="page-content">
-                    <div class="container-fluid">
+                <div class="dt-card">
+                    <div class="dt-card-header">
+                        <h4 class="dt-card-title">Formulario de Edición del Servicio | Seguimiento</h4>
+                        <p class="dt-card-desc">Los campos con <code>*</code> son campos requeridos/obligatorios.</p>
+                    </div>
 
-                        <!-- STAR PAGE TITULO -->
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                    <h4 class="mb-sm-0 font-size-18">Item Servicio</h4>
+                    <div class="dt-card-body py-8">
+                        <h5 class="mb-6 flex items-center gap-2 font-sans text-sm font-bold text-slate-700">
+                            <i data-lucide="arrow-right" class="!h-4 !w-4 text-primary-600"></i>
+                            Ingresar datos en los campos
+                        </h5>
 
-                                    <div class="page-title-right">
-                                        <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="dash-services.php">Servicios</a></li>
-                                            <li class="breadcrumb-item active">Item Servicio</li>
-                                        </ol>
-                                    </div>
+                        <form action="controller/service-update.php" class="needs-validation mt-4 pt-2" method="post" enctype="multipart/form-data">
+                            <input class="dt-input" type="hidden" id="id_Servicio" name="id_Servicio" value="<?php echo (int) $row['id_Servicio']; ?>" readonly>
+                            <input class="dt-input" type="hidden" id="nro_Servicio" name="nro_Servicio" value="<?php echo (int) $row['nro_Servicio']; ?>" readonly>
 
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4 gap-y-0">
+                                <div class="mb-4">
+                                    <label for="id_Cliente" class="dt-label">Cliente</label>
+                                    <input class="dt-input" type="text" id="id_Cliente" name="id_Cliente" value="<?php echo htmlspecialchars($row['nombre_Cliente'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
                                 </div>
-                            </div>
-                        </div>
 
-                        <!-- STAR PAGE CONTENT -->
+                                <div class="mb-4">
+                                    <label for="id_Contrato" class="dt-label">Contrato</label>
+                                    <input class="dt-input" type="hidden" id="id_Contrato" name="id_Contrato" value="<?php echo (int) $row['id_Contrato']; ?>" readonly>
+                                    <input class="dt-input" type="text" value="<?php echo htmlspecialchars($row['obra_Contrato'], ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                                </div>
 
-                        <div class="row mt-4">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-header">
-                                        <h4 class="card-title">Formulario de Edición del Servicio | Seguimiento</h4>
-                                        <p class="card-title-desc">Los campos con <code>*</code> son campos requeridos/obligatorios.</p>
-                                    </div>
-                                    <div class="card-body">
-                                        <h5 class="font-size-14 mb-4"><i class="mdi mdi-arrow-right text-primary me-1"></i> Ingresar datos en los campos</h5>
-
-                                        <form action="controller/service-update.php" class="needs-validation mt-4 pt-2" method="post" enctype="multipart/form-data">
-                                            <input class="form-control" type="hidden" id="id_Servicio" name="id_Servicio" value="<?php echo $row['id_Servicio']?>" readonly >
-                                            <input class="form-control" type="hidden" id="nro_Servicio" name="nro_Servicio" value="<?php echo $row['nro_Servicio']?>" readonly >
-
-                                            <div class="row mb-4">
-                                                <label for="id_Cliente" class="col-sm-3 col-form-label">Cliente:</label>
-                                                <div class="col-sm-6">
-                                                    <input class="form-control" type="text" id="id_Cliente" name="id_Cliente" value="<?php echo htmlspecialchars($row['nombre_Cliente'])?>" readonly>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-4">
-                                                <label for="id_Contrato" class="col-sm-3 col-form-label">Contrato:</label>
-                                                <div class="col-sm-6">
-                                                    <input class="form-control" type="hidden" id="id_Contrato" name="id_Contrato" value="<?php echo (int) $row['id_Contrato']?>" readonly>
-                                                    <input class="form-control" type="text" value="<?php echo htmlspecialchars($row['obra_Contrato'])?>" readonly>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-4">
-                                                <label for="tipo_servicio" class="col-sm-3 col-form-label">Tipo de Servicios: *</label>
-                                                <div class="col-sm-2">
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="1" id="instalacion_Tipo" name="instalacion_Tipo" <?php echo $row['instalacion_Tipo'] == 1 ? 'checked' : ''; ?>>
-                                                        <label class="form-check-label" for="instalacion_Tipo">
-                                                            Instalación
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="1" id="reparacion_Tipo" name="reparacion_Tipo" <?php echo $row['reparacion_Tipo'] == 1 ? 'checked' : ''; ?>>
-                                                        <label class="form-check-label" for="reparacion_Tipo">
-                                                            Reparación
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="1" id="limpieza_Tipo" name="limpieza_Tipo" <?php echo $row['limpieza_Tipo'] == 1 ? 'checked' : ''; ?>>
-                                                        <label class="form-check-label" for="limpieza_Tipo">
-                                                            Limpieza
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-2">
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="1" id="desinfeccion_Tipo" name="desinfeccion_Tipo" <?php echo $row['desinfeccion_Tipo'] == 1 ? 'checked' : ''; ?>>
-                                                        <label class="form-check-label" for="desinfeccion_Tipo">
-                                                            Desinfección
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="1" id="sanitizacion_Tipo" name="sanitizacion_Tipo" <?php echo $row['sanitizacion_Tipo'] == 1 ? 'checked' : ''; ?>>
-                                                        <label class="form-check-label" for="sanitizacion_Tipo">
-                                                            Sanitización
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="1" id="higienico_Tipo" name="higienico_Tipo" <?php echo $row['higienico_Tipo'] == 1 ? 'checked' : ''; ?>>
-                                                        <label class="form-check-label" for="higienico_Tipo">
-                                                            Entrega Papel Higiénico
-                                                        </label>
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-sm-2">
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="1" id="jabon_Tipo" name="jabon_Tipo" <?php echo $row['jabon_Tipo'] == 1 ? 'checked' : ''; ?>>
-                                                        <label class="form-check-label" for="jabon_Tipo">
-                                                            Entrega de Jabón Liquido
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="1" id="otros_Tipo" name="otros_Tipo" <?php echo $row['otros_Tipo'] == 1 ? 'checked' : ''; ?>>
-                                                        <label class="form-check-label" for="otros_Tipo">
-                                                            Otros
-                                                        </label>
-                                                    </div>
-
-                                                    <div class="form-check mt-2">
-                                                        <input class="form-check-input" type="checkbox" value="1" id="retiro_Tipo" name="retiro_Tipo" <?php echo $row['retiro_Tipo'] == 1 ? 'checked' : ''; ?>>
-                                                        <label class="form-check-label" for="retiro_Tipo">
-                                                            Retiro de Baños
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-4">
-                                                <label for="fecha_Servicio" class="col-sm-3 col-form-label">Fecha del Servicio: *</label>
-                                                <div class="col-sm-6">
-                                                    <input class="form-control" type="date" id="fecha_Servicio" name="fecha_Servicio" value="<?php echo htmlspecialchars($row['fecha_Servicio'])?>">
-                                                </div>
-                                            </div>
-
-                                            <div class="row mb-4">
-                                                <label for="observaciones_Servicio" class="col-sm-3 col-form-label">Observaciones: *</label>
-                                                <div class="col-sm-6">
-                                                    <textarea class="form-control" id="observaciones_Servicio" name="observaciones_Servicio" rows="5"><?php echo htmlspecialchars($row['observaciones_Servicio'] ?? '')?></textarea>
-                                                </div>
-                                            </div>
-
-                                            <div class="row justify-content-end">
-                                                <div class="col-sm-9">
-                                                    <div>
-                                                        <button class="btn btn-primary" type="submit" style="width: 200px" name="update">Actualizar</button>
-                                                    </div>
-                                                </div>
-                                            </div>
-
-
-                                        </form>
-
+                                <div class="mb-4 md:col-span-2">
+                                    <label class="dt-label">Tipo de Servicios</label>
+                                    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
+                                        <?php
+                                        $tipos = [
+                                            'instalacion_Tipo' => 'Instalación',
+                                            'reparacion_Tipo' => 'Reparación',
+                                            'limpieza_Tipo' => 'Limpieza',
+                                            'desinfeccion_Tipo' => 'Desinfección',
+                                            'sanitizacion_Tipo' => 'Sanitización',
+                                            'higienico_Tipo' => 'Entrega Papel Higiénico',
+                                            'jabon_Tipo' => 'Entrega de Jabón Liquido',
+                                            'otros_Tipo' => 'Otros',
+                                            'retiro_Tipo' => 'Retiro de Baños',
+                                        ];
+                                        foreach ($tipos as $name => $label): ?>
+                                            <label class="flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 cursor-pointer hover:bg-slate-50 hover:border-primary-300 transition-colors">
+                                                <input type="checkbox" value="1" id="<?php echo $name; ?>" name="<?php echo $name; ?>" <?php echo isset($row[$name]) && $row[$name] == 1 ? 'checked' : ''; ?> class="!h-4 !w-4 rounded border-slate-300 text-primary-600 focus:ring-primary-500">
+                                                <span class="font-sans text-xs text-slate-700"><?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?></span>
+                                            </label>
+                                        <?php endforeach; ?>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
 
+                                <div class="mb-4">
+                                    <label for="fecha_Servicio" class="dt-label">Fecha del Servicio</label>
+                                    <input class="dt-input" type="date" id="fecha_Servicio" name="fecha_Servicio" value="<?php echo htmlspecialchars($row['fecha_Servicio'], ENT_QUOTES, 'UTF-8'); ?>">
+                                </div>
+
+                                <div class="mb-4 md:col-span-2">
+                                    <label for="observaciones_Servicio" class="dt-label">Observaciones</label>
+                                    <textarea class="dt-input" id="observaciones_Servicio" name="observaciones_Servicio" rows="4"><?php echo htmlspecialchars($row['observaciones_Servicio'] ?? '', ENT_QUOTES, 'UTF-8'); ?></textarea>
+                                </div>
+                            </div>
+
+                            <div class="mt-6 flex justify-end">
+                                <button class="dt-btn-add" type="submit" name="update">Actualizar</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
+
             </div>
         </div>
-        <!-- END layout-wrapper -->
+    </div>
+</div>
 
-        <!-- Right Sidebar -->
-        <?php include 'layouts/right-sidebar.php'; ?>
-        <!-- /Right-bar -->
+<?php include 'layouts/vendor-scripts.php'; ?>
+<script src="assets/js/app.js"></script>
 
-        <!-- JAVASCRIPT -->
-
-        <?php include 'layouts/vendor-scripts.php'; ?>
-        <script src="assets/js/app.js"></script>
-
-
-    </body>
+</body>
 
 <?php
-
 } else {
-    echo '<script>alert ("Problema al cargar el Servicio")</script>';
+    echo '<script>alert("Problema al cargar el Servicio")</script>';
 }
 ?>

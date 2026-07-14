@@ -31,204 +31,140 @@ if ($customer !== null) {
 
         <?php include 'layouts/body.php'; ?>
 
-        <!-- Begin page -->
         <div id="layout-wrapper">
 
             <?php include 'layouts/menu.php'; ?>
 
-            <!-- ============================================================== -->
-            <!-- Start right Content here -->
-            <!-- ============================================================== -->
             <div class="main-content">
 
                 <div class="page-content">
                     <div class="container-fluid">
 
-                        <!-- start page title -->
-
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                                    <h4 class="mb-sm-0 font-size-18">Perfil Cliente</h4>
-
-                                    <div class="page-title-right">
-                                        <ol class="breadcrumb m-0">
-                                            <li class="breadcrumb-item"><a href="dash-customers.php">Clientes</a></li>
-                                            <li class="breadcrumb-item active">Perfil Cliente</li>
-                                        </ol>
-                                    </div>
-
-                                </div>
-                            </div>
+                        <div class="dt-page-title">
+                            <h1>Perfil Cliente</h1>
+                            <ol class="dt-breadcrumb">
+                                <li><a href="dash-customers.php">Clientes</a></li>
+                                <li class="active">Perfil Cliente</li>
+                            </ol>
                         </div>
 
-                        <!-- end page title -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
 
-                        <div class="row">
-                            <div class="col-lg-6">
-                                <div class="card">
-                                    <div class="card-header d-flex">
-                                        <div class="col-6">
-                                            <h5 class="card-title">Información del Cliente</h5>
-                                            <p class="card-title-desc">Datos relevantes del cliente</p>
-                                        </div>
-                                        <div class="col-6">
-                                            <a href="javascript:void(0)"
-                                               class="btn btn-light float-end editarCliente"
-                                               data-bs-toggle="modal"
-                                               data-bs-target="#editarCliente"
-                                               data-id="<?php echo $customer->id?>"
-                                               title="Editar">
-                                                <i class='bx bx-edit'></i> Editar Cliente</a>
-                                        </div>
-                                        <!-- MODAL EDITA CLIENTE-->
-                                        <?php include 'layouts/modal-edit-customer.php'; ?>
+                            <!-- Informacion del Cliente -->
+                            <div class="dt-card">
+                                <div class="dt-card-header flex items-start justify-between gap-4">
+                                    <div>
+                                        <h5 class="dt-card-title">Información del Cliente</h5>
+                                        <p class="dt-card-desc">Datos relevantes del cliente</p>
+                                    </div>
+                                    <a href="javascript:void(0)"
+                                       class="dt-btn-secondary"
+                                       data-bs-toggle="modal"
+                                       data-bs-target="#editarCliente"
+                                       data-id="<?php echo (int) $customer->id; ?>"
+                                       title="Editar">
+                                        <i data-lucide="square-pen" class="!mr-1.5 !h-3.5 !w-3.5"></i> Editar Cliente
+                                    </a>
+                                </div>
+                                <?php include 'layouts/modal-edit-customer.php'; ?>
 
-                                    </div>
-                                    <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <table>
-                                                    <tbody class="table-cliente">
-                                                    <tr>
-                                                        <td><b>Nombre:</b></td>
-                                                        <td><?php echo htmlspecialchars($customer->name) ?></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><b>RUT:</b></td>
-                                                        <td><?php echo htmlspecialchars($customer->rut) ?></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><b>Email:</b></td>
-                                                        <td><?php echo htmlspecialchars($customer->email) ?></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><b>Teléfono:</b></td>
-                                                        <td><?php echo htmlspecialchars($customer->phone) ?></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><b>Dirección:</b></td>
-                                                        <td><?php echo htmlspecialchars($customer->address) ?></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><b>Comuna:</b></td>
-                                                        <td><?php echo htmlspecialchars($customer->commune) ?></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><b>Ciudad:</b></td>
-                                                        <td><?php echo htmlspecialchars($customer->city) ?></td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td><b>Región:</b></td>
-                                                        <td><?php echo htmlspecialchars($customer->region) ?></td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div class="dt-card-body py-6">
+                                    <dl class="grid grid-cols-[120px_1fr] gap-y-2 text-[13px]">
+                                        <dt class="font-bold text-slate-500">Nombre:</dt>
+                                        <dd class="font-sans text-slate-900 m-0"><?php echo htmlspecialchars($customer->name, ENT_QUOTES, 'UTF-8'); ?></dd>
+                                        <dt class="font-bold text-slate-500">RUT:</dt>
+                                        <dd class="font-mono text-slate-700 m-0"><?php echo htmlspecialchars($customer->rut, ENT_QUOTES, 'UTF-8'); ?></dd>
+                                        <dt class="font-bold text-slate-500">Email:</dt>
+                                        <dd class="font-sans text-slate-900 m-0"><?php echo htmlspecialchars($customer->email, ENT_QUOTES, 'UTF-8'); ?></dd>
+                                        <dt class="font-bold text-slate-500">Teléfono:</dt>
+                                        <dd class="font-sans text-slate-900 m-0"><?php echo htmlspecialchars($customer->phone, ENT_QUOTES, 'UTF-8'); ?></dd>
+                                        <dt class="font-bold text-slate-500">Dirección:</dt>
+                                        <dd class="font-sans text-slate-900 m-0"><?php echo htmlspecialchars($customer->address, ENT_QUOTES, 'UTF-8'); ?></dd>
+                                        <dt class="font-bold text-slate-500">Comuna:</dt>
+                                        <dd class="font-sans text-slate-900 m-0"><?php echo htmlspecialchars($customer->commune, ENT_QUOTES, 'UTF-8'); ?></dd>
+                                        <dt class="font-bold text-slate-500">Ciudad:</dt>
+                                        <dd class="font-sans text-slate-900 m-0"><?php echo htmlspecialchars($customer->city, ENT_QUOTES, 'UTF-8'); ?></dd>
+                                        <dt class="font-bold text-slate-500">Región:</dt>
+                                        <dd class="font-sans text-slate-900 m-0"><?php echo htmlspecialchars($customer->region, ENT_QUOTES, 'UTF-8'); ?></dd>
+                                    </dl>
                                 </div>
                             </div>
 
-                            <div class="col-lg-6">
-                                <div class="card">
-                                    <div class="card-header d-flex">
-                                        <div class="col-6">
-                                            <h5 class="card-title">Contactos del Cliente</h5>
-                                            <p class="card-title-desc">Contactos relacionados al cliente</p>
-                                        </div>
-                                        <div class="col-6 ">
-                                            <a href="#" data-bs-toggle="modal" data-bs-target="#nuevoContacto"
-                                               data-bs-whatever="@fat" class="btn btn-light float-end"><i class="bx bx-plus me-1"></i> Agregar Nuevo Contacto</a>
-                                        </div>
-                                        <!-- MODAL NUEVO CONTACTO-->
-                                        <?php include 'layouts/modal-nuevo-contacto.php'; ?>
-
+                            <!-- Contactos del Cliente -->
+                            <div class="dt-card">
+                                <div class="dt-card-header flex items-start justify-between gap-4">
+                                    <div>
+                                        <h5 class="dt-card-title">Contactos del Cliente</h5>
+                                        <p class="dt-card-desc">Contactos relacionados al cliente</p>
                                     </div>
+                                    <a href="#" data-bs-toggle="modal" data-bs-target="#nuevoContacto"
+                                       class="dt-btn-secondary">
+                                        <i data-lucide="plus" class="!mr-1.5 !h-3.5 !w-3.5"></i> Agregar Nuevo Contacto
+                                    </a>
+                                </div>
+                                <?php include 'layouts/modal-nuevo-contacto.php'; ?>
 
-                                    <div class="card-body">
-                                        <div class="row">
-
-                                            <table class="table table-nowrap align-middle">
-                                                <thead>
+                                <div class="dt-card-body p-0">
+                                    <?php if (empty($contactos)): ?>
+                                        <p class="m-0 p-6 text-center text-sm text-slate-500">Sin contactos registrados.</p>
+                                    <?php else: ?>
+                                        <table class="w-full border-collapse text-left">
+                                            <thead>
                                                 <tr>
-                                                    <th>RUT</th>
-                                                    <th>Nombre</th>
-                                                    <th>Teléfono</th>
-                                                    <th>Acciones</th>
+                                                    <th class="border-b border-slate-100 px-6 py-4 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">RUT</th>
+                                                    <th class="border-b border-slate-100 px-6 py-4 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">Nombre</th>
+                                                    <th class="border-b border-slate-100 px-6 py-4 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">Teléfono</th>
+                                                    <th class="border-b border-slate-100 px-6 py-4 font-mono text-[10px] font-bold uppercase tracking-wider text-slate-400">Acciones</th>
                                                 </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <?php
-                                                        foreach ($contactos as $contacto) {
-                                                    ?>
+                                            </thead>
+                                            <tbody>
+                                                <?php foreach ($contactos as $contacto): ?>
                                                     <tr>
-                                                        <td><?php echo htmlspecialchars($contacto->rut) ?></td>
-                                                        <td><?php echo htmlspecialchars($contacto->name) ?> <?php echo htmlspecialchars($contacto->lastname) ?></td>
-                                                        <td><?php echo htmlspecialchars($contacto->phone) ?></td>
-                                                        <td style="width: 100px">
-
-                                                            <!-- Botón para ver el contacto -->
-                                                            <a href="javascript:void(0)"
-                                                               class="btn btn-outline-secondary btn-sm view"
-                                                               data-bs-toggle="modal"
-                                                               data-bs-target="#verContacto"
-                                                               data-id="<?php echo $contacto->id?>"
-                                                               title="Ver">
-                                                                <i class="fas fas fa-eye"></i>
-                                                            </a>
-
-                                                            <!-- Botón para editar el contacto -->
-                                                            <a href="javascript:void(0)"
-                                                               class="btn btn-outline-secondary btn-sm editar"
-                                                               data-bs-toggle="modal"
-                                                               data-bs-target="#editarContacto"
-                                                               data-id="<?php echo $contacto->id?>"
-                                                               title="Editar">
-                                                                <i class="fas fa-pencil-alt"></i>
-                                                            </a>
-
-                                                            <!-- Botón para eliminar el contacto -->
-                                                            <a href="controller/contact-remove.php?id_Contacto=<?php echo $contacto->id ?>&id_Cliente=<?php echo $contacto->customerId ?>"
-                                                               class="btn btn-outline-secondary btn-sm delete-contacto" title="Eliminar">
-                                                                <i class="fas fa-trash-alt"></i>
-                                                            </a>
-
+                                                        <td class="border-b border-slate-100 px-6 py-4 font-mono text-xs text-slate-700"><?php echo htmlspecialchars($contacto->rut, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                        <td class="border-b border-slate-100 px-6 py-4 font-sans text-sm font-bold text-slate-900"><?php echo htmlspecialchars($contacto->name, ENT_QUOTES, 'UTF-8'); ?> <?php echo htmlspecialchars($contacto->lastname, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                        <td class="border-b border-slate-100 px-6 py-4 font-sans text-sm text-slate-700"><?php echo htmlspecialchars($contacto->phone, ENT_QUOTES, 'UTF-8'); ?></td>
+                                                        <td class="border-b border-slate-100 px-6 py-4" style="width: 100px">
+                                                            <div class="flex items-center gap-1">
+                                                                <a href="javascript:void(0)"
+                                                                   class="dt-cell-action view"
+                                                                   data-bs-toggle="modal"
+                                                                   data-bs-target="#verContacto"
+                                                                   data-id="<?php echo (int) $contacto->id; ?>"
+                                                                   title="Ver">
+                                                                    <i data-lucide="eye"></i>
+                                                                </a>
+                                                                <a href="javascript:void(0)"
+                                                                   class="dt-cell-action editar"
+                                                                   data-bs-toggle="modal"
+                                                                   data-bs-target="#editarContacto"
+                                                                   data-id="<?php echo (int) $contacto->id; ?>"
+                                                                   title="Editar">
+                                                                    <i data-lucide="square-pen"></i>
+                                                                </a>
+                                                                <a href="controller/contact-remove.php?id_Contacto=<?php echo (int) $contacto->id; ?>&id_Cliente=<?php echo (int) $contacto->customerId; ?>"
+                                                                   class="dt-cell-action delete-contacto" title="Eliminar">
+                                                                    <i data-lucide="trash-2"></i>
+                                                                </a>
+                                                            </div>
                                                         </td>
                                                     </tr>
-                                                    <?php
-                                                        }
-                                                    ?>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
+                                                <?php endforeach; ?>
+                                            </tbody>
+                                        </table>
+                                    <?php endif; ?>
                                 </div>
                             </div>
+
                         </div>
 
-                    </div> <!-- container-fluid -->
+                    </div>
                 </div>
-                <!-- End Page-content -->
 
-                <?php include 'layouts/footer.php'; ?>
             </div>
-            <!-- end main content-->
-
         </div>
-        <!-- END layout-wrapper -->
-
-
-        <!-- Right Sidebar -->
-        <?php include 'layouts/right-sidebar.php'; ?>
-        <!-- /Right-bar -->
-
-        <!-- MODAL AGREGAR NUEVO CONTACTO -->
 
         <?php include 'layouts/modal-ver-contacto.php'; ?>
         <?php include 'layouts/modal-editar-contacto.php'; ?>
-
-        <!-- JAVASCRIPT -->
 
         <?php include 'layouts/vendor-scripts.php'; ?>
         <script src="assets/js/app.js"></script>
@@ -288,6 +224,6 @@ if ($customer !== null) {
         </html>
         <?php
 } else {
-    echo '<script>alert ("Problema al cargar el cliente")</script>';
+    echo '<script>alert("Problema al cargar el cliente")</script>';
 }
 ?>

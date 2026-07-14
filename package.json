@@ -1,0 +1,17 @@
+{
+    "name": "php-bathroom-tailwind",
+    "private": true,
+    "version": "0.0.0",
+    "description": "Build pipeline para TailwindCSS 4 en app/public (plan-migracion-bootstrap-tailwind, Fase 0)",
+    "scripts": {
+        "tw:watch": "tailwindcss -i ./app/public/assets/css/tw/main.css -o ./app/public/assets/css/tailwind.css --watch",
+        "tw:build": "tailwindcss -i ./app/public/assets/css/tw/main.css -o ./app/public/assets/css/tailwind.css --minify"
+    },
+    "devDependencies": {
+        "@tailwindcss/cli": "^4.3.0",
+        "tailwindcss": "^4.3.0"
+    },
+    "engines": {
+        "pnpm": ">=8"
+    }
+}

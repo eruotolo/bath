@@ -1,0 +1,36 @@
+/*
+ * Design tokens — Fase 0.
+ *
+ * Origen:
+ *   - rebranding/src/index.css (@theme fuentes: Inter, Outfit, JetBrains Mono)
+ *   - app/public/assets/css/style.css (tokens semánticos teal: --color-primary, etc.
+ *     sobreviven ahí hasta Fase 9; acá se monta la paleta del rebrand).
+ *
+ * Convergencia: la paleta definitiva se ajusta en fases siguientes a medida que se
+ * traduce cada vista, tomando como base lo definido en rebranding/.
+ * --color-primary actual: indigo-600 (dirección declarada del rebranding).
+ * El teal #2D5C6C permanece en style.css y se sigue usando en vistas no migradas.
+ *
+ * Para agregar/escalar colores mientras se traduce una vista, copiar bloque de
+ * rebranding/ (los componentes TSX suelen usar hexes directos de la escala indigo/slate).
+ */
+@theme {
+    --color-primary: #4f46e5;
+    --color-primary-50: #eef2ff;
+    --color-primary-100: #e0e7ff;
+    --color-primary-200: #c7d2fe;
+    --color-primary-300: #a5b4fc;
+    --color-primary-400: #818cf8;
+    --color-primary-500: #6366f1;
+    --color-primary-600: #4f46e5;
+    --color-primary-700: #4338ca;
+    --color-primary-800: #3730a3;
+    --color-primary-900: #312e81;
+
+    --font-sans: "Inter", ui-sans-serif, system-ui, -apple-system, sans-serif;
+    --font-display: "Outfit", "Inter", ui-sans-serif, system-ui, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+
+    --radius-card: 24px;
+    --radius-control: 8px;
+}

@@ -1,0 +1,5 @@
+/* Reglas globales para tablas — override sobre app.min.css */
+
+.table {
+    font-size: 12px;
+}

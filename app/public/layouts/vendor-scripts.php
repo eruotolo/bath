@@ -1,12 +1,13 @@
 <!-- JAVASCRIPT -->
 <script src="assets/libs/jquery/jquery.min.js"></script>
-<script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
-<script src="assets/libs/metismenu/metisMenu.min.js"></script>
-<script src="assets/libs/simplebar/simplebar.min.js"></script>
-<script src="assets/libs/node-waves/waves.min.js"></script>
-<script src="assets/libs/feather-icons/feather.min.js"></script>
-<!-- pace js -->
-<script src="assets/libs/pace-js/pace.min.js"></script>
+<!-- Bootstrap JS (modal/dropdown/tab) reemplazado por bs-shim.js despues de Fase 8
+     del plan-migracion-bootstrap-tailwind. Mantenemos Bootstrap CSS porque
+     sus clases estructurales (.modal, .dropdown-menu, .nav-tabs) se usan
+     hasta Fase 9. metismenu/simplebar/node-waves/feather-icons/pace: legacy,
+     el sidebar rebrand usa su propio sidebar.js + Lucide, sin ellos. -->
+<script src="assets/js/components/bs-shim.js"></script>
+<!-- sidebar rebranding — iconos Lucide (reemplazo de Feather para el sidebar nuevo) -->
+<script src="assets/libs/lucide/lucide.min.js"></script>
 
 <!-- feedback / validación (Sprint 1 plan-mejoras-frontend) -->
 <script src="assets/libs/sweetalert2/sweetalert2.min.js"></script>
@@ -32,3 +33,6 @@
 <!-- preview de PDF (facturas/certificados) (Sprint 4 plan-mejoras-frontend) -->
 <script src="assets/libs/glightbox/js/glightbox.min.js"></script>
 <script src="assets/js/components/lightbox-preview.js"></script>
+
+<!-- sidebar rebranding — toggle + init Lucide -->
+<script src="assets/js/components/sidebar.js"></script>

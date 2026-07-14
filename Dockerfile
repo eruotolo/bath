@@ -1,6 +1,6 @@
 FROM composer:2 AS composer
 
-FROM php:8.1-fpm-alpine3.18
+FROM php:8.5-fpm-alpine3.21
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 

@@ -2,47 +2,22 @@
 <?php include 'layouts/head-main.php'; ?>
 <?php include('layouts/config.php'); ?>
 
-
-
 <head>
-
     <title>Baños & Contratos | Blanco Servicios - Admin & Dashboard</title>
-
     <?php include 'layouts/head.php'; ?>
-
-    <!-- DataTables -->
     <link href="assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
-
-    <!-- Responsive datatable examples -->
-    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet"
-          type="text/css"/>
-
+    <link href="assets/libs/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css" rel="stylesheet" type="text/css"/>
     <?php include 'layouts/head-style.php'; ?>
-
 </head>
 
 <?php include 'layouts/body.php'; ?>
 
-<!-- Begin page -->
 <div id="layout-wrapper">
-
     <?php include 'layouts/menu.php'; ?>
 
-    <!-- ============================================================== -->
-    <!-- Start right Content here -->
-    <!-- ============================================================== -->
     <div class="main-content">
         <div class="page-content">
             <div class="container-fluid">
-                <!-- start page title -->
-
-                <div class="row">
-                    <div class="col-12">
-                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0 font-size-18">Baños & Contratos</h4>
-                        </div>
-                    </div>
-                </div>
 
                 <?php
                     $query_contratos_activos = "SELECT BT.codigo_Bath, CT.fechaInicio_Contrato, CT.estado_Contrato,
@@ -72,34 +47,28 @@
                     $total_banos_disponibles = mysqli_num_rows($result_banos_disponibles);
                 ?>
 
-                <div class="card">
-                    <div class="card-body">
+                <div class="space-y-4">
+                    <ul class="flex gap-2 border-b border-slate-200" role="tablist">
+                        <li>
+                            <button type="button" class="flex items-center gap-2 border-b-2 border-primary-600 px-4 py-3 font-sans text-sm font-semibold text-primary-600" data-bs-toggle="tab" data-bs-target="#tab-contratos-activos">
+                                Todos los contratos activos
+                                <span class="rounded-full bg-primary-100 px-2 py-0.5 font-mono text-[10px] font-bold text-primary-700"><?php echo (int) $total_contratos_activos; ?></span>
+                            </button>
+                        </li>
+                        <li>
+                            <button type="button" class="flex items-center gap-2 border-b-2 border-transparent px-4 py-3 font-sans text-sm font-semibold text-slate-500 transition-colors hover:text-slate-700" data-bs-toggle="tab" data-bs-target="#tab-banos-disponibles">
+                                Todos los baños disponibles
+                                <span class="rounded-full bg-slate-100 px-2 py-0.5 font-mono text-[10px] font-bold text-slate-700"><?php echo (int) $total_banos_disponibles; ?></span>
+                            </button>
+                        </li>
+                    </ul>
 
-                        <ul class="nav nav-tabs nav-tabs-custom" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#tab-contratos-activos" role="tab">
-                                    Todos los contratos activos
-                                    <span class="badge bg-primary rounded-pill ms-1"><?php echo $total_contratos_activos ?></span>
-                                </a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" data-bs-toggle="tab" href="#tab-banos-disponibles" role="tab">
-                                    Todos los baños disponibles
-                                    <span class="badge bg-primary rounded-pill ms-1"><?php echo $total_banos_disponibles ?></span>
-                                </a>
-                            </li>
-                        </ul>
-
-                        <div class="tab-content pt-4">
-
-                            <!-- Tab: Todos los contratos activos -->
-                            <div class="tab-pane active" id="tab-contratos-activos" role="tabpanel">
-                                <p class="text-muted mb-3">Cantidad de contratos activos: <strong><?php echo $total_contratos_activos ?></strong></p>
-                                <div class="table-responsive mb-4">
-                                    <table id="datatable-contratos-activos"
-                                           class="table align-middle datatable dt-responsive table-check nowrap w-100"
-                                           style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
-                                        <thead>
+                    <div class="tab-content pt-4">
+                        <div class="tab-pane active" id="tab-contratos-activos" role="tabpanel">
+                            <p class="mb-3 text-sm text-slate-500">Cantidad de contratos activos: <strong class="font-bold text-slate-700"><?php echo (int) $total_contratos_activos; ?></strong></p>
+                            <div class="table-card mb-4 overflow-hidden">
+                                <table id="datatable-contratos-activos" class="table align-middle datatable dt-responsive nowrap w-100">
+                                    <thead>
                                         <tr>
                                             <th scope="col">Código de Baño</th>
                                             <th scope="col">Fecha de Inicio de Contrato</th>
@@ -108,89 +77,62 @@
                                             <th scope="col">Nombre de la Obra</th>
                                             <th scope="col">Nombre del Cliente</th>
                                         </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                            $result_task = $result_contratos_activos;
-                                            while ($row = mysqli_fetch_array($result_task)) {
-                                        ?>
+                                    </thead>
+                                    <tbody>
+                                        <?php while ($row = mysqli_fetch_array($result_contratos_activos)): ?>
                                             <tr>
-                                                <td><?php echo htmlspecialchars($row['codigo_Bath']) ?></td>
-                                                <td><?php echo htmlspecialchars($row['fechaInicio_Contrato']) ?></td>
-                                                <td><div class="badge item-activo">Activo</div></td>
-                                                <td><div class="badge item-activo">Asignado</div></td>
-                                                <td><?php echo htmlspecialchars($row['obra_Contrato']) ?></td>
-                                                <td><?php echo htmlspecialchars($row['nombre_Cliente']) ?></td>
+                                                <td class="font-mono text-xs font-semibold text-slate-700"><?php echo htmlspecialchars($row['codigo_Bath'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($row['fechaInicio_Contrato'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><span class="badge-status is-success">Activo</span></td>
+                                                <td><span class="badge-status is-success">Asignado</span></td>
+                                                <td><?php echo htmlspecialchars($row['obra_Contrato'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($row['nombre_Cliente'], ENT_QUOTES, 'UTF-8'); ?></td>
                                             </tr>
-                                        <?php } ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        <?php endwhile; ?>
+                                    </tbody>
+                                </table>
                             </div>
+                        </div>
 
-                            <!-- Tab: Todos los baños disponibles -->
-                            <div class="tab-pane" id="tab-banos-disponibles" role="tabpanel">
-                                <p class="text-muted mb-3">Cantidad de baños disponibles: <strong><?php echo $total_banos_disponibles ?></strong></p>
-                                <div class="table-responsive mb-4">
-                                    <table id="datatable-banos-disponibles"
-                                           class="table align-middle datatable dt-responsive table-check nowrap w-100"
-                                           style="border-collapse: collapse; border-spacing: 0 8px; width: 100%;">
-                                        <thead>
+                        <div class="tab-pane" id="tab-banos-disponibles" role="tabpanel">
+                            <p class="mb-3 text-sm text-slate-500">Cantidad de baños disponibles: <strong class="font-bold text-slate-700"><?php echo (int) $total_banos_disponibles; ?></strong></p>
+                            <div class="table-card mb-4 overflow-hidden">
+                                <table id="datatable-banos-disponibles" class="table align-middle datatable dt-responsive nowrap w-100">
+                                    <thead>
                                         <tr>
                                             <th scope="col">Código del Baño</th>
                                             <th scope="col">Fecha de Compra</th>
                                             <th scope="col">Estado</th>
                                         </tr>
-                                        </thead>
-                                        <tbody>
-                                        <?php
-                                            $result_task = $result_banos_disponibles;
-                                            while ($row = mysqli_fetch_array($result_task)) {
-                                        ?>
+                                    </thead>
+                                    <tbody>
+                                        <?php while ($row = mysqli_fetch_array($result_banos_disponibles)): ?>
                                             <tr>
-                                                <td><?php echo htmlspecialchars($row['codigo_Bath']) ?></td>
-                                                <td><?php echo htmlspecialchars($row['fechaCompra_Bath']) ?></td>
-                                                <td><div class="badge item-disponible">Disponible</div></td>
+                                                <td class="font-mono text-xs font-semibold text-slate-700"><?php echo htmlspecialchars($row['codigo_Bath'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><?php echo htmlspecialchars($row['fechaCompra_Bath'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                                <td><span class="badge-status is-info">Disponible</span></td>
                                             </tr>
-                                        <?php } ?>
-                                        </tbody>
-                                    </table>
-                                </div>
+                                        <?php endwhile; ?>
+                                    </tbody>
+                                </table>
                             </div>
-
                         </div>
-
                     </div>
                 </div>
 
             </div>
-
         </div>
-        <?php include 'layouts/footer.php'; ?>
     </div>
-    <!-- end main content-->
-
 </div>
-<!-- END layout-wrapper -->
-
-
-<!-- Right Sidebar -->
-<?php include 'layouts/right-sidebar.php'; ?>
-<!-- /Right-bar -->
-
-<!-- JAVASCRIPT -->
 
 <?php include 'layouts/vendor-scripts.php'; ?>
 
-<!-- Required datatable js -->
 <script src="assets/libs/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="assets/libs/datatables.net-bs4/js/dataTables.bootstrap4.min.js"></script>
-<!-- Responsive examples -->
 <script src="assets/libs/datatables.net-responsive/js/dataTables.responsive.min.js"></script>
 <script src="assets/libs/datatables.net-responsive-bs4/js/responsive.bootstrap4.min.js"></script>
 
 <script src="assets/js/app.js"></script>
-
 <script>
     $(document).ready(function () {
         var dtLanguage = {
@@ -212,20 +154,16 @@
 
         $('#datatable-contratos-activos').DataTable({
             lengthMenu: [[50, 100, -1], [50, 100, 'All']],
-            order: [[0, 'asc']], // Ordenar por Código de Baño
+            order: [[0, 'asc']],
             language: dtLanguage,
         });
-
         $('#datatable-banos-disponibles').DataTable({
             lengthMenu: [[50, 100, -1], [50, 100, 'All']],
-            order: [[0, 'asc']], // Ordenar por Código de Baño
+            order: [[0, 'asc']],
             language: dtLanguage,
         });
-
-        $('.dataTables_length select').addClass('form-select form-select-sm');
     });
 </script>
 
 </body>
-
 </html>

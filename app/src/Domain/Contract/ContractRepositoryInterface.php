@@ -26,4 +26,9 @@ interface ContractRepositoryInterface
      * @return array<int, array<string, mixed>>
      */
     public function listWithCustomerName(?int $state): array;
+
+    /**
+     * @return Contract[] Contracts whose fechaFin_Contrato falls within the next $days days.
+     */
+    public function findExpiringSoon(int $days = 7): array;
 }

@@ -1,0 +1,48 @@
+@import "./theme.css";
+@import "./layout.css";
+@import "./components.css";
+
+@layer theme, base, components, utilities;
+
+@import "tailwindcss/theme.css" layer(theme);
+@import "tailwindcss/preflight.css" layer(base);
+@import "tailwindcss/utilities.css" layer(utilities) important;
+
+/* =============================================================================
+   Tailwind 4 - Fase 9 (post-con-vivencia Bootstrap)
+
+   Preflight ACTIVADO (import tailwindcss/preflight.css en layer(base)):
+   el reset Tailwind resetea defaults globales del navegador que Bootstrap Reboot
+   solia tapar:
+     - ul/ol: list-style: none (sin dots en <ul> del sidebar/dropdowns/modal body)
+     - a: text-decoration: none (sin underline en <a> del sidebar/header)
+     - h1-h6: font-size/font-weight heredados (sizing explicito en cada vista)
+     - button: border/background transparent
+     - body: margin 0, line-height inherit
+     - y resto del reset oficial de Tailwind 4
+
+   Bootstrap 5 CSS (bootstrap.css + app.css) ya fue retirado del head; sus
+   clases estructurales (.modal, .dropdown-menu, .nav-tabs) sobreviven como
+   hooks de estilo y conviven con Preflight sin conflicto.
+
+   Flag "important" en layer(utilities) SE MANTIENE: SweetAlert2, Choices,
+   Flatpickr y Plyr definen clases que viven en archivos sin layer; con
+   important activo, las utilities de Tailwind ganan a esas libs a igualdad
+   de specificity. Re-evaluacion en una fase posterior.
+
+   Regla de migracion (cerrada en Fase 9): una vista o es Bootstrap o es
+   Tailwind. Nunca mezclar dentro del mismo bloque de markup. Unidad minima
+   de migracion = vista completa (ya migradas todas las activas).
+
+   Tree-shaking: no se aplica al theme default de Tailwind, por lo que el
+   output minificado se mantiene en ~80-100K. Optimizacion futura con
+   --color-*: initial + escala propia.
+   ============================================================================= */
+
+@source "../../**/*.php";
+@source "../../**/*.js";
+@source not "../../archive";
+@source not "../../template";
+@source not "../../vendor";
+@source not "../../assets/tcpdf";
+@source not "../../assets/libs";

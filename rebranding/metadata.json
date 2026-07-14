@@ -1,0 +1,6 @@
+{
+  "name": "Blanco Servicios - Rebranding & UX",
+  "description": "Una propuesta de rebranding y rediseño de experiencia de usuario (UX/UI) moderna, intuitiva e interactiva para Blanco Servicios, optimizando la gestión de servicios sanitarios.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

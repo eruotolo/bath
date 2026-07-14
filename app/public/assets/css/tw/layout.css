@@ -1,0 +1,73 @@
+/*
+ * Reglas no-utilities para Fase 2.
+ *
+ * Tailwind emite utilities que viven en layer(utilities) y, durante la convivencia,
+ * pisa a Bootstrap con `!important`. Aqui viven las reglas que NO encajan como
+ * utilities: animaciones keyframes, estados JS-triggered (is-open/is-visible),
+ * y reglas estructurales (`#layout-wrapper .main-content` margen del sidebar).
+ *
+ * Estas reglas siguen viviendo en vanilla CSS dentro de un archivo importado por
+ * main.css. Migracion a @layer base o @theme se re-evalua en Fase 9 cuando
+ * bootstrap.css salga del head (Preflight ya activa podra manejarlas).
+ */
+
+/* ===== Animaciones: mantienen el pulso del item activo del sidebar y del header ===== */
+@keyframes sb-pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.4; }
+}
+
+@keyframes hdr-pulse {
+    0%, 100% { opacity: 1; }
+    50%      { opacity: 0.4; }
+}
+
+.sb-nav-dot {
+    animation: sb-pulse 2s ease-in-out infinite;
+}
+
+.hdr-status-dot {
+    animation: hdr-pulse 2s ease-in-out infinite;
+}
+
+/* ===== Sidebar estados JS-triggered =====
+   Tailwind no puede expresar "estado que se activa via JS" sin variantes
+   (data-open:true -> translate-x-0). Mantenemos el patron classList de
+   sidebar.js hasta Fase 8 (donde se reescribe el JS del sidebar). */
+#sb-sidebar.is-open {
+    transform: translateX(0);
+}
+
+#sb-backdrop.is-visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+/* ===== Layout: main-content margen del sidebar en desktop =====
+   sidebar.css traducía `.sb-sidebar { width: 288px }` + `.main-content { margin-left: 288px; }`.
+   Equivalente en Tailwind puro: <div class="main-content lg:ml-72"> en cada vista. Eso
+   implica editar las 30 vistas; mantenemos esta regla hasta migrar las vistas en Fase 4. */
+@media (min-width: 992px) {
+    .main-content {
+        margin-left: 18rem;
+    }
+}
+
+/* ===== Header margen del sidebar en desktop ===== */
+@media (min-width: 992px) {
+    .hdr-header {
+        margin-left: 18rem;
+    }
+}
+
+/* ===== App Stray: rule de style.css que sigue aplicando al layout global =====
+   El sidebar rebranding fundo .logo-txt y el color del #sidebar-menu:hover
+   para que el area de cabecera se vea corporativa. Se preserva para no romper
+   los lugares donde todavia no llego la migracion (auth-*, header logo, etc.). */
+.logo-txt {
+    color: var(--color-primary);
+}
+
+#sidebar-menu ul li a:hover {
+    color: var(--color-primary-700);
+}

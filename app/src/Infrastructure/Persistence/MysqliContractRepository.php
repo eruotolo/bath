@@ -124,6 +124,23 @@ final class MysqliContractRepository implements ContractRepositoryInterface
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function findExpiringSoon(int $days = 7): array
+    {
+        $today = date('Y-m-d');
+        $threshold = date('Y-m-d', strtotime("+{$days} days"));
+
+        $stmt = $this->connection->prepare(
+            'SELECT * FROM contratos WHERE fechaFin_Contrato BETWEEN ? AND ? ORDER BY fechaFin_Contrato ASC'
+        );
+        $stmt->bind_param('ss', $today, $threshold);
+        $stmt->execute();
+
+        return array_map(
+            fn(array $row) => $this->hydrate($row),
+            $stmt->get_result()->fetch_all(MYSQLI_ASSOC)
+        );
+    }
+
     private function hydrate(array $row): Contract
     {
         return new Contract(

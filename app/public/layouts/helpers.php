@@ -9,6 +9,40 @@ function normalizar_rut($rut) {
     return preg_replace('/[^0-9K]/', '', $rut);
 }
 
+/**
+ * Valida un RUT chileno con dígito verificador (módulo 11).
+ * Acepta formatos "12345678-9", "12.345.678-9", "123456789".
+ * Devuelve true solo si el cuerpo coincide con el DV calculado.
+ */
+function validar_rut_modulo11($rut) {
+    $limpio = normalizar_rut($rut);
+    if (strlen($limpio) < 2) {
+        return false;
+    }
+
+    $cuerpo = substr($limpio, 0, -1);
+    $dv = substr($limpio, -1);
+    if (!ctype_digit($cuerpo)) {
+        return false;
+    }
+
+    $factor = 2;
+    $suma = 0;
+    for ($i = strlen($cuerpo) - 1; $i >= 0; $i--) {
+        $suma += (int) $cuerpo[$i] * $factor;
+        $factor = $factor === 7 ? 2 : $factor + 1;
+    }
+    $resto = $suma % 11;
+    $esperado = 11 - $resto;
+    if ($esperado === 11) {
+        $esperado = 0;
+    } elseif ($esperado === 10) {
+        $esperado = 'K';
+    }
+
+    return (string) $esperado === $dv;
+}
+
 function excel_a_fecha($valor) {
     $valor = trim((string)$valor);
 

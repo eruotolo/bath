@@ -112,19 +112,67 @@ File: Main Js File
     }
 
     function initActiveMenu() {
-        // === following js will activate the menu in left side bar based on url ====
-        $('#sidebar-menu a').each(function () {
-            var pageUrl = window.location.href.split(/[?#]/)[0];
-            if (this.href == pageUrl) {
-                $(this).addClass('active');
-                $(this).parent().addClass('mm-active'); // add active to li of the current link
-                $(this).parent().parent().addClass('mm-show');
-                $(this).parent().parent().prev().addClass('mm-active'); // add active class to an anchor
-                $(this).parent().parent().parent().addClass('mm-active');
-                $(this).parent().parent().parent().parent().addClass('mm-show'); // add active to li of the current link
-                $(this).parent().parent().parent().parent().parent().addClass('mm-active');
+        // === activa el ítem/grupo del sidebar según el archivo actual, comparando
+        // por segmentos del nombre (sin querystring) en vez de URL exacta: así
+        // cubre links con distinto querystring (dash-contracts.php?estado=X) y
+        // páginas hijas sin link propio en el menú (dash-*-item, *-edit, *-print),
+        // que antes quedaban sin ningún ítem marcado como activo ====
+        var currentFile = window.location.pathname.split('/').pop().replace('.php', '');
+        var currentSegments = currentFile.split('-');
+        var currentQuery = window.location.search;
+
+        var bestExact = null; // el link completo es prefijo del archivo actual
+        var bestPartial = null; // fallback: mayor prefijo común (páginas sin link propio, ej. *-item, *-edit)
+
+        $('#sidebar-menu a[href]').each(function () {
+            var linkUrl = this.getAttribute('href');
+            if (!linkUrl || linkUrl.indexOf('javascript') === 0 || linkUrl.charAt(0) === '#') {
+                return;
+            }
+
+            var queryIndex = linkUrl.indexOf('?');
+            var linkQuery = queryIndex === -1 ? '' : linkUrl.slice(queryIndex);
+            var linkFile = linkUrl.split(/[?#]/)[0].split('/').pop().replace('.php', '');
+            var linkSegments = linkFile.split('-');
+
+            var score = 0;
+            while (score < currentSegments.length && score < linkSegments.length &&
+                currentSegments[score] === linkSegments[score]) {
+                score++;
+            }
+
+            // entre links del mismo archivo (ej. dash-contracts.php?estado=1 vs
+            // ?estado=2), el que matchea el querystring exacto gana el desempate
+            var queryMatches = linkQuery === currentQuery;
+
+            if (score === linkSegments.length) {
+                var isBetterExact = !bestExact ||
+                    linkSegments.length > bestExact.length ||
+                    (linkSegments.length === bestExact.length && queryMatches && !bestExact.queryMatches);
+                if (isBetterExact) {
+                    bestExact = { el: this, length: linkSegments.length, queryMatches: queryMatches };
+                }
+            }
+
+            var minScore = linkSegments.length === 1 ? 1 : 2;
+            if (score >= minScore && (!bestPartial || score > bestPartial.score)) {
+                bestPartial = { el: this, score: score };
             }
         });
+
+        var best = bestExact || bestPartial;
+        if (!best) {
+            return;
+        }
+
+        var $link = $(best.el);
+        $link.addClass('active');
+        $link.parent().addClass('mm-active'); // add active to li of the current link
+        $link.parent().parent().addClass('mm-show');
+        $link.parent().parent().prev().addClass('mm-active'); // add active class to an anchor
+        $link.parent().parent().parent().addClass('mm-active');
+        $link.parent().parent().parent().parent().addClass('mm-show'); // add active to li of the current link
+        $link.parent().parent().parent().parent().parent().addClass('mm-active');
     }
 
     function initMenuItemScroll() {

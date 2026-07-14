@@ -1,0 +1,705 @@
+/*
+ * Componentes reutilizables (Fase 3+ del plan-migracion-bootstrap-tailwind).
+ *
+ * Tailwind promueve utilities puras en el markup, pero hay patrones que se
+ * repiten >=3 veces: tabla homologada, toolbar de acciones, badge de estado,
+ * boton icono de toolbar, boton primario "agregar nuevo". Centralizados aca
+ * como @layer components para no inundar el HTML con utilities duplicados.
+ *
+ * Migrar a @theme o utilities cuando un componente se especialice.
+ */
+
+@layer components {
+
+    /* ===== Tabla homologada (todas las listas datatable) ===== */
+    .table-card {
+        background: #fff;
+        border: 1px solid var(--color-slate-100, #f1f5f9);
+        border-radius: 24px;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+    }
+    .table-card > .table-responsive { margin: 0; overflow: visible; }
+    .table-card table.dataTable {
+        border-collapse: separate !important;
+        border-spacing: 0 !important;
+        width: 100% !important;
+        margin: 0 !important;
+    }
+    .table-card table.dataTable thead th {
+        background: rgba(248, 250, 252, 0.5);
+        border-bottom: 1px solid var(--color-slate-100, #f1f5f9);
+        border-top: none;
+        padding: 16px 24px;
+        font-family: var(--font-mono);
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--color-slate-400, #94a3b8);
+        letter-spacing: .05em;
+        text-transform: uppercase;
+        text-align: left;
+        vertical-align: middle;
+    }
+    .table-card table.dataTable thead th.text-center { text-align: center; }
+    .table-card table.dataTable tbody tr { transition: background .15s ease; }
+    .table-card table.dataTable tbody tr td {
+        border-top: 1px solid var(--color-slate-100, #f1f5f9);
+        border-bottom: none;
+        padding: 18px 24px;
+        vertical-align: middle;
+        background: transparent;
+    }
+    .table-card table.dataTable tbody tr:first-child td { border-top: none; }
+    .table-card table.dataTable tbody tr:hover > td {
+        background: rgba(238, 242, 255, 0.55);
+        cursor: pointer;
+    }
+
+    /* Footer del wrapper DataTables: info a la izquierda, paginator a la derecha */
+    .table-card .dataTables_wrapper > .row:last-child {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        flex-wrap: nowrap !important;
+        gap: 16px;
+        background: var(--color-slate-50, #f8fafc);
+        border-top: 1px solid var(--color-slate-100, #f1f5f9);
+        margin: 0 !important;
+        padding: 16px 24px !important;
+        border-bottom-left-radius: 24px !important;
+        border-bottom-right-radius: 24px !important;
+        overflow: hidden;
+    }
+    .table-card .dataTables_wrapper > .row:last-child > [class*="col-"] {
+        padding: 0 !important;
+        flex: 0 1 auto !important;
+        min-width: 0;
+    }
+    .table-card .dataTables_wrapper > .row:last-child > [class*="col-"]:last-child {
+        margin-left: auto !important;
+        flex-shrink: 0;
+    }
+    .table-card .dataTables_info {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--color-slate-400, #94a3b8);
+        text-transform: uppercase;
+        letter-spacing: .03em;
+        padding: 0 !important;
+        margin: 0 !important;
+    }
+    .table-card .dataTables_length { display: none !important; }
+
+    /* Paginacion: pills sueltos, activo indigo solido */
+    .table-card .dataTables_paginate .pagination { gap: 4px; margin: 0 !important; }
+    .table-card .dataTables_paginate .page-item .page-link,
+    .table-card .dataTables_paginate .page-item:first-child .page-link,
+    .table-card .dataTables_paginate .page-item:last-child .page-link {
+        border-radius: 8px;
+        border: 1px solid var(--color-slate-100, #f1f5f9);
+        background: #fff;
+        color: var(--color-slate-500, #64748b);
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 12px;
+        box-shadow: none;
+        margin-left: 0;
+    }
+    .table-card .dataTables_paginate .page-item .page-link:hover {
+        background: var(--color-slate-50, #f8fafc);
+        border-color: var(--color-slate-200, #e2e8f0);
+        color: var(--color-primary-600, #4f46e5);
+    }
+    .table-card .dataTables_paginate .page-item.active .page-link {
+        background: var(--color-primary-600, #4f46e5);
+        border-color: var(--color-primary-600, #4f46e5);
+        color: #fff;
+    }
+    .table-card .dataTables_paginate .page-item.disabled .page-link {
+        color: var(--color-slate-300, #cbd5e1);
+        pointer-events: auto;
+    }
+
+    /* Dropdown de accion en celda */
+    .table-card table.dataTable tbody td .dropdown-menu {
+        border-radius: 12px;
+        border: 1px solid var(--color-slate-100, #f1f5f9);
+        box-shadow: 0 8px 24px -4px rgba(15, 23, 42, .12);
+        padding: 6px;
+        font-size: 12.5px;
+    }
+    .table-card table.dataTable tbody td .dropdown-item {
+        border-radius: 8px;
+        padding: 7px 12px;
+        font-weight: 500;
+        color: var(--color-slate-600, #475569);
+    }
+    .table-card table.dataTable tbody td .dropdown-item:hover {
+        background: var(--color-slate-50, #f8fafc);
+        color: var(--color-primary-600, #4f46e5);
+    }
+
+    /* Bug RTL del bootstrap.css (legacy): dropdown-menu-end cae al lado izquierdo */
+    .table-card .dropdown-menu-end[data-bs-popper] { right: 0; left: auto; }
+
+    /* ===== Toolbar de acciones (sobre la tabla) ===== */
+    .table-toolbar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
+    .table-toolbar-title {
+        margin: 0;
+        font-family: var(--font-sans);
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--color-slate-900, #0f172a);
+    }
+    .table-toolbar-title .count {
+        margin-left: 6px;
+        font-family: var(--font-mono);
+        font-size: 11px;
+        font-weight: 700;
+        color: var(--color-slate-400, #94a3b8);
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* Buscador reubicado por datatable.js dentro de .table-toolbar-search */
+    .table-toolbar-search .dataTables_filter label {
+        display: flex; align-items: center; gap: 6px;
+        margin: 0;
+        background: rgba(248, 250, 252, 0.6);
+        border: 1px solid var(--color-slate-200, #e2e8f0);
+        border-radius: 14px;
+        padding: 8px 14px 8px 34px;
+        font-weight: 400;
+        font-size: 13px;
+        color: var(--color-slate-500, #64748b);
+        position: relative;
+    }
+    .table-toolbar-search .dataTables_filter label::before {
+        content: '';
+        position: absolute;
+        left: 12px;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 14px;
+        height: 14px;
+        background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E") no-repeat center / contain;
+    }
+    .table-toolbar-search .dataTables_filter input {
+        border: none; outline: none; background: none;
+        font-size: 13px;
+        min-width: 220px;
+        font-family: var(--font-sans);
+        color: var(--color-slate-900, #0f172a);
+    }
+    .table-toolbar-search .dataTables_filter label:focus-within {
+        border-color: var(--color-primary-600, #4f46e5);
+        box-shadow: 0 0 0 3px rgba(79, 70, 229, .15);
+    }
+
+    /* ===== dt-icon-btn: boton cuadrado para toolbar de export ===== */
+    .dt-icon-btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 34px; height: 34px;
+        padding: 0;
+        border-radius: 10px;
+        border: 1px solid var(--color-slate-100, #f1f5f9);
+        background: transparent;
+        color: var(--color-slate-400, #94a3b8);
+        transition: background .15s, color .15s, border-color .15s;
+        cursor: pointer;
+    }
+    .dt-icon-btn svg { width: 15px; height: 15px; }
+    .dt-icon-btn:hover {
+        background: var(--color-slate-50, #f8fafc);
+        border-color: var(--color-slate-200, #e2e8f0);
+        color: var(--color-primary-600, #4f46e5);
+    }
+
+    /* ===== dt-btn-add: CTA primario "Agregar nuevo" del toolbar ===== */
+    .dt-btn-add {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 9px 18px;
+        background: var(--color-primary-600, #4f46e5);
+        border: 1px solid var(--color-primary-600, #4f46e5);
+        color: #fff;
+        border-radius: 14px;
+        font-family: var(--font-sans);
+        font-size: 12.5px;
+        font-weight: 600;
+        box-shadow: 0 8px 16px -4px rgba(79, 70, 229, .25);
+        transition: background .15s, border-color .15s;
+        text-decoration: none;
+    }
+    .dt-btn-add:hover {
+        background: var(--color-primary-700, #4338ca);
+        border-color: var(--color-primary-700, #4338ca);
+        color: #fff;
+    }
+    .dt-btn-add svg { width: 15px; height: 15px; }
+
+    /* ===== dt-btn-secondary: CTA secundario (cancelar, cerrar, edit-card) ===== */
+    .dt-btn-secondary {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        padding: 9px 18px;
+        background: var(--color-slate-50, #f8fafc);
+        border: 1px solid var(--color-slate-200, #e2e8f0);
+        color: var(--color-slate-700, #334155);
+        border-radius: 14px;
+        font-family: var(--font-sans);
+        font-size: 12.5px;
+        font-weight: 600;
+        transition: background .15s, color .15s, border-color .15s;
+        text-decoration: none;
+        cursor: pointer;
+    }
+    .dt-btn-secondary:hover {
+        background: #fff;
+        color: var(--color-primary-600, #4f46e5);
+        border-color: var(--color-primary-300, #a5b4fc);
+    }
+    .dt-btn-secondary svg { width: 15px; height: 15px; }
+
+    /* ===== Boton de accion icono en celda (ver/editar/eliminar) ===== */
+    .dt-cell-action {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 32px; height: 32px;
+        padding: 6px;
+        border-radius: 8px;
+        border: 1px solid var(--color-slate-100, #f1f5f9);
+        background: transparent;
+        color: var(--color-slate-400, #94a3b8);
+        transition: background .15s, color .15s, border-color .15s;
+        cursor: pointer;
+    }
+    .dt-cell-action svg, .dt-cell-action i { width: 14px; height: 14px; }
+    .dt-cell-action:hover {
+        background: rgba(79, 70, 229, .04);
+        border-color: rgba(79, 70, 229, .15);
+        color: var(--color-primary-600, #4f46e5);
+    }
+    .dt-cell-action.dropdown-toggle::after { display: none; }
+
+    /* ===== badge-status: generico, reemplaza la version de style.css con paleta indigo ===== */
+    .badge-status {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-family: var(--font-sans);
+        font-size: var(--fs-caption, 12px);
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 9999px;
+        letter-spacing: .05em;
+        text-transform: uppercase;
+    }
+    .badge-status::before {
+        content: "";
+        width: 6px; height: 6px;
+        border-radius: 50%;
+    }
+    .badge-status.is-success {
+        color: #047857;
+        background: rgba(16, 185, 129, .08);
+    }
+    .badge-status.is-success::before { background: #10b981; }
+    .badge-status.is-danger {
+        color: var(--color-slate-600, #475569);
+        background: var(--color-slate-50, #f8fafc);
+    }
+    .badge-status.is-danger::before { background: var(--color-slate-400, #94a3b8); }
+    .badge-status.is-info {
+        color: var(--color-info, #3B82F6);
+        background: rgba(59, 130, 246, .08);
+    }
+    .badge-status.is-info::before { background: var(--color-info, #3B82F6); }
+    .badge-status.is-warn {
+        color: #b8790a;
+        background: rgba(184, 121, 10, .08);
+    }
+    .badge-status.is-warn::before { background: #b8790a; }
+
+    /* ===== Dashboard (Fase 4 plan-migracion-bootstrap-tailwind) ===== */
+    .dt-kpi-card {
+        position: relative;
+        overflow: hidden;
+        display: block;
+        padding: 24px;
+        background: #fff;
+        border: 1px solid var(--color-slate-100, #f1f5f9);
+        border-radius: 24px;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+        text-decoration: none;
+        color: inherit;
+        transition: box-shadow .3s, transform .2s;
+    }
+    .dt-kpi-card:hover { box-shadow: 0 10px 30px -5px rgba(226, 232, 240, .7); transform: translateY(-2px); }
+    .dt-kpi-card::before {
+        content: '';
+        position: absolute;
+        top: 0; right: 0;
+        width: 128px; height: 128px;
+        background: linear-gradient(to bottom left, rgba(99, 102, 241, .05), transparent);
+        border-bottom-left-radius: 100%;
+    }
+    .dt-kpi-title {
+        font-family: var(--font-sans);
+        font-size: 12px;
+        font-weight: 700;
+        color: var(--color-slate-400, #94a3b8);
+        text-transform: uppercase;
+        letter-spacing: .025em;
+    }
+    .dt-kpi-icon {
+        width: 40px; height: 40px;
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        color: #fff;
+        flex-shrink: 0;
+    }
+    .dt-kpi-icon.bg-indigo-600 {
+        background: linear-gradient(135deg, #6366f1, #4f46e5);
+        box-shadow: 0 4px 10px rgba(99, 102, 241, .2);
+    }
+    .dt-kpi-icon.bg-slate-800 {
+        background: linear-gradient(135deg, #334155, #0f172a);
+    }
+    .dt-kpi-value {
+        font-family: var(--font-sans);
+        font-size: 30px;
+        font-weight: 800;
+        color: var(--color-slate-900, #0f172a);
+        letter-spacing: -.025em;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+    }
+    .dt-kpi-badge {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        font-weight: 700;
+        color: var(--color-primary-600, #4f46e5);
+        background: var(--color-primary-50, #eef2ff);
+        padding: 2px 6px;
+        border-radius: 6px;
+    }
+    .dt-kpi-plabel {
+        font-family: var(--font-mono);
+        font-size: 9px;
+        font-weight: 600;
+        color: var(--color-slate-400, #94a3b8);
+        text-transform: uppercase;
+        flex-shrink: 0;
+    }
+
+    /* Hub card */
+    .dt-hub-title {
+        font-family: var(--font-sans);
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--color-slate-900, #0f172a);
+        margin: 0;
+    }
+    .dt-hub-subtitle {
+        font-family: var(--font-sans);
+        font-size: 12px;
+        color: var(--color-slate-500, #64748b);
+        margin: 2px 0 0;
+    }
+
+    /* Finance */
+    .dt-finance-box {
+        padding: 16px;
+        border-radius: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+    .dt-finance-box.paid { background: rgba(99,102,241,.05); border: 1px solid rgba(99,102,241,.1); }
+    .dt-finance-box.pending { background: rgba(245,158,11,.05); border: 1px solid rgba(245,158,11,.1); }
+    .dt-finance-box.eco { background: #fff; border: 1px solid var(--color-slate-100, #f1f5f9); }
+    .dt-finance-box-label {
+        font-family: var(--font-mono);
+        font-size: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+    }
+    .dt-finance-box.paid .dt-finance-box-label { color: var(--color-primary-600, #4f46e5); }
+    .dt-finance-box.pending .dt-finance-box-label { color: #b8790a; }
+    .dt-finance-box.eco .dt-finance-box-label { color: var(--color-slate-400, #94a3b8); }
+    .dt-finance-box-value {
+        font-family: var(--font-sans);
+        font-size: 20px;
+        font-weight: 800;
+        color: var(--color-slate-900, #0f172a);
+        margin-top: 4px;
+    }
+    .dt-finance-box-note {
+        font-family: var(--font-sans);
+        font-size: 10px;
+        margin-top: 4px;
+    }
+    .dt-finance-box.paid .dt-finance-box-note { color: var(--color-primary-600, #4f46e5); }
+    .dt-finance-box.pending .dt-finance-box-note { color: #b8790a; }
+    .dt-finance-box.eco .dt-finance-box-note { color: var(--color-slate-500, #64748b); font-size: 12px; }
+
+    /* ===== Alerts ===== */
+    .dt-alert {
+        padding: 12px 16px;
+        border-radius: 12px;
+        border: 1px solid;
+        font-family: var(--font-sans);
+        font-size: 13px;
+    }
+    .dt-alert.dt-alert-info {
+        background: rgba(59, 130, 246, .06);
+        border-color: rgba(59, 130, 246, .2);
+        color: var(--color-slate-700, #334155);
+    }
+    .dt-alert.dt-alert-success {
+        background: rgba(16, 185, 129, .08);
+        border-color: rgba(16, 185, 129, .25);
+        color: var(--color-slate-700, #334155);
+    }
+    .dt-alert.dt-alert-danger {
+        background: rgba(244, 63, 94, .08);
+        border-color: rgba(244, 63, 94, .25);
+        color: var(--color-slate-700, #334155);
+    }
+    .dt-alert.dt-alert-warning {
+        background: rgba(245, 158, 11, .08);
+        border-color: rgba(245, 158, 11, .25);
+        color: var(--color-slate-700, #334155);
+    }
+
+    /* ===== Input group (prefijo @ para email en users-add) ===== */
+    .dt-input-group {
+        display: flex;
+        align-items: stretch;
+    }
+    .dt-input-prefix {
+        display: flex;
+        align-items: center;
+        padding: 0 14px;
+        background: var(--color-slate-50, #f8fafc);
+        border: 1px solid var(--color-slate-200, #e2e8f0);
+        border-right: 0;
+        border-top-left-radius: 12px;
+        border-bottom-left-radius: 12px;
+        color: var(--color-slate-500, #64748b);
+        font-family: var(--font-sans);
+        font-size: 13px;
+    }
+
+    /* ===== Helper re-skin ranges de fecha (flatpickr input-group) ===== */
+    .dt-range-picker {
+        display: inline-flex;
+        align-items: stretch;
+        border-radius: 12px;
+        overflow: hidden;
+        border: 1px solid var(--color-slate-200, #e2e8f0);
+    }
+    .dt-range-picker .dt-input {
+        border: 0;
+        border-radius: 0;
+        min-width: 160px;
+    }
+    .dt-input-suffix {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 12px;
+        background: var(--color-slate-50, #f8fafc);
+        border: 0;
+        border-left: 1px solid var(--color-slate-200, #e2e8f0);
+        color: var(--color-slate-500, #64748b);
+        cursor: pointer;
+    }
+    .dt-input-suffix:hover { color: var(--color-primary-600, #4f46e5); }
+
+    /* Compat legacy: badge alias usados mientras existan referencias en vistas sin migrar */
+    .item-activo { color: var(--color-success, #2ab57d) !important; background-color: rgba(42, 181, 125, .18) !important; font-size: 12px !important; }
+    .item-inactivo { color: var(--color-danger, #d5453b) !important; background-color: rgba(213, 69, 59, .18) !important; font-size: 12px !important; }
+    .item-disponible { color: var(--color-info, #3B82F6) !important; background-color: rgba(59, 130, 246, .18) !important; font-size: 12px !important; }
+
+    /* ===== Pill button (toolbar de filtros estado/asignado en dash-bathrooms) ===== */
+    .dt-filter-group {
+        display: inline-flex;
+        gap: 4px;
+        padding: 4px;
+        background: var(--color-slate-50, #f8fafc);
+        border: 1px solid var(--color-slate-200, #e2e8f0);
+        border-radius: 12px;
+    }
+    .dt-filter-btn {
+        padding: 6px 14px;
+        background: transparent;
+        border: 0;
+        color: var(--color-slate-500, #64748b);
+        font-family: var(--font-sans);
+        font-size: 12.5px;
+        font-weight: 600;
+        border-radius: 8px;
+        cursor: pointer;
+        transition: background .15s, color .15s;
+    }
+    .dt-filter-btn:hover { color: var(--color-slate-700, #334155); }
+    .dt-filter-btn.is-active {
+        background: #fff;
+        color: var(--color-primary-600, #4f46e5);
+        box-shadow: 0 1px 2px rgba(15, 23, 42, .08);
+    }
+
+    /* ===== Card generico (formularios y vistas) ===== */
+    .dt-card {
+        background: #fff;
+        border: 1px solid var(--color-slate-100, #f1f5f9);
+        border-radius: 24px;
+        box-shadow: 0 1px 2px rgba(15, 23, 42, .04);
+        overflow: hidden;
+    }
+    .dt-card-header {
+        padding: 20px 24px;
+        border-bottom: 1px solid var(--color-slate-100, #f1f5f9);
+        background: rgba(248, 250, 252, .5);
+    }
+    .dt-card-title {
+        margin: 0;
+        font-family: var(--font-sans);
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--color-slate-900, #0f172a);
+    }
+    .dt-card-desc {
+        margin: 4px 0 0;
+        font-size: 13px;
+        color: var(--color-slate-500, #64748b);
+    }
+    .dt-card-body {
+        padding: 24px;
+    }
+
+    /* ===== Form controls: re-skin del theme con paleta indigo =====
+       Sustituye a .form-control / .form-select de Bootstrap para vistas migradas.
+       El data-attribute data-dt-form las engancha para sobreescribir sin !important. */
+    .dt-input,
+    .dt-select {
+        display: block;
+        width: 100%;
+        padding: 9px 14px;
+        font-family: var(--font-sans);
+        font-size: 13px;
+        color: var(--color-slate-900, #0f172a);
+        background: #fff;
+        border: 1px solid var(--color-slate-200, #e2e8f0);
+        border-radius: 12px;
+        transition: border-color .15s, box-shadow .15s;
+    }
+    .dt-input:focus,
+    .dt-select:focus {
+        outline: none;
+        border-color: var(--color-primary-500, #6366f1);
+        box-shadow: 0 0 0 3px rgba(99, 102, 241, .15);
+    }
+    .dt-input::placeholder { color: var(--color-slate-400, #94a3b8); }
+    .dt-label {
+        display: block;
+        margin-bottom: 6px;
+        font-family: var(--font-sans);
+        font-size: 12.5px;
+        font-weight: 600;
+        color: var(--color-slate-700, #334155);
+    }
+
+    /* ===== Page title box (encabezado de seccion + breadcrumb) ===== */
+    .dt-page-title {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 12px;
+        margin-bottom: 24px;
+    }
+    .dt-page-title h1 {
+        margin: 0;
+        font-family: var(--font-sans);
+        font-size: 22px;
+        font-weight: 700;
+        color: var(--color-slate-900, #0f172a);
+        letter-spacing: -.025em;
+    }
+    .dt-breadcrumb {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        display: flex;
+        gap: 8px;
+        font-size: 12.5px;
+        color: var(--color-slate-500, #64748b);
+    }
+    .dt-breadcrumb li + li::before { content: '/'; margin-right: 8px; color: var(--color-slate-300, #cbd5e1); }
+    .dt-breadcrumb a {
+        color: var(--color-primary-600, #4f46e5);
+        text-decoration: none;
+    }
+    .dt-breadcrumb a:hover { text-decoration: underline; }
+    .dt-breadcrumb .active { color: var(--color-slate-500, #64748b); }
+
+    /* ===== Dropdown shell — reglas estructurales que bootstrap.css proveía =====
+       En Fase 9 del plan-migracion se retiró bootstrap.css del head; estas reglas
+       mínimas (positioning + display toggle) sobreviven como hook estructural para
+       que bs-shim.js (que solo togglea .show) funcione en cualquier dropdown
+       fuera de .table-card (header, modales, etc.). El aspecto visual va por
+       utilities Tailwind en cada markup. */
+    .dropdown { position: relative; }
+    .dropdown-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        z-index: 1000;
+        display: none;
+    }
+    .dropdown-menu.show { display: block; }
+    .dropdown-menu-end { right: 0; left: auto; }
+    .dropdown-item {
+        display: block;
+        text-decoration: none;
+        background: none;
+        border: 0;
+    }
+    .dropdown-divider {
+        height: 0;
+        margin: .5rem 0;
+        overflow: hidden;
+        border-top: 1px solid var(--color-slate-100, #f1f5f9);
+    }
+
+    /* ===== Modal overrides (legacy Bootstrap JS hasta Fase 8) =====
+       El JS sigue siendo bootstrap.Modal; nosotros re-skineamos el aspecto. */
+    .modal-header {
+        border-bottom: 1px solid var(--color-slate-100, #f1f5f9);
+        padding: 16px 24px;
+    }
+    .modal-header .modal-title {
+        font-family: var(--font-sans);
+        font-size: 16px;
+        font-weight: 700;
+        color: var(--color-slate-900, #0f172a);
+    }
+    .modal-footer {
+        border-top: 1px solid var(--color-slate-100, #f1f5f9);
+        padding: 14px 24px;
+    }
+    .modal-body { padding: 20px 24px; }
+    .modal-content {
+        border: 1px solid var(--color-slate-100, #f1f5f9);
+        border-radius: 20px;
+        box-shadow: 0 25px 50px -12px rgba(15, 23, 42, .25);
+    }
+    .modal-backdrop.show { opacity: .4; }
+}

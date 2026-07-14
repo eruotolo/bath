@@ -2,124 +2,67 @@
 <?php include 'layouts/head-main.php'; ?>
 
 <head>
-    
     <title>Perfil del Usuario | Blanco Servicios - Admin & Dashboard Template</title>
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
-
 </head>
 
 <?php include 'layouts/body.php'; ?>
 
-<!-- Begin page -->
 <div id="layout-wrapper">
-
     <?php include 'layouts/menu.php'; ?>
 
-    <!-- ============================================================== -->
-    <!-- Start right Content here -->
-    <!-- ============================================================== -->
     <div class="main-content">
-
         <div class="page-content">
             <div class="container-fluid">
 
-                <!-- start page title -->
-                <div class="row">
-                    <div class="col-12">
-                        <div class="page-title-box d-sm-flex align-items-center justify-content-between">
-                            <h4 class="mb-sm-0 font-size-18">Perfil</h4>
-
-                            <div class="page-title-right">
-                                <ol class="breadcrumb m-0">
-                                    <li class="breadcrumb-item"><a href="dash-users-list.php">Usuarios</a></li>
-                                    <li class="breadcrumb-item active">Perfil</li>
-                                </ol>
-                            </div>
-
-                        </div>
-                    </div>
+                <div class="dt-page-title">
+                    <h1>Perfil</h1>
+                    <ol class="dt-breadcrumb">
+                        <li><a href="dash-users-list.php">Usuarios</a></li>
+                        <li class="active">Perfil</li>
+                    </ol>
                 </div>
-                <!-- end page title -->
 
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-sm order-2 order-sm-1">
-                                        <div class="d-flex align-items-start mt-3 mt-sm-0">
-                                            <div class="flex-shrink-0">
-                                                <div class="avatar-xl me-3">
-                                                    <img src="uploads/users/<?php echo htmlspecialchars($_SESSION['image']); ?>" alt="Imagen de Usuario"
-                                                         class="img-fluid rounded-circle d-block">
-                                                </div>
-                                            </div>
-                                            <div class="flex-grow-1">
-                                                <div>
-                                                    <h5 class="font-size-16 mb-1"><?php echo htmlspecialchars($_SESSION['name']); ?> <?php echo htmlspecialchars($_SESSION['lastname']); ?></h5>
-
-                                                    <?php
-                                                        if ($_SESSION['category'] == 1){ ?>
-                                                            <p class="text-muted font-size-13">Administrador</p>
-                                                    <?php
-                                                        } else{
-                                                    ?>
-                                                            <p class="text-muted font-size-13">Usuario</p>
-                                                    <?php
-                                                        }
-                                                    ?>
-
-                                                    <div class="d-flex flex-wrap align-items-start gap-2 gap-lg-3 text-muted font-size-13">
-                                                        <div>
-                                                            <i class="mdi mdi-circle-medium me-1 text-success align-middle"></i><?php echo htmlspecialchars($_SESSION['useremail']); ?>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
+                <div class="dt-card">
+                    <div class="dt-card-body py-8">
+                        <div class="grid grid-cols-1 sm:grid-cols-12 gap-4 items-center">
+                            <div class="order-2 sm:order-1 sm:col-span-9">
+                                <div class="flex items-start gap-4 mt-3 sm:mt-0">
+                                    <img src="uploads/users/<?php echo htmlspecialchars($_SESSION['image'] ?? '', ENT_QUOTES, 'UTF-8'); ?>" alt="Imagen de Usuario" class="!h-24 !w-24 shrink-0 rounded-full object-cover">
+                                    <div class="flex-1 min-w-0">
+                                        <h5 class="font-sans text-lg font-bold text-slate-900 mb-1"><?php echo htmlspecialchars($_SESSION['name'] ?? '', ENT_QUOTES, 'UTF-8'); ?> <?php echo htmlspecialchars($_SESSION['lastname'] ?? '', ENT_QUOTES, 'UTF-8'); ?></h5>
+                                        <p class="font-mono mb-3 text-xs uppercase tracking-wider text-primary-600 font-bold">
+                                            <?php echo ($_SESSION['category'] ?? 0) == 1 ? 'Administrador' : 'Usuario'; ?>
+                                        </p>
+                                        <div class="font-sans flex flex-wrap items-center gap-2 text-sm text-slate-500">
+                                            <span class="inline-flex items-center gap-2">
+                                                <span class="h-2 w-2 rounded-full bg-emerald-500"></span>
+                                                <?php echo htmlspecialchars($_SESSION['useremail'] ?? '', ENT_QUOTES, 'UTF-8'); ?>
+                                            </span>
                                         </div>
                                     </div>
-                                    <div class="col-sm-auto order-1 order-sm-2">
-                                        <div class="d-flex justify-content-end gap-2">
-                                            <a href="javascript:void(0)"
-                                               class="btn btn-light float-end editarCliente mt-3"
-                                               data-bs-toggle="modal"
-                                               data-bs-target="#nuevoPassword"
-                                               title="Nuevo Password">Cambiar el Password</a>
-
-                                            <?php include 'layouts/modal-new-password.php'; ?>
-                                        </div>
-                                    </div>
+                                </div>
+                            </div>
+                            <div class="order-1 sm:order-2 sm:col-span-3">
+                                <div class="flex justify-end gap-2">
+                                    <a href="javascript:void(0)" class="dt-btn-secondary editarCliente mt-3" data-bs-toggle="modal" data-bs-target="#nuevoPassword" title="Nuevo Password">
+                                        <i data-lucide="key" class="!mr-1.5 !h-3.5 !w-3.5"></i> Cambiar el Password
+                                    </a>
+                                    <?php include 'layouts/modal-new-password.php'; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- end row -->
 
-            </div> <!-- container-fluid -->
+            </div>
         </div>
-        <!-- End Page-content -->
-
-
-        <?php include 'layouts/footer.php'; ?>
     </div>
-    <!-- end main content-->
-
 </div>
-<!-- END layout-wrapper -->
-
-
-<!-- Right Sidebar -->
-<?php include 'layouts/right-sidebar.php'; ?>
-<!-- /Right-bar -->
-
-<!-- JAVASCRIPT -->
 
 <?php include 'layouts/vendor-scripts.php'; ?>
-
 <script src="assets/js/app.js"></script>
 
 </body>
-
 </html>

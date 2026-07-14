@@ -79,9 +79,20 @@ final class MysqliCustomerRepository implements CustomerRepositoryInterface
         return (int) $result->fetch_assoc()['total'];
     }
 
-    public function listActive(): array
+    public function listActive(string $sortBy = 'created_at', string $sortDir = 'DESC'): array
     {
-        $result = $this->connection->query('SELECT * FROM clientes WHERE estado_Cliente = 1');
+        $sortByMap = [
+            'created_at' => 'created_at',
+            'rut' => 'rut_Cliente',
+        ];
+        $allowedSortDir = ['ASC', 'DESC'];
+
+        $column = $sortByMap[$sortBy] ?? $sortByMap['created_at'];
+        $direction = in_array($sortDir, $allowedSortDir, true) ? $sortDir : 'DESC';
+
+        $sql = 'SELECT * FROM clientes WHERE estado_Cliente = 1 ORDER BY ' . $column . ' ' . $direction . ', id_Cliente DESC';
+
+        $result = $this->connection->query($sql);
 
         $customers = [];
         foreach ($result->fetch_all(MYSQLI_ASSOC) as $row) {

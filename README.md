@@ -119,19 +119,19 @@ docker cp php-bathroom:/usr/local/etc/php ./php
 
 ## Seguridad — problemas conocidos pendientes
 
-Documentados en `.doc/plan-migracion-php-8.5.md` y `plan-migracion-ddd-drycode.md`:
+Documentados en `.doc/Viejos/plan-migracion-php-8.5.md` y `plan-migracion-ddd-drycode.md`:
 
 1. **Credenciales hardcodeadas en `app/public/layouts/config.php`** — usuario y contraseña de producción en texto plano, trackeadas en git. **Rotar y mover a `.env` antes de cualquier deploy.**
-2. **SQL Injection sistemática** — los 45 controllers arman SQL por concatenación directa de `$_POST` (sin prepared statements). Resolver con el refactor DDD documentado en `.doc/plan-migracion-ddd-drycode.md`.
+2. **SQL Injection sistemática** — los 45 controllers arman SQL por concatenación directa de `$_POST` (sin prepared statements). Resolver con el refactor DDD documentado en `.doc/Viejos/plan-migracion-ddd-drycode.md`.
 3. **Manejo de errores de `mysqli_connect` muerto desde PHP 8.1** — el bloque `if($link === false)` ya no se ejecuta; una falla de conexión lanza una excepción no controlada.
 
 ## Planificaciones estratégicas
 
 El directorio `.doc/` contiene tres planes de evolución del proyecto. **No son deployables** — son documentos de trabajo:
 
-- [`.doc/plan-mejoras-frontend.md`](.doc/plan-mejoras-frontend.md) — componentes UI reutilizables (DataTable potenciado, selects con buscador y orden alfabético vía Choices.js, datepickers Flatpickr, máscara de RUT, feedback con SweetAlert2). Usa librerías ya instaladas en `assets/libs/` — cero downloads nuevos.
-- [`.doc/plan-migracion-php-8.5.md`](.doc/plan-migracion-php-8.5.md) — migración incremental de PHP 8.1 → 8.2 → 8.3 → 8.4 → 8.5, con riesgos identificados y checklist de QA por escalón.
-- [`.doc/plan-migracion-ddd-drycode.md`](.doc/plan-migracion-ddd-drycode.md) — refactor a arquitectura DDD liviana (Entity / Repository / Use Case) que elimina SQL Injection de raíz y centraliza el acceso a datos.
+- [`.doc/Viejos/plan-mejoras-frontend.md`](.doc/Viejos/plan-mejoras-frontend.md) — componentes UI reutilizables (DataTable potenciado, selects con buscador y orden alfabético vía Choices.js, datepickers Flatpickr, máscara de RUT, feedback con SweetAlert2). Usa librerías ya instaladas en `assets/libs/` — cero downloads nuevos.
+- [`.doc/Viejos/plan-migracion-php-8.5.md`](.doc/Viejos/plan-migracion-php-8.5.md) — migración incremental de PHP 8.1 → 8.2 → 8.3 → 8.4 → 8.5, con riesgos identificados y checklist de QA por escalón.
+- [`.doc/Viejos/plan-migracion-ddd-drycode.md`](.doc/Viejos/plan-migracion-ddd-drycode.md) — refactor a arquitectura DDD liviana (Entity / Repository / Use Case) que elimina SQL Injection de raíz y centraliza el acceso a datos.
 
 Orden recomendado: **Frontend → DDD → PHP 8.5**. Ver análisis en `CLAUDE.md`.
 
@@ -156,7 +156,7 @@ docker-compose logs -f --tail=100
 ## Convenciones de código
 
 - **PHP procedural puro** — no usar clases ni namespaces hasta que se ejecute el plan DDD.
-- **Consultas a DB** — usar `mysqli_query` con concatenación (estado actual). Migrar a prepared statements según `.doc/plan-migracion-ddd-drycode.md`.
+- **Consultas a DB** — usar `mysqli_query` con concatenación (estado actual). Migrar a prepared statements según `.doc/Viejos/plan-migracion-ddd-drycode.md`.
 - **Frontend** — assets en `app/public/assets/`, sin frameworks (jQuery está OK por ahora, presente en `assets/libs/`).
 - **Sin `composer.json`** — si necesitás una librería nueva, vendorizar en `app/public/vendor/<lib>/` (patrón actual del proyecto) salvo que se introduzca Composer como parte del refactor DDD.
 

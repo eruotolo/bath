@@ -15,5 +15,5 @@ interface CustomerRepositoryInterface
     /**
      * @return Customer[]
      */
-    public function listActive(): array;
+    public function listActive(string $sortBy = 'created_at', string $sortDir = 'DESC'): array;
 }
