@@ -60,21 +60,6 @@ $nav_sections = [
             'icon' => 'file-text',
             'url' => 'dash-contracts.php',
             'match' => ['dash-contracts.php', 'dash-contracts-add.php', 'dash-contracts-edit.php', 'dash-contracts-item.php'],
-            'exclude_get' => ['key' => 'estado', 'values' => ['1', '2']],
-        ],
-        [
-            'label' => 'Contratos Activos',
-            'icon' => 'circle-check',
-            'url' => 'dash-contracts.php?estado=2',
-            'match' => ['dash-contracts.php'],
-            'match_get' => ['key' => 'estado', 'value' => '2'],
-        ],
-        [
-            'label' => 'Contratos Terminados',
-            'icon' => 'archive',
-            'url' => 'dash-contracts.php?estado=1',
-            'match' => ['dash-contracts.php'],
-            'match_get' => ['key' => 'estado', 'value' => '1'],
         ],
         [
             'label' => 'Servicios',

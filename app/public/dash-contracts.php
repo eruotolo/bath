@@ -26,12 +26,17 @@ $allowedSortDir = ['ASC', 'DESC'];
 $sortBy = in_array($_GET['sort'] ?? '', $allowedSortBy, true) ? $_GET['sort'] : null;
 $sortDir = in_array($_GET['dir'] ?? '', $allowedSortDir, true) ? $_GET['dir'] : 'ASC';
 
-$useCase = new ListContracts(new MysqliContractRepository($link));
+$contractRepository = new MysqliContractRepository($link);
+$useCase = new ListContracts($contractRepository);
 $listado = $useCase->handle(
     in_array($estado_Contrato_filtro, [1, 2], true) ? $estado_Contrato_filtro : null,
     $sortBy ?? 'created_at',
     $sortBy !== null ? $sortDir : 'DESC'
 );
+
+$total_contratos_todos = $contractRepository->countByState(null);
+$total_contratos_activos = $contractRepository->countByState(2);
+$total_contratos_terminados = $contractRepository->countByState(1);
 
 $titulo_listado = 'Contratos';
 if ($estado_Contrato_filtro === 2) {
@@ -41,7 +46,7 @@ if ($estado_Contrato_filtro === 2) {
 }
 
 $drawerAction = $_GET['action'] ?? '';
-$drawerMode = in_array($drawerAction, ['new', 'edit', 'manage'], true) && ($drawerAction === 'new' || isset($_GET['id_Contrato']))
+$drawerMode = in_array($drawerAction, ['new', 'edit', 'view', 'manage'], true) && ($drawerAction === 'new' || isset($_GET['id_Contrato']))
     ? $drawerAction
     : null;
 $drawerError = isset($_GET['err']) ? (string) $_GET['err'] : '';
@@ -54,7 +59,7 @@ $contratoEdit = null;
 if ($drawerMode === 'new') {
     $clientesDrawer = (new ListCustomers(new MysqliCustomerRepository($link)))->handle('rut', 'ASC')['items'];
     $banosDisponibles = (new ListAvailableBathrooms(new MysqliBathroomRepository($link)))->handle();
-} elseif ($drawerMode === 'edit') {
+} elseif ($drawerMode === 'edit' || $drawerMode === 'view') {
     $idContratoEdit = (int) $_GET['id_Contrato'];
     $contratoEdit = (new FindContract(new MysqliContractRepository($link)))->handle($idContratoEdit);
     if ($contratoEdit !== null) {
@@ -84,6 +89,18 @@ function baseQueryString(array $excludes = ['page']): string {
         }
     }
     return $params ? '&' . implode('&', $params) : '';
+}
+
+function contractsFilterUrl(?int $estado, ?string $currentSort, string $currentDir): string {
+    $params = [];
+    if ($estado !== null) {
+        $params[] = 'estado=' . $estado;
+    }
+    if ($currentSort !== null) {
+        $params[] = 'sort=' . $currentSort;
+        $params[] = 'dir=' . $currentDir;
+    }
+    return 'dash-contracts.php' . ($params ? '?' . implode('&', $params) : '');
 }
 
 function sortUrl(string $column, ?string $currentSort, string $currentDir, ?int $estado): string {
@@ -126,6 +143,26 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
             <div class="container-fluid px-10 py-10 bg-slate-50/50">
 
                 <div class="space-y-4">
+                    <ul class="flex items-center gap-2">
+                        <li>
+                            <a href="<?php echo htmlspecialchars(contractsFilterUrl(null, $sortBy, $sortDir), ENT_QUOTES, 'UTF-8'); ?>" class="<?php echo $estado_Contrato_filtro === null ? 'active ' : ''; ?>group flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-2 font-sans text-xs font-semibold text-slate-500 transition-all duration-200 hover:text-slate-800 [&.active]:bg-slate-900 [&.active]:text-white">
+                                Todos los Contratos
+                                <span class="rounded-full bg-slate-200 px-2 py-0.5 font-mono text-[10px] font-bold text-slate-700 group-[.active]:bg-white/15 group-[.active]:text-white"><?php echo (int) $total_contratos_todos; ?></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo htmlspecialchars(contractsFilterUrl(2, $sortBy, $sortDir), ENT_QUOTES, 'UTF-8'); ?>" class="<?php echo $estado_Contrato_filtro === 2 ? 'active ' : ''; ?>group flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-2 font-sans text-xs font-semibold text-slate-500 transition-all duration-200 hover:text-slate-800 [&.active]:bg-slate-900 [&.active]:text-white">
+                                Contratos Activos
+                                <span class="rounded-full bg-slate-200 px-2 py-0.5 font-mono text-[10px] font-bold text-slate-700 group-[.active]:bg-white/15 group-[.active]:text-white"><?php echo (int) $total_contratos_activos; ?></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="<?php echo htmlspecialchars(contractsFilterUrl(1, $sortBy, $sortDir), ENT_QUOTES, 'UTF-8'); ?>" class="<?php echo $estado_Contrato_filtro === 1 ? 'active ' : ''; ?>group flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-2 font-sans text-xs font-semibold text-slate-500 transition-all duration-200 hover:text-slate-800 [&.active]:bg-slate-900 [&.active]:text-white">
+                                Contratos Terminados
+                                <span class="rounded-full bg-slate-200 px-2 py-0.5 font-mono text-[10px] font-bold text-slate-700 group-[.active]:bg-white/15 group-[.active]:text-white"><?php echo (int) $total_contratos_terminados; ?></span>
+                            </a>
+                        </li>
+                    </ul>
                     <?php
                         table_native_open([
                             'table_id' => 'tabla-contratos',
@@ -193,9 +230,15 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
                             </td>
                             <td class="px-6 py-4.5">
                                 <div class="flex items-center gap-1">
-                                    <a href="?action=edit&id_Contrato=<?php echo (int) $row['id_Contrato']; ?><?php echo htmlspecialchars(baseQueryString(['action', 'id_Contrato']), ENT_QUOTES, 'UTF-8'); ?>" class="dt-cell-action" title="Editar">
-                                        <i data-lucide="square-pen"></i>
-                                    </a>
+                                    <?php if ($row['estado_Contrato'] == 2): ?>
+                                        <a href="?action=edit&id_Contrato=<?php echo (int) $row['id_Contrato']; ?><?php echo htmlspecialchars(baseQueryString(['action', 'id_Contrato']), ENT_QUOTES, 'UTF-8'); ?>" class="dt-cell-action" title="Editar">
+                                            <i data-lucide="square-pen"></i>
+                                        </a>
+                                    <?php else: ?>
+                                        <a href="?action=view&id_Contrato=<?php echo (int) $row['id_Contrato']; ?><?php echo htmlspecialchars(baseQueryString(['action', 'id_Contrato']), ENT_QUOTES, 'UTF-8'); ?>" class="dt-cell-action" title="Ver">
+                                            <i data-lucide="eye"></i>
+                                        </a>
+                                    <?php endif; ?>
                                     <div class="dropdown">
                                         <button class="dt-cell-action dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                             <i data-lucide="more-horizontal"></i>
@@ -226,19 +269,31 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
     </div>
 </div>
 
-<?php if ($drawerMode === 'new' || ($drawerMode === 'edit' && $contratoEdit !== null)): ?>
-    <?php $isEdit = $drawerMode === 'edit'; ?>
+<?php if ($drawerMode === 'new' || (($drawerMode === 'edit' || $drawerMode === 'view') && $contratoEdit !== null)): ?>
+    <?php
+        $isEdit = $drawerMode === 'edit' || $drawerMode === 'view';
+        $isView = $drawerMode === 'view';
+        $clienteActual = null;
+        if ($isEdit) {
+            foreach ($clientesDrawer as $cliente) {
+                if ($cliente->id === $contratoEdit->customerId) {
+                    $clienteActual = $cliente;
+                    break;
+                }
+            }
+        }
+    ?>
     <div class="fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-40 transition-opacity" onclick="window.location='<?php echo $closeDrawerUrl; ?>'"></div>
     <div class="fixed inset-y-0 right-0 w-full sm:max-w-md bg-white shadow-2xl z-50 flex flex-col transform transition-transform duration-300 ease-out translate-x-0 app-drawer" id="contract-drawer">
 
         <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center shadow-lg shadow-indigo-600/10">
-                    <i data-lucide="<?php echo $isEdit ? 'square-pen' : 'briefcase'; ?>" class="w-5 h-5"></i>
+                    <i data-lucide="<?php echo $isView ? 'eye' : ($isEdit ? 'square-pen' : 'briefcase'); ?>" class="w-5 h-5"></i>
                 </div>
                 <div>
-                    <h3 class="font-sans font-bold text-slate-900 text-sm"><?php echo $isEdit ? 'Editar Contrato' : 'Registrar Nuevo Contrato'; ?></h3>
-                    <span class="font-sans text-[10px] text-slate-400 block mt-0.5"><?php echo $isEdit ? 'Actualizar datos del servicio sanitario.' : 'Establecer servicio sanitario para faenas.'; ?></span>
+                    <h3 class="font-sans font-bold text-slate-900 text-sm"><?php echo $isView ? 'Ver Contrato' : ($isEdit ? 'Editar Contrato' : 'Registrar Nuevo Contrato'); ?></h3>
+                    <span class="font-sans text-[10px] text-slate-400 block mt-0.5"><?php echo $isView ? 'Detalle del servicio sanitario.' : ($isEdit ? 'Actualizar datos del servicio sanitario.' : 'Establecer servicio sanitario para faenas.'); ?></span>
                 </div>
             </div>
             <a href="<?php echo $closeDrawerUrl; ?>" class="p-1.5 rounded-lg hover:bg-slate-200 text-slate-400 hover:text-slate-600 transition-all" aria-label="Cerrar panel">
@@ -259,19 +314,28 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
             <?php endif; ?>
             <div class="space-y-1.5">
                 <label class="font-sans text-xs font-bold text-slate-600 block">Cliente Titular <span class="text-rose-500">*</span></label>
-                <select
-                    name="id_Cliente"
-                    id="id_Cliente_new_contract"
-                    class="dt-select w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-emerald-500 transition-all font-sans"
-                    data-enhanced-select
-                    data-search-placeholder="Buscar cliente..."
-                    required
-                >
-                    <option value="">Seleccione un cliente...</option>
-                    <?php foreach ($clientesDrawer as $cliente): ?>
-                        <option value="<?php echo (int) $cliente->id; ?>" <?php echo $isEdit && $cliente->id === $contratoEdit->customerId ? 'selected' : ''; ?>><?php echo htmlspecialchars($cliente->name, ENT_QUOTES, 'UTF-8'); ?> (<?php echo htmlspecialchars($cliente->rut, ENT_QUOTES, 'UTF-8'); ?>)</option>
-                    <?php endforeach; ?>
-                </select>
+                <?php if ($isView): ?>
+                    <input
+                        type="text"
+                        class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 bg-slate-50 font-sans"
+                        value="<?php echo $clienteActual !== null ? htmlspecialchars($clienteActual->name . ' (' . $clienteActual->rut . ')', ENT_QUOTES, 'UTF-8') : ''; ?>"
+                        disabled
+                    >
+                <?php else: ?>
+                    <select
+                        name="id_Cliente"
+                        id="id_Cliente_new_contract"
+                        class="dt-select w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-emerald-500 transition-all font-sans"
+                        data-enhanced-select
+                        data-search-placeholder="Buscar cliente..."
+                        required
+                    >
+                        <option value="">Seleccione un cliente...</option>
+                        <?php foreach ($clientesDrawer as $cliente): ?>
+                            <option value="<?php echo (int) $cliente->id; ?>" <?php echo $isEdit && $cliente->id === $contratoEdit->customerId ? 'selected' : ''; ?>><?php echo htmlspecialchars($cliente->name, ENT_QUOTES, 'UTF-8'); ?> (<?php echo htmlspecialchars($cliente->rut, ENT_QUOTES, 'UTF-8'); ?>)</option>
+                        <?php endforeach; ?>
+                    </select>
+                <?php endif; ?>
             </div>
 
             <div class="space-y-1.5">
@@ -281,8 +345,8 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
                     name="obra_Contrato"
                     placeholder="e.g. OBRA RUTA 5 - CHONCHI"
                     value="<?php echo $isEdit ? htmlspecialchars($contratoEdit->obra, ENT_QUOTES, 'UTF-8') : ''; ?>"
-                    class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-sans"
-                    required
+                    class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-sans<?php echo $isView ? ' bg-slate-50' : ''; ?>"
+                    <?php echo $isView ? 'disabled' : 'required'; ?>
                 >
             </div>
 
@@ -293,8 +357,8 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
                         type="date"
                         name="fechaInicio_Contrato"
                         value="<?php echo $isEdit ? htmlspecialchars($contratoEdit->startDate, ENT_QUOTES, 'UTF-8') : ''; ?>"
-                        class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-mono"
-                        required
+                        class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-mono<?php echo $isView ? ' bg-slate-50' : ''; ?>"
+                        <?php echo $isView ? 'disabled' : 'required'; ?>
                     >
                 </div>
                 <div class="space-y-1.5">
@@ -303,8 +367,8 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
                         type="date"
                         name="fechaFin_Contrato"
                         value="<?php echo $isEdit ? htmlspecialchars($contratoEdit->endDate, ENT_QUOTES, 'UTF-8') : ''; ?>"
-                        class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-mono"
-                        required
+                        class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-mono<?php echo $isView ? ' bg-slate-50' : ''; ?>"
+                        <?php echo $isView ? 'disabled' : 'required'; ?>
                     >
                 </div>
             </div>
@@ -318,9 +382,9 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
                         name="valorMensual_Contrato"
                         placeholder="e.g. 125.000"
                         value="<?php echo $isEdit ? number_format($contratoEdit->monthlyValue, 0, ',', '.') : ''; ?>"
-                        class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-sans"
+                        class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-sans<?php echo $isView ? ' bg-slate-50' : ''; ?>"
                         data-money-mask
-                        required
+                        <?php echo $isView ? 'disabled' : 'required'; ?>
                     >
                 </div>
                 <div class="space-y-1.5">
@@ -331,9 +395,9 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
                         name="valorTotal_Contrato"
                         placeholder="e.g. 1.500.000"
                         value="<?php echo $isEdit ? number_format($contratoEdit->totalValue, 0, ',', '.') : ''; ?>"
-                        class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-sans"
+                        class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-sans<?php echo $isView ? ' bg-slate-50' : ''; ?>"
                         data-money-mask
-                        required
+                        <?php echo $isView ? 'disabled' : 'required'; ?>
                     >
                 </div>
             </div>
@@ -345,8 +409,8 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
                     name="direccion_Contrato"
                     placeholder="e.g. Km 12 Camino a Rilán, Castro"
                     value="<?php echo $isEdit ? htmlspecialchars($contratoEdit->address, ENT_QUOTES, 'UTF-8') : ''; ?>"
-                    class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-sans"
-                    required
+                    class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-sans<?php echo $isView ? ' bg-slate-50' : ''; ?>"
+                    <?php echo $isView ? 'disabled' : 'required'; ?>
                 >
             </div>
 
@@ -376,25 +440,35 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
                     name="observacion_Contrato"
                     placeholder="Mantenimiento los martes y sábados, incluir papel..."
                     rows="3"
-                    class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-sans"
+                    class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-sans<?php echo $isView ? ' bg-slate-50' : ''; ?>"
+                    <?php echo $isView ? 'disabled' : ''; ?>
                 ><?php echo $isEdit ? htmlspecialchars($contratoEdit->observation ?? '', ENT_QUOTES, 'UTF-8') : ''; ?></textarea>
             </div>
 
             <div class="pt-4 border-t border-slate-100 flex items-center space-x-3">
-                <a
-                    href="<?php echo $closeDrawerUrl; ?>"
-                    class="flex-1 py-2.5 border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors rounded-xl text-xs font-semibold font-sans text-center"
-                >
-                    Cancelar
-                </a>
-                <button
-                    type="submit"
-                    name="<?php echo $isEdit ? 'update' : 'crear'; ?>"
-                    id="submit-new-contract"
-                    class="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-semibold font-sans transition-all shadow-lg shadow-emerald-500/10"
-                >
-                    <?php echo $isEdit ? 'Actualizar Contrato' : 'Establecer Contrato'; ?>
-                </button>
+                <?php if ($isView): ?>
+                    <a
+                        href="<?php echo $closeDrawerUrl; ?>"
+                        class="flex-1 py-2.5 border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors rounded-xl text-xs font-semibold font-sans text-center"
+                    >
+                        Cerrar
+                    </a>
+                <?php else: ?>
+                    <a
+                        href="<?php echo $closeDrawerUrl; ?>"
+                        class="flex-1 py-2.5 border border-slate-200 text-slate-600 hover:bg-slate-50 transition-colors rounded-xl text-xs font-semibold font-sans text-center"
+                    >
+                        Cancelar
+                    </a>
+                    <button
+                        type="submit"
+                        name="<?php echo $isEdit ? 'update' : 'crear'; ?>"
+                        id="submit-new-contract"
+                        class="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-semibold font-sans transition-all shadow-lg shadow-emerald-500/10"
+                    >
+                        <?php echo $isEdit ? 'Actualizar Contrato' : 'Establecer Contrato'; ?>
+                    </button>
+                <?php endif; ?>
             </div>
         </form>
     </div>
@@ -497,7 +571,7 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
     </div>
 <?php endif; ?>
 
-<?php if ($drawerMode === 'new' || $drawerMode === 'edit' || $drawerMode === 'manage'): ?>
+<?php if ($drawerMode === 'new' || $drawerMode === 'edit' || $drawerMode === 'view' || $drawerMode === 'manage'): ?>
     <script>
         (function () {
             var drawer = document.querySelector('.app-drawer');

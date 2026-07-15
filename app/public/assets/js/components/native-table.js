@@ -47,6 +47,40 @@
         return el;
     }
 
+    function buildPageEllipsis() {
+        var el = document.createElement('span');
+        el.textContent = '...';
+        el.className = 'px-2 py-1 text-xs font-semibold text-slate-400 select-none';
+        return el;
+    }
+
+    // Ventana deslizante: siempre primera y ultima pagina, mas siblingCount
+    // paginas a cada lado de la actual. Saltos >1 se marcan con '...'.
+    function getPageItems(totalPages, currentPage, siblingCount) {
+        var pageSet = {};
+        var add = function (p) {
+            if (p >= 1 && p <= totalPages) pageSet[p] = true;
+        };
+        add(1);
+        add(totalPages);
+        for (var i = currentPage - siblingCount; i <= currentPage + siblingCount; i++) {
+            add(i);
+        }
+
+        var sorted = Object.keys(pageSet).map(Number).sort(function (a, b) { return a - b; });
+
+        var items = [];
+        var prev = null;
+        sorted.forEach(function (page) {
+            if (prev !== null && page - prev > 1) {
+                items.push('...');
+            }
+            items.push(page);
+            prev = page;
+        });
+        return items;
+    }
+
     function render(table) {
         var state = getState(table);
         var perPage = parseInt(table.getAttribute('data-per-page'), 10) || 9;
@@ -99,7 +133,11 @@
                 : buildPageDisabled('Anterior')
         );
 
-        for (var p = 1; p <= totalPages; p++) {
+        getPageItems(totalPages, state.page, 1).forEach(function (item) {
+            if (item === '...') {
+                pages.appendChild(buildPageEllipsis());
+                return;
+            }
             (function (page) {
                 var active = page === state.page;
                 pages.appendChild(
@@ -112,8 +150,8 @@
                         }
                     )
                 );
-            })(p);
-        }
+            })(item);
+        });
 
         pages.appendChild(
             state.page < totalPages

@@ -1,7 +1,8 @@
 // Datepicker.js — wrapper de Flatpickr en español sobre input[type="date"].
 // Se auto-inicializa: no requiere script por vista. Flatpickr reemplaza visualmente
-// el picker nativo del navegador, pero el name y el formato enviado al backend
-// (Y-m-d) son idénticos a los del input nativo -> cero cambios en controllers/DB.
+// el picker nativo del navegador. Usa altInput: el usuario ve/edita d-m-Y, pero el
+// input real (name, value enviado al backend) sigue en Y-m-d -> cero cambios en
+// controllers/DB.
 //
 // Casos opt-in vía data-attrs:
 //   data-datepicker-min="today"          -> no permite fechas pasadas
@@ -20,6 +21,8 @@ window.Datepicker = (function () {
             var config = {
                 locale: 'es',
                 dateFormat: 'Y-m-d',
+                altInput: true,
+                altFormat: 'd-m-Y',
                 allowInput: true,
             };
 

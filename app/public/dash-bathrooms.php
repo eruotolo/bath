@@ -112,6 +112,33 @@ function base_query_string(array $excludes = ['page']): string {
     return $query !== '' ? '&' . $query : '';
 }
 
+/**
+ * Ventana deslizante de paginación: siempre primera y última página, más
+ * $siblingCount páginas a cada lado de la actual. Saltos >1 se marcan con '...'.
+ * @return array<int, int|string>
+ */
+function pagination_page_items(int $totalPages, int $currentPage, int $siblingCount = 1): array {
+    $pages = array_unique(array_filter(
+        array_merge(
+            [1, $totalPages],
+            range($currentPage - $siblingCount, $currentPage + $siblingCount)
+        ),
+        fn(int $p): bool => $p >= 1 && $p <= $totalPages
+    ));
+    sort($pages);
+
+    $items = [];
+    $prev = null;
+    foreach ($pages as $page) {
+        if ($prev !== null && $page - $prev > 1) {
+            $items[] = '...';
+        }
+        $items[] = $page;
+        $prev = $page;
+    }
+    return $items;
+}
+
 // --- Metadatos visuales por estado: Inactivo=slate > Mantención=amber > Asignado=blue > Disponible=emerald ---
 function bath_estado_meta(int $estado, int $asignado): array {
     if ($estado === 0) {
@@ -454,13 +481,15 @@ $pills = [
                             <?php else: ?>
                                 <button class="px-3 py-1 rounded-lg border border-slate-100 bg-white text-xs font-semibold text-slate-500 cursor-not-allowed" disabled>Anterior</button>
                             <?php endif; ?>
-                            <?php for ($p = 1; $p <= $totalPages; $p++): ?>
-                                <?php if ($p === $currentPage): ?>
-                                    <span class="px-3 py-1 rounded-lg border border-emerald-600 bg-emerald-600 text-white text-xs font-semibold"><?php echo $p; ?></span>
+                            <?php foreach (pagination_page_items($totalPages, $currentPage) as $item): ?>
+                                <?php if ($item === '...'): ?>
+                                    <span class="px-2 py-1 text-xs font-semibold text-slate-400 select-none">...</span>
+                                <?php elseif ($item === $currentPage): ?>
+                                    <span class="px-3 py-1 rounded-lg border border-emerald-600 bg-emerald-600 text-white text-xs font-semibold"><?php echo $item; ?></span>
                                 <?php else: ?>
-                                    <a href="?page=<?php echo $p; ?><?php echo base_query_string(['page']); ?>" class="px-3 py-1 rounded-lg border border-slate-100 bg-white text-xs font-semibold text-slate-500 transition-colors hover:bg-slate-50 hover:text-emerald-600 hover:border-slate-200"><?php echo $p; ?></a>
+                                    <a href="?page=<?php echo $item; ?><?php echo base_query_string(['page']); ?>" class="px-3 py-1 rounded-lg border border-slate-100 bg-white text-xs font-semibold text-slate-500 transition-colors hover:bg-slate-50 hover:text-emerald-600 hover:border-slate-200"><?php echo $item; ?></a>
                                 <?php endif; ?>
-                            <?php endfor; ?>
+                            <?php endforeach; ?>
                             <?php if ($currentPage < $totalPages): ?>
                                 <a href="?page=<?php echo $currentPage + 1; ?><?php echo base_query_string(['page']); ?>" class="px-3 py-1 rounded-lg border border-slate-100 bg-white text-xs font-semibold text-slate-500 transition-colors hover:bg-slate-50 hover:text-emerald-600 hover:border-slate-200">Siguiente</a>
                             <?php else: ?>
