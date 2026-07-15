@@ -34,9 +34,10 @@ $listado = $useCase->handle(
     $sortBy !== null ? $sortDir : 'DESC'
 );
 
-$total_contratos_todos = $contractRepository->countByState(null);
-$total_contratos_activos = $contractRepository->countByState(2);
-$total_contratos_terminados = $contractRepository->countByState(1);
+$contratos_totales = $contractRepository->countStateTotals();
+$total_contratos_todos = $contratos_totales['todos'];
+$total_contratos_activos = $contratos_totales['activos'];
+$total_contratos_terminados = $contratos_totales['terminados'];
 
 $titulo_listado = 'Contratos';
 if ($estado_Contrato_filtro === 2) {
@@ -230,7 +231,7 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
                             </td>
                             <td class="px-6 py-4.5">
                                 <div class="flex items-center gap-1">
-                                    <?php if ($row['estado_Contrato'] == 2): ?>
+                                    <?php if ($row['estado_Contrato'] === 2): ?>
                                         <a href="?action=edit&id_Contrato=<?php echo (int) $row['id_Contrato']; ?><?php echo htmlspecialchars(baseQueryString(['action', 'id_Contrato']), ENT_QUOTES, 'UTF-8'); ?>" class="dt-cell-action" title="Editar">
                                             <i data-lucide="square-pen"></i>
                                         </a>
