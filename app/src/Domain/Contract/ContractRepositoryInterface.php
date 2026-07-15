@@ -21,10 +21,11 @@ interface ContractRepositoryInterface
     public function count(): int;
 
     /**
-     * Cuenta contratos por estado, para los botones de filtro de dash-contracts.php.
-     * $state === null cuenta los estados 1 y 2 (activos + terminados), igual que listWithCustomerName.
+     * Cuenta contratos agrupados por estado en una sola consulta, para los botones de
+     * filtro de dash-contracts.php.
+     * @return array{todos: int, activos: int, terminados: int}
      */
-    public function countByState(?int $state): int;
+    public function countStateTotals(): array;
 
     /**
      * Listado con nombre del cliente (join), para dash-contracts.php.

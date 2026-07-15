@@ -50,7 +50,7 @@
                     <ul class="flex items-center gap-2" role="tablist">
                         <li>
                             <button type="button" class="active group flex items-center gap-1.5 rounded-xl bg-slate-100 px-4 py-2 font-sans text-xs font-semibold text-slate-500 transition-all duration-200 hover:text-slate-800 [&.active]:bg-slate-900 [&.active]:text-white" data-bs-toggle="tab" data-bs-target="#tab-contratos-activos">
-                                Contratos Activos
+                                Baños y Contratos Activos
                                 <span class="rounded-full bg-slate-200 px-2 py-0.5 font-mono text-[10px] font-bold text-slate-700 group-[.active]:bg-white/15 group-[.active]:text-white"><?php echo (int) $total_contratos_activos; ?></span>
                             </button>
                         </li>
