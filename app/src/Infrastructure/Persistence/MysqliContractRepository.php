@@ -99,6 +99,21 @@ final class MysqliContractRepository implements ContractRepositoryInterface
         return (int) $result->fetch_assoc()['total'];
     }
 
+    public function countByState(?int $state): int
+    {
+        if ($state !== null) {
+            $stmt = $this->connection->prepare('SELECT COUNT(*) AS total FROM contratos WHERE estado_Contrato = ?');
+            $stmt->bind_param('i', $state);
+            $stmt->execute();
+
+            return (int) $stmt->get_result()->fetch_assoc()['total'];
+        }
+
+        $result = $this->connection->query('SELECT COUNT(*) AS total FROM contratos WHERE estado_Contrato IN (1, 2)');
+
+        return (int) $result->fetch_assoc()['total'];
+    }
+
     public function listWithCustomerName(?int $state, string $sortBy = 'created_at', string $sortDir = 'DESC'): array
     {
         $sortByMap = [
