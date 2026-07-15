@@ -25,6 +25,12 @@ interface BathroomRepositoryInterface
     public function listAll(): array;
 
     /**
+     * Baños activos y sin asignar, para el checklist de alta de contrato (dash-contracts.php).
+     * @return array<int, array{id_Bath:int, codigo_Bath:string, observacion_Bath:string}>
+     */
+    public function listAvailable(): array;
+
+    /**
      * Listado para dash-bathrooms.php (rebranding) con obra y cliente de la asignación activa.
      * Una fila por baño: obra_Contrato/nombre_Cliente vienen null si no está asignado a un
      * contrato con estado_Contrato = 2.

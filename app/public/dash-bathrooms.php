@@ -276,7 +276,7 @@ $pills = [
                             $obra = $b['obra_Contrato'] !== null ? (string) $b['obra_Contrato'] : '';
                             $cliente = $b['nombre_Cliente'] !== null ? (string) $b['nombre_Cliente'] : '';
                             $obs = (string) $b['observacion_Bath'];
-                            $fecha = (string) $b['fechaCompra_Bath'];
+                            $fecha = date('d-m-Y', strtotime((string) $b['fechaCompra_Bath']));
                         ?>
                             <div
                                 class="bano-card p-5 rounded-3xl border transition-all duration-300 relative overflow-hidden group flex flex-col justify-between h-48 bg-white <?php echo $meta['border']; ?> <?php echo $meta['shadow']; ?>"
@@ -378,7 +378,7 @@ $pills = [
                                                     <?php echo htmlspecialchars($b['codigo_Bath'], ENT_QUOTES, 'UTF-8'); ?>
                                                 </a>
                                             </td>
-                                            <td class="px-6 py-4 font-mono text-xs text-slate-500"><?php echo htmlspecialchars((string) $b['fechaCompra_Bath'], ENT_QUOTES, 'UTF-8'); ?></td>
+                                            <td class="px-6 py-4 font-mono text-xs text-slate-500"><?php echo htmlspecialchars(date('d-m-Y', strtotime((string) $b['fechaCompra_Bath'])), ENT_QUOTES, 'UTF-8'); ?></td>
                                             <td class="px-6 py-4">
                                                 <?php if ($meta['tone'] === 'blue'): ?>
                                                     <?php if ($obra !== ''): ?>

@@ -16,9 +16,9 @@ $useCase = new UnassignBathroomFromContract(new MysqliBathroomRepository($link))
 
 try {
     $useCase->handle($id_Relacion, $id_Bath, $id_Contrato);
-    header("Location: ../dash-contracts-item.php?id_Contrato=$id_Contrato");
+    header("Location: ../dash-contracts.php?action=manage&id_Contrato=$id_Contrato");
 } catch (\mysqli_sql_exception $e) {
-    header("Location: ../index.php");
+    header("Location: ../dash-contracts.php?action=manage&id_Contrato=$id_Contrato&err=" . urlencode('No se pudo desasignar el baño.'));
 }
 
 // Cerrar la conexión

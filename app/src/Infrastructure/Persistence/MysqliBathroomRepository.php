@@ -132,6 +132,17 @@ final class MysqliBathroomRepository implements BathroomRepositoryInterface
         return $result->fetch_all(MYSQLI_ASSOC);
     }
 
+    public function listAvailable(): array
+    {
+        $result = $this->connection->query(
+            'SELECT id_Bath, codigo_Bath, observacion_Bath
+             FROM bathrooms WHERE estado_Bath = 1 AND asignado_Bath = 0
+             ORDER BY codigo_Bath ASC'
+        );
+
+        return $result->fetch_all(MYSQLI_ASSOC);
+    }
+
     public function findActiveAssignment(int $idBath): ?array
     {
         $stmt = $this->connection->prepare(

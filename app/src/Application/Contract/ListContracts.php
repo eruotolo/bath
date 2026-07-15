@@ -11,11 +11,11 @@ final class ListContracts
     /**
      * @return array{total:int, items:array<int, array<string, mixed>>}
      */
-    public function handle(?int $state): array
+    public function handle(?int $state, string $sortBy = 'created_at', string $sortDir = 'DESC'): array
     {
         return [
             'total' => $this->repository->count(),
-            'items' => $this->repository->listWithCustomerName($state),
+            'items' => $this->repository->listWithCustomerName($state, $sortBy, $sortDir),
         ];
     }
 }

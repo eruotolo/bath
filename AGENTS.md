@@ -209,6 +209,16 @@ Tailwind v4.3.2 se compila con `@tailwindcss/cli` desde `app/public/assets/css/t
 - `data-bs-toggle="dropdown"` — toggle de `.show` en `.dropdown`. **Sin posicionamiento Popper**: el `.dropdown-menu` fluye natural en flexbox (suficiente para los 9 dropdowns del proyecto). Si en el futuro aparece un dropdown que necesita posicionamiento absoluto con flip, evaluar Popper.js por separado.
 - `data-bs-toggle="tab"` + `data-bs-target="#id"` — cambia paneles activos. Sin animación de fade (vanilla).
 
+## Selects con buscador (Choices.js) en drawers
+
+Todo `<select>` que necesite buscador (asignar cliente, baño, etc. dentro de un drawer lateral tipo `#contract-drawer`) usa el atributo `data-enhanced-select` (+ opcionalmente `data-search-placeholder="..."`). Esto inicializa Choices.js sobre el `<select>` nativo.
+
+**Gotcha crítico:** Choices.js oculta el `<select>` original y construye su propio DOM (`.choices`, `.choices__inner`, `.choices__list--dropdown`, etc.) con su tema por defecto (Open Sans, gris, radios de 2.5px). Las clases Tailwind puestas en el `<select>` (`rounded-xl`, `border-slate-200`, `focus:border-emerald-500`...) **no tienen ningún efecto** sobre ese DOM generado — son cosméticas solo para el elemento oculto.
+
+El re-skin real vive en `app/public/assets/css/tw/components.css` (~línea 716), como reglas `!important` **scoped por ID de drawer**: `#bath-drawer`, `#contract-drawer`. Si creás un drawer nuevo con un `data-enhanced-select` adentro y su `id` no está en esa lista de selectores, el select se ve con el tema crudo de Choices.js — mismas clases Tailwind, apariencia completamente distinta (fuente, padding, colores de foco/hover, bordes del dropdown).
+
+**Regla:** al agregar un `data-enhanced-select` dentro de un drawer nuevo, agregar el `id` de ese drawer a los 8 selectores scoped en `components.css` (el bloque completo del re-skin) y correr `pnpm tw:build`. Verificar abriendo el dropdown en el navegador — no alcanza con mirar el select cerrado, el tema roto se nota recién al desplegar la lista.
+
 ## NO hacer
 
 - **NO** `git add .` a ciegas — `.env` NO está gitignored (ver sección Seguridad).

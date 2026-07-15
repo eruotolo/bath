@@ -99,14 +99,26 @@ final class MysqliContractRepository implements ContractRepositoryInterface
         return (int) $result->fetch_assoc()['total'];
     }
 
-    public function listWithCustomerName(?int $state): array
+    public function listWithCustomerName(?int $state, string $sortBy = 'created_at', string $sortDir = 'DESC'): array
     {
+        $sortByMap = [
+            'created_at' => 'CT.created_at',
+            'cliente' => 'CL.nombre_Cliente',
+            'obra' => 'CT.obra_Contrato',
+            'estado' => 'CT.estado_Contrato',
+        ];
+        $allowedSortDir = ['ASC', 'DESC'];
+
+        $column = $sortByMap[$sortBy] ?? $sortByMap['created_at'];
+        $direction = in_array($sortDir, $allowedSortDir, true) ? $sortDir : 'DESC';
+        $orderBy = $column . ' ' . $direction . ', CT.id_Contrato DESC';
+
         if ($state !== null) {
             $stmt = $this->connection->prepare(
                 'SELECT CT.*, CL.nombre_Cliente FROM contratos CT
                  JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
                  WHERE CT.estado_Contrato = ?
-                 ORDER BY CT.created_at DESC, CT.id_Contrato DESC'
+                 ORDER BY ' . $orderBy
             );
             $stmt->bind_param('i', $state);
             $stmt->execute();
@@ -118,7 +130,7 @@ final class MysqliContractRepository implements ContractRepositoryInterface
             'SELECT CT.*, CL.nombre_Cliente FROM contratos CT
              JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
              WHERE CT.estado_Contrato IN (1, 2)
-             ORDER BY CT.created_at DESC, CT.id_Contrato DESC'
+             ORDER BY ' . $orderBy
         );
 
         return $result->fetch_all(MYSQLI_ASSOC);

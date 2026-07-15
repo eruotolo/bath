@@ -713,14 +713,14 @@
     }
     .modal-backdrop.show { opacity: .4; }
 
-    /* ===== Re-skin de Choices.js dentro de #bath-drawer =====
+    /* ===== Re-skin de Choices.js dentro de #bath-drawer, #contract-drawer =====
        Choices.js oculta el <select> original y crea su propio DOM (.choices, .choices__inner, ...)
        con su theme por defecto (Open Sans, radios de 2.5px, gris), que no respeta los inputs
        Tailwind del resto del drawer (rounded-xl, border-slate-200, focus:border-emerald-500).
-       Scoped a #bath-drawer para no afectar los otros data-enhanced-select del resto de la app
+       Scoped a #bath-drawer, #contract-drawer para no afectar los otros data-enhanced-select del resto de la app
        (esos usan .dt-select/.dt-input, un sistema visual distinto). */
-    #bath-drawer .choices { font-size: 12px !important; }
-    #bath-drawer .choices__inner {
+    #bath-drawer .choices, #contract-drawer .choices { font-size: 12px !important; }
+    #bath-drawer .choices__inner, #contract-drawer .choices__inner {
         display: flex !important;
         align-items: center !important;
         min-height: 0 !important;
@@ -734,39 +734,43 @@
         transition: border-color .15s !important;
     }
     #bath-drawer .choices.is-open .choices__inner,
-    #bath-drawer .choices.is-focused .choices__inner {
+    #bath-drawer .choices.is-focused .choices__inner,
+    #contract-drawer .choices.is-open .choices__inner,
+    #contract-drawer .choices.is-focused .choices__inner {
         border-color: #10b981 !important;
     }
-    #bath-drawer .choices__list--single { padding: 0 !important; }
-    #bath-drawer .choices__list--single .choices__item {
+    #bath-drawer .choices__list--single, #contract-drawer .choices__list--single { padding: 0 !important; }
+    #bath-drawer .choices__list--single .choices__item, #contract-drawer .choices__list--single .choices__item {
         font-family: var(--font-sans) !important;
         color: #000 !important;
     }
-    #bath-drawer .choices__placeholder {
+    #bath-drawer .choices__placeholder, #contract-drawer .choices__placeholder {
         opacity: 1 !important;
         color: var(--color-slate-400, #94a3b8) !important;
     }
     #bath-drawer .choices__list--dropdown,
-    #bath-drawer .choices__list[aria-expanded] {
+    #bath-drawer .choices__list[aria-expanded],
+    #contract-drawer .choices__list--dropdown,
+    #contract-drawer .choices__list[aria-expanded] {
         border: 1px solid var(--color-slate-200, #e2e8f0) !important;
         border-radius: 12px !important;
         box-shadow: 0 10px 25px -5px rgba(15, 23, 42, .1) !important;
         overflow: hidden !important;
         z-index: 60 !important;
     }
-    #bath-drawer .choices__list--dropdown .choices__input {
+    #bath-drawer .choices__list--dropdown .choices__input, #contract-drawer .choices__list--dropdown .choices__input {
         margin: 0 !important;
         padding: 10px 16px !important;
         font-family: var(--font-sans) !important;
         font-size: 12px !important;
         border-bottom: 1px solid var(--color-slate-100, #f1f5f9) !important;
     }
-    #bath-drawer .choices__list--dropdown .choices__item {
+    #bath-drawer .choices__list--dropdown .choices__item, #contract-drawer .choices__list--dropdown .choices__item {
         font-family: var(--font-sans) !important;
         font-size: 12px !important;
         padding: 8px 16px !important;
     }
-    #bath-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted {
+    #bath-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted, #contract-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted {
         background: #ecfdf5 !important;
         color: #047857 !important;
     }

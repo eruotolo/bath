@@ -83,7 +83,7 @@
                     <?php while ($row = mysqli_fetch_array($result_task)): ?>
                         <?php
                             $codigo = htmlspecialchars($row['codigo_Bath'], ENT_QUOTES, 'UTF-8');
-                            $fecha = htmlspecialchars($row['fechaInicio_Contrato'], ENT_QUOTES, 'UTF-8');
+                            $fecha = htmlspecialchars(date('d-m-Y', strtotime($row['fechaInicio_Contrato'])), ENT_QUOTES, 'UTF-8');
                             $obra = htmlspecialchars($row['obra_Contrato'], ENT_QUOTES, 'UTF-8');
                             $cliente = htmlspecialchars($row['nombre_Cliente'], ENT_QUOTES, 'UTF-8');
                             $searchable = htmlspecialchars($row['codigo_Bath'] . ' ' . $row['obra_Contrato'] . ' ' . $row['nombre_Cliente'], ENT_QUOTES, 'UTF-8');

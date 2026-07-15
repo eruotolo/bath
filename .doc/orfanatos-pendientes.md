@@ -47,3 +47,26 @@ Origen: la página `dash-customers-item.php` (ficha de detalle del cliente) va a
 - `app/public/layouts/sidebar.php:36` — quitar `'dash-customers-item.php'` del array `match`.
 - `app/public/layouts/header.php:9` — quitar entrada del breadcrumb.
 - `app/public/dash-customers.php:182` y `:187` — los enlaces de RUT/Nombre (convertir a texto plano o re-apuntar).
+
+---
+
+## Cluster "Obras & Contratos" (huérfano, 2026-07-15)
+
+Origen: `dash-contracts.php` migró sus flujos de crear/editar contrato y gestionar baños a drawers laterales embebidos en la misma página (`?action=new`, `?action=edit&id_Contrato=X`, `?action=manage&id_Contrato=X`). Las 3 páginas legacy de página completa que cumplían esos roles quedaron sin ningún link de navegación que apunte a ellas.
+
+**Seguras de borrar** — a diferencia del cluster de clientes, acá el reemplazo (los drawers) ya está construido, probado y en uso. No hay flujo pendiente que dependa de estas páginas.
+
+### Páginas huérfanas
+- 🔴 `app/public/dash-contracts-add.php` — página completa de "Nuevo Contrato" (posteaba a `controller/contract-new.php`, mismo endpoint que ahora usa el drawer `?action=new`). Ya estaba huérfana antes de esta sesión — nadie la enlazaba.
+- 🔴 `app/public/dash-contracts-edit.php` — página completa de "Editar Contrato" (posteaba a `controller/contract-update.php`). Reemplazada por el drawer `?action=edit&id_Contrato=X`. Antes la enlazaba el botón lápiz de la tabla.
+- 🔴 `app/public/dash-contracts-item.php` — ficha de detalle del contrato con lista de baños asignados + modal para asignar uno nuevo. Reemplazada por el drawer `?action=manage&id_Contrato=X`. Antes la enlazaba "Agregar Baños Químicos" del dropdown de acciones.
+
+### Semi-huérfano (cascada de `dash-contracts-item.php`)
+- 🟡 `app/public/layouts/modal-nuevo-assign-bath.php` — modal "Asignar Nuevo Baño al Contrato", solo lo incluye `dash-contracts-item.php`. Postea a `controller/contract-bath-new-assign.php` (**ese controller NO es huérfano** — el drawer de gestión de baños lo sigue usando activamente con un formulario distinto).
+
+### Controllers — no huérfanos, no tocar
+`controller/contract-new.php`, `controller/contract-update.php`, `controller/contract-bath-new-assign.php` y `controller/contract-bath-notassign.php` siguen todos en uso activo por los drawers nuevos. Solo las 3 páginas de arriba y el modal quedaron sin uso.
+
+### Otros puntos a tocar al limpiar
+- `app/public/layouts/sidebar.php:62` — quitar `'dash-contracts-add.php'`, `'dash-contracts-edit.php'` y `'dash-contracts-item.php'` del array `match`.
+- `app/public/layouts/header.php:16-18` — quitar las 3 entradas del breadcrumb (`dash-contracts-add.php`, `dash-contracts-edit.php`, `dash-contracts-item.php`).

@@ -25,7 +25,7 @@ interface ContractRepositoryInterface
      * $state === null trae los estados 1 y 2 (activos + terminados), igual que el listado original.
      * @return array<int, array<string, mixed>>
      */
-    public function listWithCustomerName(?int $state): array;
+    public function listWithCustomerName(?int $state, string $sortBy = 'created_at', string $sortDir = 'DESC'): array;
 
     /**
      * @return Contract[] Contracts whose fechaFin_Contrato falls within the next $days days.
