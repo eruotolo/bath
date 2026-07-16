@@ -65,7 +65,7 @@ $nav_sections = [
             'label' => 'Servicios',
             'icon' => 'clipboard-check',
             'url' => 'dash-services.php',
-            'match' => ['dash-services.php', 'dash-services-add.php', 'dash-services-edit.php', 'dash-services-bath.php', 'dash-services-print.php'],
+            'match' => ['dash-services.php', 'dash-services-add.php', 'dash-services-edit.php', 'dash-services-print.php'],
         ],
     ],
     'Finanzas' => [

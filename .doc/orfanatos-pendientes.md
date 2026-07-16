@@ -70,3 +70,56 @@ Origen: `dash-contracts.php` migró sus flujos de crear/editar contrato y gestio
 ### Otros puntos a tocar al limpiar
 - `app/public/layouts/sidebar.php:62` — quitar `'dash-contracts-add.php'`, `'dash-contracts-edit.php'` y `'dash-contracts-item.php'` del array `match`.
 - `app/public/layouts/header.php:16-18` — quitar las 3 entradas del breadcrumb (`dash-contracts-add.php`, `dash-contracts-edit.php`, `dash-contracts-item.php`).
+
+---
+
+## Cluster "Baños Químicos" (huérfano, 2026-07-16)
+
+Origen: `dash-bathrooms.php` ya usaba el patrón de drawer (`?action=new`, `?action=edit&id=X`) desde antes de esta sesión — nunca se limpió. Detectado al verificar huérfanos disparado por la migración de Servicios.
+
+**Es la isla más completa de las tres** — a diferencia de Contratos, acá el drawer real postea a controllers *distintos* (`bath-create-drawer.php` / `bath-edit-drawer.php`), así que los controllers viejos también quedaron sin ningún uso. Seguras de borrar (páginas + controllers): el reemplazo ya está construido y en uso.
+
+### Páginas huérfanas
+- 🔴 `app/public/dash-bathrooms-add.php` — página completa de "Registrar Baño" (posteaba a `controller/bath-new.php`). Reemplazada por el drawer `?action=new`.
+- 🔴 `app/public/dash-bathrooms-edit.php` — página completa de "Editar Baño" (posteaba a `controller/bath-update.php`). Reemplazada por el drawer `?action=edit&id=X`.
+
+### Controllers huérfanos (a diferencia de Contratos, acá SÍ hay que borrarlos)
+- 🔴 `app/public/controller/bath-new.php` — solo lo llama `dash-bathrooms-add.php` (huérfana). El drawer real usa `bath-create-drawer.php`.
+- 🔴 `app/public/controller/bath-update.php` — solo lo llama `dash-bathrooms-edit.php` (huérfana). El drawer real usa `bath-edit-drawer.php`.
+
+### Otros puntos a tocar al limpiar
+- `app/public/layouts/sidebar.php:42` — quitar `'dash-bathrooms-add.php'` y `'dash-bathrooms-edit.php'` del array `match`.
+- `app/public/layouts/header.php:11-12` — quitar las 2 entradas del breadcrumb.
+
+---
+
+## Cluster "Servicios" (huérfano, 2026-07-16)
+
+Origen: migración de `dash-services.php` al drawer inline (`?action=new`, `?action=edit&id_Servicio=X`) hecha en esta misma sesión de trabajo. Mismo patrón que Baños/Contratos, detectado apenas terminada la migración.
+
+**Seguro de borrar** — igual que Contratos, el controller (`service-new.php`/`service-update.php`) queda vivo porque lo comparte el drawer nuevo; solo las páginas de página completa quedaron sin uso.
+
+### Páginas huérfanas
+- 🔴 `app/public/dash-services-add.php` — página completa de "Nuevo Servicio" (posteaba a `controller/service-new.php`). Reemplazada por el drawer `?action=new`.
+- 🔴 `app/public/dash-services-edit.php` — página completa de "Editar Servicio" (posteaba a `controller/service-update.php`). Reemplazada por el drawer `?action=edit&id_Servicio=X`.
+
+### Controllers — no huérfanos, no tocar
+`controller/service-new.php` y `controller/service-update.php` siguen en uso activo por el drawer nuevo.
+
+### 🐛 Bug relacionado, no corregido (a pedido de Edgardo, 2026-07-16)
+`app/public/controller/service-new.php:21` — si `CreateService` lanza `mysqli_sql_exception`, redirige a `dash-services-add.php?status=error&msg=...`. Como esa página quedó huérfana, un error real de creación manda al usuario a una página sin entrada en vez de devolverlo al drawer con el mensaje. El path de éxito (línea 16→ahora corregido a `dash-services.php?flash=...`) y el de `service-update.php` ya redirigen bien — falta parchear este caso. **Pendiente, no tocar todavía.**
+
+### Otros puntos a tocar al limpiar
+- `app/public/layouts/sidebar.php:68` — quitar `'dash-services-add.php'` y `'dash-services-edit.php'` del array `match` (dejar `'dash-services.php'` y `'dash-services-print.php'`, ese último sigue vivo).
+- `app/public/layouts/header.php:20-21` — quitar las 2 entradas del breadcrumb.
+
+---
+
+## Huérfanas de otro tipo — nunca conectadas, no son restos de migración (2026-07-16)
+
+A diferencia de los 3 clusters de arriba (páginas que SÍ tuvieron uso y quedaron atrás tras una migración), estas dos parecen no haber tenido nunca un link de entrada desde la UI:
+
+- 🔴 `app/public/auth-recoverpw.php` — cero enlaces desde `auth-login.php` ni de ningún otro lado; no hay "¿Olvidaste tu contraseña?" en el login. Auto-contenida (maneja su propio `$_POST`, sin controller separado). Contiene una inyección SQL real (`:17-18`, interpolación directa sin prepared statement) y un XSS reflejado potencial (`:85`, `htmlentities` sin `ENT_QUOTES`) — ver `.doc/auditoria-web-interface-guidelines-julio-2026.md`. **Decisión de Edgardo (2026-07-16): no tocar por ahora** (ni el bug de seguridad ni conectarla).
+- 🔴 `app/public/auth-register.php` — cero enlaces desde `auth-login.php`; no hay "Registrarse". Auto-contenida. Contiene un bug de password reflejado en `value=` tras error de validación (`:122,130`). **Decisión de Edgardo (2026-07-16): no tocar por ahora.**
+
+Ambas siguen siendo accesibles tecleando la URL directo — el "huérfano" es solo de navegación UI, no de disponibilidad real.

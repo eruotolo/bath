@@ -95,10 +95,19 @@ final class MysqliServiceRepository implements ServiceRepositoryInterface
     {
         $result = $this->connection->query(
             'SELECT SR.*, CT.obra_Contrato, CL.nombre_Cliente,
-                    EXISTS(SELECT 1 FROM factura_servicio FS WHERE FS.id_Servicio = SR.id_Servicio) AS facturado
+                    TS.instalacion_Tipo, TS.reparacion_Tipo, TS.limpieza_Tipo, TS.desinfeccion_Tipo,
+                    TS.sanitizacion_Tipo, TS.higienico_Tipo, TS.jabon_Tipo, TS.otros_Tipo, TS.retiro_Tipo,
+                    EXISTS(SELECT 1 FROM factura_servicio FS WHERE FS.id_Servicio = SR.id_Servicio) AS facturado,
+                    (SELECT F.numero_Factura
+                     FROM factura_servicio FS
+                     JOIN facturas F ON F.id_Factura = FS.id_Factura
+                     WHERE FS.id_Servicio = SR.id_Servicio
+                     ORDER BY FS.id_Factura DESC
+                     LIMIT 1) AS numero_Factura
              FROM servicios SR
              JOIN contratos CT ON SR.id_Contrato = CT.id_Contrato
              JOIN clientes CL ON CT.id_Cliente = CL.id_Cliente
+             JOIN tipo_servicio TS ON SR.nro_Servicio = TS.nro_Servicio
              WHERE SR.estado_Servicio = 1
              ORDER BY SR.created_at DESC, SR.id_Servicio DESC'
         );
@@ -135,6 +144,32 @@ final class MysqliServiceRepository implements ServiceRepositoryInterface
         $stmt->execute();
 
         return $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    }
+
+    public function syncBathrooms(int $idServicio, array $bathIds): void
+    {
+        $bathIds = array_unique(array_map('intval', $bathIds));
+
+        $this->connection->begin_transaction();
+
+        try {
+            $stmtDelete = $this->connection->prepare('DELETE FROM servicios_bathrooms WHERE id_Servicio = ?');
+            $stmtDelete->bind_param('i', $idServicio);
+            $stmtDelete->execute();
+
+            if ($bathIds !== []) {
+                $stmtInsert = $this->connection->prepare('INSERT INTO servicios_bathrooms (id_Servicio, id_Bath) VALUES (?, ?)');
+                foreach ($bathIds as $idBath) {
+                    $stmtInsert->bind_param('ii', $idServicio, $idBath);
+                    $stmtInsert->execute();
+                }
+            }
+
+            $this->connection->commit();
+        } catch (\Throwable $exception) {
+            $this->connection->rollback();
+            throw $exception;
+        }
     }
 
     private function insertTipoServicio(Service $service): void

@@ -13,7 +13,7 @@ interface ServiceRepositoryInterface
     public function find(int $id): ?Service;
 
     /**
-     * Servicio + contrato + cliente (join), para dash-services-edit.php / dash-services-bath.php / dash-services-print.php.
+     * Servicio + contrato + cliente (join), para dash-services-edit.php / dash-services-print.php.
      * @return array<string, mixed>|null
      */
     public function findWithContractAndCustomer(int $id): ?array;
@@ -32,8 +32,14 @@ interface ServiceRepositoryInterface
     public function removeAssignedBathroom(int $idRelacion): void;
 
     /**
-     * Baños asignados a un servicio, para dash-services-bath.php / dash-services-print.php.
+     * Baños asignados a un servicio, para dash-services.php (drawer editar) / dash-services-print.php.
      * @return array<int, array<string, mixed>>
      */
     public function listAssignedBathrooms(int $idServicio): array;
+
+    /**
+     * Reemplaza el set completo de baños asignados a un servicio (DELETE + INSERT).
+     * @param int[] $bathIds
+     */
+    public function syncBathrooms(int $idServicio, array $bathIds): void;
 }

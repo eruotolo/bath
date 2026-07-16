@@ -4,7 +4,7 @@ namespace App\Application\Service;
 
 use App\Domain\Service\ServiceRepositoryInterface;
 
-final class AssignBathroomsToService
+final class SyncBathroomsToService
 {
     public function __construct(private readonly ServiceRepositoryInterface $repository) {}
 
@@ -13,6 +13,6 @@ final class AssignBathroomsToService
      */
     public function handle(int $idServicio, array $bathIds): void
     {
-        $this->repository->assignBathrooms($idServicio, $bathIds);
+        $this->repository->syncBathrooms($idServicio, $bathIds);
     }
 }

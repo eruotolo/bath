@@ -19,7 +19,6 @@ $page_titles = [
     'dash-services.php' => 'Servicios en Terreno & Ruta',
     'dash-services-add.php' => 'Servicios en Terreno & Ruta',
     'dash-services-edit.php' => 'Servicios en Terreno & Ruta',
-    'dash-services-bath.php' => 'Servicios en Terreno & Ruta',
     'dash-services-print.php' => 'Servicios en Terreno & Ruta',
     'dash-invoices-list.php' => 'Control de Facturación',
     'dash-invoices-add.php' => 'Control de Facturación',

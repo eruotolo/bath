@@ -439,19 +439,19 @@ $pills = [
                                                         <button class="p-1.5 rounded-lg border border-slate-100 text-slate-500 hover:text-slate-800 hover:border-slate-200 transition-all dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" title="Más acciones">
                                                             <i data-lucide="more-horizontal" class="w-4 h-4"></i>
                                                         </button>
-                                                        <ul class="dropdown-menu dropdown-menu-end">
+                                                        <ul class="dropdown-menu dropdown-menu-end m-0 min-w-[220px] list-none overflow-hidden rounded-2xl border border-slate-100 bg-white p-2 shadow-xl shadow-slate-200/50">
                                                             <li>
-                                                                <a class="dropdown-item" href="?action=edit&id=<?php echo (int) $b['id_Bath']; ?><?php echo base_query_string(['page', 'action', 'id', 'assign', 'err']); ?>">
-                                                                    <i data-lucide="square-pen" class="!mr-2 !h-[14px] !w-[14px]"></i>Editar
+                                                                <a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="?action=edit&id=<?php echo (int) $b['id_Bath']; ?><?php echo base_query_string(['page', 'action', 'id', 'assign', 'err']); ?>">
+                                                                    <i data-lucide="square-pen" class="!h-[14px] !w-[14px] shrink-0"></i>Editar
                                                                 </a>
                                                             </li>
-                                                            <li><a class="dropdown-item" href="controller/bath-active.php?id_Bath=<?php echo (int) $b['id_Bath']; ?>"><i data-lucide="lock-open" class="!mr-2 !h-[14px] !w-[14px]"></i>Activar</a></li>
-                                                            <li><a class="dropdown-item" href="controller/bath-maintenance.php?id_Bath=<?php echo (int) $b['id_Bath']; ?>"><i data-lucide="wrench" class="!mr-2 !h-[14px] !w-[14px]"></i>Mantención</a></li>
-                                                            <li><a class="dropdown-item" href="controller/bath-inactive.php?id_Bath=<?php echo (int) $b['id_Bath']; ?>"><i data-lucide="lock" class="!mr-2 !h-[14px] !w-[14px]"></i>Inactivar</a></li>
-                                                            <li><hr class="dropdown-divider"></li>
+                                                            <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/bath-active.php?id_Bath=<?php echo (int) $b['id_Bath']; ?>"><i data-lucide="lock-open" class="!h-[14px] !w-[14px] shrink-0"></i>Activar</a></li>
+                                                            <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/bath-maintenance.php?id_Bath=<?php echo (int) $b['id_Bath']; ?>"><i data-lucide="wrench" class="!h-[14px] !w-[14px] shrink-0"></i>Mantención</a></li>
+                                                            <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/bath-inactive.php?id_Bath=<?php echo (int) $b['id_Bath']; ?>"><i data-lucide="lock" class="!h-[14px] !w-[14px] shrink-0"></i>Inactivar</a></li>
+                                                            <li><hr class="dropdown-divider m-1 border-slate-100"></li>
                                                             <li>
-                                                                <a class="dropdown-item text-danger" href="controller/bath-delete.php?id_Bath=<?php echo (int) $b['id_Bath']; ?>" data-confirm-delete data-confirm-title="¿Eliminar este baño?" data-confirm-text="Esta acción no se puede deshacer.">
-                                                                    <i data-lucide="trash-2" class="!mr-2 !h-[14px] !w-[14px]"></i>Eliminar
+                                                                <a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-rose-500 hover:bg-rose-50 hover:text-rose-500" href="controller/bath-delete.php?id_Bath=<?php echo (int) $b['id_Bath']; ?>" data-confirm-delete data-confirm-title="¿Eliminar este baño?" data-confirm-text="Esta acción no se puede deshacer.">
+                                                                    <i data-lucide="trash-2" class="!h-[14px] !w-[14px] shrink-0"></i>Eliminar
                                                                 </a>
                                                             </li>
                                                         </ul>

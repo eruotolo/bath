@@ -916,13 +916,13 @@
   .modal-backdrop.show {
     opacity: .4;
   }
-  #bath-drawer .choices, #contract-drawer .choices {
+  #bath-drawer .choices, #contract-drawer .choices, #service-drawer .choices {
     font-size: 12px !important;
   }
-  #bath-drawer .choices__inner, #contract-drawer .choices__inner {
+  #bath-drawer .choices__inner, #contract-drawer .choices__inner, #service-drawer .choices__inner {
     display: flex !important;
     align-items: center !important;
-    min-height: 0 !important;
+    min-height: 40px !important;
     padding: 10px 16px !important;
     font-family: var(--font-sans) !important;
     font-size: 12px !important;
@@ -935,32 +935,35 @@
   #bath-drawer .choices.is-open .choices__inner, #bath-drawer .choices.is-focused .choices__inner, #contract-drawer .choices.is-open .choices__inner, #contract-drawer .choices.is-focused .choices__inner {
     border-color: #10b981 !important;
   }
-  #bath-drawer .choices__list--single, #contract-drawer .choices__list--single {
+  #service-drawer .choices.is-open .choices__inner, #service-drawer .choices.is-focused .choices__inner {
+    border-color: #6366f1 !important;
+  }
+  #bath-drawer .choices__list--single, #contract-drawer .choices__list--single, #service-drawer .choices__list--single {
     padding: 0 !important;
   }
-  #bath-drawer .choices__list--single .choices__item, #contract-drawer .choices__list--single .choices__item {
+  #bath-drawer .choices__list--single .choices__item, #contract-drawer .choices__list--single .choices__item, #service-drawer .choices__list--single .choices__item {
     font-family: var(--font-sans) !important;
     color: #000 !important;
   }
-  #bath-drawer .choices__placeholder, #contract-drawer .choices__placeholder {
+  #bath-drawer .choices__placeholder, #contract-drawer .choices__placeholder, #service-drawer .choices__placeholder {
     opacity: 1 !important;
     color: var(--color-slate-400, #94a3b8) !important;
   }
-  #bath-drawer .choices__list--dropdown, #bath-drawer .choices__list[aria-expanded], #contract-drawer .choices__list--dropdown, #contract-drawer .choices__list[aria-expanded] {
+  #bath-drawer .choices__list--dropdown, #bath-drawer .choices__list[aria-expanded], #contract-drawer .choices__list--dropdown, #contract-drawer .choices__list[aria-expanded], #service-drawer .choices__list--dropdown, #service-drawer .choices__list[aria-expanded] {
     border: 1px solid var(--color-slate-200, #e2e8f0) !important;
     border-radius: 12px !important;
     box-shadow: 0 10px 25px -5px rgba(15, 23, 42, .1) !important;
     overflow: hidden !important;
     z-index: 60 !important;
   }
-  #bath-drawer .choices__list--dropdown .choices__input, #contract-drawer .choices__list--dropdown .choices__input {
+  #bath-drawer .choices__list--dropdown .choices__input, #contract-drawer .choices__list--dropdown .choices__input, #service-drawer .choices__list--dropdown .choices__input {
     margin: 0 !important;
     padding: 10px 16px !important;
     font-family: var(--font-sans) !important;
     font-size: 12px !important;
     border-bottom: 1px solid var(--color-slate-100, #f1f5f9) !important;
   }
-  #bath-drawer .choices__list--dropdown .choices__item, #contract-drawer .choices__list--dropdown .choices__item {
+  #bath-drawer .choices__list--dropdown .choices__item, #contract-drawer .choices__list--dropdown .choices__item, #service-drawer .choices__list--dropdown .choices__item {
     font-family: var(--font-sans) !important;
     font-size: 12px !important;
     padding: 8px 16px !important;
@@ -968,6 +971,10 @@
   #bath-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted, #contract-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted {
     background: #ecfdf5 !important;
     color: #047857 !important;
+  }
+  #service-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted {
+    background: #eef2ff !important;
+    color: #4338ca !important;
   }
 }
 @layer theme, base, components, utilities;
@@ -1999,6 +2006,9 @@
   }
   .max-h-32 {
     max-height: calc(var(--spacing) * 32) !important;
+  }
+  .max-h-48 {
+    max-height: calc(var(--spacing) * 48) !important;
   }
   .max-h-56 {
     max-height: calc(var(--spacing) * 56) !important;
@@ -3596,6 +3606,12 @@
       --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-indigo-500) 5%, transparent) var(--tw-shadow-alpha), transparent) !important;
     }
   }
+  .shadow-indigo-500\/10 {
+    --tw-shadow-color: color-mix(in srgb, oklch(58.5% 0.233 277.117) 10%, transparent) !important;
+    @supports (color: color-mix(in lab, red, red)) {
+      --tw-shadow-color: color-mix(in oklab, color-mix(in oklab, var(--color-indigo-500) 10%, transparent) var(--tw-shadow-alpha), transparent) !important;
+    }
+  }
   .shadow-indigo-600\/10 {
     --tw-shadow-color: color-mix(in srgb, oklch(51.1% 0.262 276.966) 10%, transparent) !important;
     @supports (color: color-mix(in lab, red, red)) {
@@ -3952,6 +3968,13 @@
       }
     }
   }
+  .hover\:border-indigo-300 {
+    &:hover {
+      @media (hover: hover) {
+        border-color: var(--color-indigo-300) !important;
+      }
+    }
+  }
   .hover\:border-primary-300 {
     &:hover {
       @media (hover: hover) {
@@ -4266,6 +4289,11 @@
       @supports (color: color-mix(in lab, red, red)) {
         --tw-ring-color: color-mix(in oklab, var(--color-emerald-500) 20%, transparent) !important;
       }
+    }
+  }
+  .focus\:ring-indigo-500 {
+    &:focus {
+      --tw-ring-color: var(--color-indigo-500) !important;
     }
   }
   .focus\:ring-indigo-500\/20 {
