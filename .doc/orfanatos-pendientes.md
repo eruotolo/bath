@@ -110,8 +110,25 @@ Origen: migración de `dash-services.php` al drawer inline (`?action=new`, `?act
 `app/public/controller/service-new.php:21` — si `CreateService` lanza `mysqli_sql_exception`, redirige a `dash-services-add.php?status=error&msg=...`. Como esa página quedó huérfana, un error real de creación manda al usuario a una página sin entrada en vez de devolverlo al drawer con el mensaje. El path de éxito (línea 16→ahora corregido a `dash-services.php?flash=...`) y el de `service-update.php` ya redirigen bien — falta parchear este caso. **Pendiente, no tocar todavía.**
 
 ### Otros puntos a tocar al limpiar
-- `app/public/layouts/sidebar.php:68` — quitar `'dash-services-add.php'` y `'dash-services-edit.php'` del array `match` (dejar `'dash-services.php'` y `'dash-services-print.php'`, ese último sigue vivo).
+- `app/public/layouts/sidebar.php:68` — quitar `'dash-services-add.php'` y `'dash-services-edit.php'` del array `match` (dejar `'dash-services.php'`; `'dash-services-print.php'` dejó de estar vivo, ver cluster de abajo).
 - `app/public/layouts/header.php:20-21` — quitar las 2 entradas del breadcrumb.
+
+---
+
+## Cluster "Impresión de Servicios" (huérfano, 2026-07-16)
+
+Origen: los 2 botones "Imprimir" de `dash-services.php` (vista tarjetas línea ~266 y dropdown de la tabla línea ~338) apuntaban a `dash-services-print.php?id_Servicio=X`, una página completa de dashboard con un botón que disparaba `window.print()`. Edgardo reportó dos problemas: el print del navegador capturaba su propio header/footer (fecha, URL, página), y tras imprimir/guardar PDF la pestaña quedaba parada en esa página del dashboard, que no debería ser navegable públicamente.
+
+**Reemplazo:** se creó `app/public/controller/service-pdf.php` (mismo patrón que `certificate-pdf.php`/`invoice-pdf.php`: usa el use case ya migrado `FindServiceForPrint` + `MysqliServiceRepository`, genera el PDF con TCPDF con `setPrintHeader(false)`/`setPrintFooter(false)`, `Output(..., 'I')` inline). Los 2 botones ahora apuntan ahí con `data-glightbox-preview data-type="external" data-width="900px" data-height="90vh"` — el PDF se abre en un lightbox sobre `dash-services.php`, sin navegar nunca a otra página. Resuelve ambos problemas: TCPDF controla el layout del PDF (sin header/footer del navegador) y no queda ninguna URL de dashboard cargada.
+
+**Bug de TCPDF encontrado en el camino (no soy yo quien lo introdujo, es preexistente):** `writeHTML()` con `<img src="{ruta absoluta filesystem}">` no renderiza la imagen cuando el script corre vía PHP-FPM (sí funciona por CLI) — probado que **también afecta a `certificate-pdf.php`** (logo y firma vienen en blanco ahí también). En `service-pdf.php` se evitó insertando el logo y la firma con `$pdf->Image()` nativo en vez de embeberlos en el HTML. **`certificate-pdf.php` e `invoice-pdf.php` NO se tocaron** — quedan con el mismo bug latente, fuera del alcance de este cambio.
+
+### Página huérfana
+- 🔴 `app/public/dash-services-print.php` — ya no la enlaza ningún botón. Sigue siendo accesible tecleando la URL directo (requiere sesión activa via `layouts/session.php`, igual exposición que siempre tuvo). **Decisión de Edgardo (2026-07-16): no borrar todavía, dejar documentado acá para limpieza por lotes.**
+
+### Otros puntos a tocar al limpiar (cuando se borre)
+- `app/public/layouts/sidebar.php:68` — quitar `'dash-services-print.php'` del array `match`.
+- `app/public/layouts/header.php:22` — quitar la entrada `'dash-services-print.php' => 'Servicios en Terreno & Ruta'`.
 
 ---
 

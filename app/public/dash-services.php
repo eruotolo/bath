@@ -115,15 +115,50 @@ function baseQueryString(array $excludes = ['page']): string {
     <?php include 'layouts/head.php'; ?>
     <?php include 'layouts/head-style.php'; ?>
     <style>
-        html[data-services-view="table"] #servicios-grid { display: none !important; }
-        html[data-services-view="table"] #servicios-table { display: block !important; }
+        /* Anti-flash: ambas vistas ocultas por defecto; solo la activa (data-services-view)
+           se muestra. El dataset lo setea el <script> de abajo pre-body, asi el primer paint
+           ya tiene la vista correcta (sin un frame de la otra vista). Fallback: grid si no hay JS.
+
+           IMPORTANTE — @layer utilities: estas reglas DEBEN vivir dentro del layer
+           `utilities` de Tailwind. El `important` flag del proyecto emite las utilities
+           (.grid, .hidden, .flex que llevan los contenedores) con !important dentro de
+           @layer utilities. Regla del cascade CSS: entre declaraciones !important, las que
+           estan en un layer le ganan a las unlayered, sin importar especificidad. Si este
+           bloque queda sin layer, `.grid`/`.hidden`/`.flex` (layered) le ganan y en el primer
+           paint SIEMPRE se ve el grid ~1s hasta que services.js corrige con estilo inline.
+           Dentro del mismo layer gana la especificidad: estos selectores (ID + atributo)
+           superan a las utilities de una sola clase. NO sacar el @layer. */
+        @layer utilities {
+            #servicios-grid, #servicios-table, #servicios-cards-pagination { display: none !important; }
+            html[data-services-view="grid"] #servicios-grid { display: grid !important; }
+            html[data-services-view="grid"] #servicios-cards-pagination { display: flex !important; }
+            html[data-services-view="table"] #servicios-table { display: block !important; }
+            html:not([data-services-view]) #servicios-grid { display: grid !important; }
+            html:not([data-services-view]) #servicios-cards-pagination { display: flex !important; }
+
+            /* Anti-flash del toggle grid/tabla: el markup PHP marca "grid" activo por
+               defecto (no conoce el localStorage). Sin esto, en cada recarga (ej. al
+               cambiar de pill Facturados/No Facturados) el boton de card se ve activo
+               un frame antes de que services.js corrija el estado. */
+            html[data-services-view="table"] [data-view-toggle="grid"] {
+                background-color: transparent !important;
+                color: #64748b !important;
+                box-shadow: none !important;
+            }
+            html[data-services-view="table"] [data-view-toggle="table"] {
+                background-color: #fff !important;
+                color: #0f172a !important;
+                box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05) !important;
+            }
+        }
     </style>
     <script>
         try {
-            if (window.localStorage.getItem('services-view') === 'table') {
-                document.documentElement.dataset.servicesView = 'table';
-            }
-        } catch (error) {}
+            var v = window.localStorage.getItem('services-view');
+            document.documentElement.dataset.servicesView = (v === 'table') ? 'table' : 'grid';
+        } catch (error) {
+            document.documentElement.dataset.servicesView = 'grid';
+        }
     </script>
 </head>
 
@@ -146,6 +181,7 @@ function baseQueryString(array $excludes = ['page']): string {
                                     type="text"
                                     placeholder="Cliente, obra o número..."
                                     id="servicios-local-search"
+                                    data-table-search-input="#servicios-table"
                                     class="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-colors font-sans"
                                 />
                             </div>
@@ -278,18 +314,32 @@ function baseQueryString(array $excludes = ['page']): string {
                         <?php endif; ?>
                     </div>
 
+                    <!-- Footer de paginacion de cards (calco visual de native-table.php:116-119).
+                         Como el grid no tiene card contenedor, es su propia superficie rounded-3xl.
+                         La visibilidad la controla el CSS anti-flash del <head> (solo vista grid). -->
+                    <div
+                        id="servicios-cards-pagination"
+                        class="bg-white rounded-3xl border border-slate-100 shadow-sm px-6 py-4 flex items-center justify-between"
+                        data-cards-pagination
+                        data-per-page="9"
+                        data-item-label="Servicios"
+                    >
+                        <span class="font-mono text-[10px] text-slate-400 font-bold uppercase" data-cards-summary></span>
+                        <div class="flex items-center space-x-1" data-cards-pages></div>
+                    </div>
+
                     <!-- Tabla (#servicios-table) — oculta por defecto; la visibilidad la controla services.js (Fase 5) -->
-                    <div id="servicios-table" class="hidden bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+                    <div id="servicios-table" data-table-native-wrap data-per-page="9" data-item-label="Servicios" class="hidden bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
                         <div class="overflow-x-auto">
-                            <table class="w-full text-left border-collapse">
+                            <table class="w-full table-fixed text-left border-collapse">
                                 <thead>
                                     <tr class="border-b border-slate-50 bg-slate-50/50">
-                                        <th class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Número de Servicio</th>
-                                        <th class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Cliente</th>
-                                        <th class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Obra</th>
-                                        <th class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Factura</th>
-                                        <th class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Fecha</th>
-                                        <th class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase text-right">Acción</th>
+                                        <th class="w-[13%] px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Número de Servicio</th>
+                                        <th class="w-[21%] px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Cliente</th>
+                                        <th class="w-[20%] px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Obra</th>
+                                        <th class="w-[17%] px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Factura</th>
+                                        <th class="w-[15%] px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Fecha</th>
+                                        <th class="w-[14%] px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase text-right">Acción</th>
                                     </tr>
                                 </thead>
                                 <tbody class="divide-y divide-slate-50">
@@ -305,26 +355,27 @@ function baseQueryString(array $excludes = ['page']): string {
                                     ?>
                                         <tr
                                             class="servicio-row hover:bg-slate-50/50 transition-colors group"
+                                            data-search="<?php echo htmlspecialchars($cliente . ' ' . $obra . ' #' . $nro . ' ' . $searchTipos, ENT_QUOTES, 'UTF-8'); ?>"
                                             data-search-cliente="<?php echo $cliente; ?>"
                                             data-search-obra="<?php echo $obra; ?>"
                                             data-search-nro="#<?php echo $nro; ?>"
                                             data-search-tipos="<?php echo $searchTipos; ?>"
                                         >
-                                            <td class="px-6 py-4">
+                                            <td class="px-6 py-4 whitespace-nowrap">
                                                 <a href="?action=edit&id_Servicio=<?php echo (int) $row['id_Servicio']; ?>" class="font-mono font-extrabold text-slate-800 text-sm hover:text-indigo-600 transition-colors">
                                                     #<?php echo $nro; ?>
                                                 </a>
                                             </td>
                                             <td class="px-6 py-4 font-sans text-sm text-slate-700"><?php echo $cliente; ?></td>
                                             <td class="px-6 py-4 font-sans text-sm text-slate-700"><?php echo $obra; ?></td>
-                                            <td class="px-6 py-4">
+                                            <td class="px-6 py-4 whitespace-nowrap">
                                                 <?php if ($facturadoFlag === 0): ?>
                                                     <span class="badge-status is-warn">No Facturado</span>
                                                 <?php else: ?>
                                                     <span class="badge-status is-success">Facturado</span>
                                                 <?php endif; ?>
                                             </td>
-                                            <td class="px-6 py-4 font-mono text-xs text-slate-500"><?php echo htmlspecialchars($fechaFmt, ENT_QUOTES, 'UTF-8'); ?></td>
+                                            <td class="px-6 py-4 font-mono text-xs text-slate-500 whitespace-nowrap"><?php echo htmlspecialchars($fechaFmt, ENT_QUOTES, 'UTF-8'); ?></td>
                                             <td class="px-6 py-4 text-right">
                                                 <div class="inline-flex items-center justify-end gap-1">
                                                     <a href="?action=edit&id_Servicio=<?php echo (int) $row['id_Servicio']; ?>" class="dt-cell-action" title="Editar">
@@ -358,6 +409,10 @@ function baseQueryString(array $excludes = ['page']): string {
                                     <?php endif; ?>
                                 </tbody>
                             </table>
+                        </div>
+                        <div class="px-6 py-4 bg-slate-50/50 border-t border-slate-50 flex items-center justify-between" data-table-native-pagination>
+                            <span class="font-mono text-[10px] text-slate-400 font-bold uppercase" data-table-native-summary></span>
+                            <div class="flex items-center space-x-1" data-table-native-pages></div>
                         </div>
                     </div>
                 </div>
@@ -564,6 +619,7 @@ function baseQueryString(array $excludes = ['page']): string {
 
 <script src="assets/js/app.js"></script>
 <script src="assets/js/components/services.js"></script>
+<script src="assets/js/components/native-table.js"></script>
 
 <?php if ($drawerMode !== null): ?>
     <script>

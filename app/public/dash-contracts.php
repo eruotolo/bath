@@ -231,7 +231,7 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
                             </td>
                             <td class="px-6 py-4.5">
                                 <div class="flex items-center gap-1">
-                                    <?php if ($row['estado_Contrato'] === 2): ?>
+                                    <?php if ($row['estado_Contrato'] == 2): ?>
                                         <a href="?action=edit&id_Contrato=<?php echo (int) $row['id_Contrato']; ?><?php echo htmlspecialchars(baseQueryString(['action', 'id_Contrato']), ENT_QUOTES, 'UTF-8'); ?>" class="dt-cell-action" title="Editar">
                                             <i data-lucide="square-pen"></i>
                                         </a>
@@ -245,6 +245,7 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
                                             <i data-lucide="more-horizontal"></i>
                                         </button>
                                         <ul class="dropdown-menu dropdown-menu-end m-0 min-w-[220px] list-none overflow-hidden rounded-2xl border border-slate-100 bg-white p-2 shadow-xl shadow-slate-200/50">
+                                            <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="?action=edit&id_Contrato=<?php echo (int) $row['id_Contrato']; ?><?php echo htmlspecialchars(baseQueryString(['action', 'id_Contrato']), ENT_QUOTES, 'UTF-8'); ?>"><i data-lucide="square-pen" class="!h-[14px] !w-[14px] shrink-0"></i>Editar</a></li>
                                             <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="?action=manage&id_Contrato=<?php echo (int) $row['id_Contrato']; ?><?php echo htmlspecialchars(baseQueryString(['action', 'id_Contrato']), ENT_QUOTES, 'UTF-8'); ?>"><i data-lucide="bath" class="!h-[14px] !w-[14px] shrink-0"></i>Agregar Baños Químicos</a></li>
                                             <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/contract-active.php?id_Contrato=<?php echo (int) $row['id_Contrato']; ?>"><i data-lucide="lock-open" class="!h-[14px] !w-[14px] shrink-0"></i>Activar</a></li>
                                             <li><hr class="dropdown-divider m-1 border-slate-100"></li>

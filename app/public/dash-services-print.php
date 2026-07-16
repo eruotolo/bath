@@ -49,7 +49,7 @@ if ($impresion !== null) {
                         <div class="flex items-start justify-between gap-4 print:gap-0">
                             <div class="flex-1 print:flex-none">
                                 <div class="mb-4">
-                                    <img src="assets/images/logo_zl.png" alt="" height="160">
+                                    <img src="assets/images/logo_zl.png" alt="" class="h-40 w-auto">
                                 </div>
                             </div>
                             <div class="shrink-0 pt-5 print:shrink-0">
@@ -84,33 +84,34 @@ if ($impresion !== null) {
                                 <p class="mb-1 text-sm"><b>Dirección de la obra:</b> <?php echo htmlspecialchars($row['direccion_Contrato'], ENT_QUOTES, 'UTF-8'); ?></p>
                                 <p class="mb-1 text-sm"><b>Fecha del Servicio:</b> <?php echo date('d/m/Y', strtotime($row['fecha_Servicio'])); ?></p>
 
-                                <ul class="mb-1 mt-2 list-none p-0 text-sm">
-                                    <li><b>Tipo de Servicio:</b></li>
-                                    <?php
-                                    $tipos = [
-                                        'instalacion_Tipo' => 'Instalación',
-                                        'reparacion_Tipo' => 'Reparación',
-                                        'limpieza_Tipo' => 'Limpieza',
-                                        'desinfeccion_Tipo' => 'Desinfección',
-                                        'sanitizacion_Tipo' => 'Sanitización',
-                                        'higienico_Tipo' => 'Entrega Papel Higiénico',
-                                        'jabon_Tipo' => 'Entrega de Jabón Líquido',
-                                        'otros_Tipo' => 'Otros Servicios',
-                                        'retiro_Tipo' => 'Retiro de Baños',
-                                    ];
-                                    foreach ($tipos as $field => $label):
-                                        if (isset($row[$field]) && $row[$field] == 1): ?>
-                                            <li class="ml-2"><?php echo htmlspecialchars($label, ENT_QUOTES, 'UTF-8'); ?>,</li>
-                                        <?php endif;
-                                    endforeach; ?>
-                                </ul>
+                                <?php
+                                $tipos = [
+                                    'instalacion_Tipo' => 'Instalación',
+                                    'reparacion_Tipo' => 'Reparación',
+                                    'limpieza_Tipo' => 'Limpieza',
+                                    'desinfeccion_Tipo' => 'Desinfección',
+                                    'sanitizacion_Tipo' => 'Sanitización',
+                                    'higienico_Tipo' => 'Entrega Papel Higiénico',
+                                    'jabon_Tipo' => 'Entrega de Jabón Líquido',
+                                    'otros_Tipo' => 'Otros Servicios',
+                                    'retiro_Tipo' => 'Retiro de Baños',
+                                ];
+                                $tiposActivos = [];
+                                foreach ($tipos as $field => $label) {
+                                    if (isset($row[$field]) && $row[$field] == 1) {
+                                        $tiposActivos[] = $label;
+                                    }
+                                }
+                                ?>
+                                <p class="mb-1 mt-2 text-sm">
+                                    <b>Tipo de Servicio:</b>
+                                    <span><?php echo htmlspecialchars(implode(', ', $tiposActivos), ENT_QUOTES, 'UTF-8'); ?></span>
+                                </p>
 
-                                <ul class="mb-1 mt-3 list-none p-0 text-sm">
-                                    <li><b>Baños Tratados:</b></li>
-                                    <?php foreach ($banosTratados as $bano): ?>
-                                        <li class="ml-2 font-mono"><?php echo htmlspecialchars($bano['codigo_Bath'], ENT_QUOTES, 'UTF-8'); ?></li>
-                                    <?php endforeach; ?>
-                                </ul>
+                                <p class="mb-1 mt-3 text-sm">
+                                    <b>Baños Tratados:</b>
+                                    <span class="font-mono"><?php echo htmlspecialchars(implode(', ', array_column($banosTratados, 'codigo_Bath')), ENT_QUOTES, 'UTF-8'); ?></span>
+                                </p>
                             </div>
                         </div>
 
@@ -119,8 +120,8 @@ if ($impresion !== null) {
                             <p class="text-sm m-0"><?php echo htmlspecialchars($row['observaciones_Servicio'] ?? '', ENT_QUOTES, 'UTF-8'); ?></p>
                         </div>
 
-                        <div class="flex justify-center my-3 print:my-3">
-                            <img src="assets/images/firma_01.png" alt="firma" class="w-[90%] max-w-md">
+                        <div class="my-3 print:my-3">
+                            <img src="assets/images/firma_01.png" alt="firma" class="w-full">
                         </div>
 
                         <hr class="my-2 print:my-2 border-slate-200">
@@ -155,6 +156,11 @@ if ($impresion !== null) {
 
 <?php include 'layouts/vendor-scripts.php'; ?>
 <script src="assets/js/app.js"></script>
+<script>
+    window.addEventListener('load', function () {
+        window.print();
+    });
+</script>
 
 </body>
 
