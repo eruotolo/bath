@@ -69,13 +69,15 @@ foreach ($filas as $indice => $fila) {
     $cargadas++;
 }
 
-$_SESSION['carga_resultado'] = [
-    'cargadas' => $cargadas,
-    'rechazadas' => $rechazadas,
-];
+$msg = "{$cargadas} factura(s) cargada(s) correctamente.";
+if (count($rechazadas) > 0) {
+    $detalle = implode('; ', array_map(fn($r) => "#{$r['numero_Factura']}: {$r['motivo']}", $rechazadas));
+    $msg .= " " . count($rechazadas) . " fila(s) rechazada(s): {$detalle}";
+}
+$status = count($rechazadas) === 0 ? 'success' : ($cargadas > 0 ? 'warning' : 'error');
 
 unset($_SESSION['carga_facturas']);
 
-header('Location: ../dash-invoices-upload-result.php');
+header('Location: ../dash-invoices-list.php?status=' . $status . '&msg=' . urlencode($msg));
 
 $link->close();

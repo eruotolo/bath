@@ -58,22 +58,6 @@ La carpeta `rebranding/` contiene un prototipo funcional del nuevo diseño de la
 
 **Objetivo:** Este diseño es la referencia visual y funcional para la modernización de la interfaz que se encuentra en `app/public/`. El plan es migrar las vistas de PHP a este nuevo sistema visual de forma incremental. **No es código legacy, sino el futuro de la interfaz.**
 
-## Skills
-
-### `frontend-design`
-
-Skill instalada a nivel proyecto en `.agents/skills/frontend-design/` (vía `npx skills add`), registrada en `opencode.json` → `skills.paths` para que opencode la cargue para **todos los modelos/agents**. Gestionada por el CLI `skills` (actualizar con `npx skills update`).
-
-**Regla — uso obligatorio al crear features de UI:**
-
-Al crear una feature nueva de UI/frontend — nueva vista `dash-*.php` / `auth-*.php`, nuevo componente en `rebranding/`, migrar una vista a Tailwind, o rediseñar una pantalla existente — **cargar la skill `frontend-design` con la tool `skill` ANTES de escribir markup/CSS** y seguir su guía (dirección estética, tipografía, jerarquía visual, layout, toma de un riesgo estético justificado). No es opcional para UI nueva.
-
-**No requiere la skill** (excepciones):
-- Fix puntual de bug, typo o ajuste menor de spacing/margen en vista existente sin tocar el diseño.
-- Cambios puramente de backend / controller / SQL / DB.
-
-**Convivencia con los design tokens del proyecto:** la skill empuja a decisiones visuales distintivas y opinadas; en este proyecto **conviven con los tokens ya fijados** en `app/public/assets/css/tw/theme.css` y los componentes `dt-*` (`tw/components.css`). Usar la skill para dirección estética de pantallas nuevas; **NO** para reemplazar tokens existentes. Si la skill sugiere algo que choca con un token, documentar la decisión antes de modificar `tw/theme.css`. Después de cualquier cambio en `tw/`: `pnpm tw:build`.
-
 ## Migración DDD — completa
 
 El proyecto migró de **100% procedural** a **DDD liviano** (Entity / Repository / Use Case). Las 7 entidades del sistema están migradas:
@@ -142,7 +126,6 @@ Después de agregar/modificar código en `app/src/`: `docker-compose exec php co
 
 ## Workflow
 
-0. **¿Vas a crear o rediseñar UI?** Cargar la skill `frontend-design` con la tool `skill` ANTES de empezar (ver `§Skills`). Obligatorio para UI nueva; no para fixes puntuales ni backend.
 1. **¿Vas a tocar un controller?** Buscar primero si la entidad ya está migrada (`grep -r "use App\\\\" app/public/controller/{entidad}*.php`). Si sí, extender el patrón DDD. Si no, **migrar la entidad completa** o dejar el controller procedural — no mezclar.
 2. **¿Cambio de versión PHP?** Leer `.doc/Viejos/plan-migracion-php-8.5.md` sección 5 antes.
 3. **Después de cualquier cambio de código PHP:** `docker-compose up -d --force-recreate php` + smoke test manual en `http://localhost`.

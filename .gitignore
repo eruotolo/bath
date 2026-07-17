@@ -1,15 +1,15 @@
 /mysql/mysql-data
-.idea
 .DS_Store
 /vendor
 
 # Serena MCP
 .serena/
 
-# Excluir carpetas
-/06-07-2026
-
 # Tailwind (Fase 0 plan-migracion-bootstrap-tailwind)
 node_modules/
 .pnpm-store/
 # tailwind.css compilado se commitea (deploy cPanel no tiene build pipeline)
+graphify-out/
+.claude/
+.idea/
+/.idea/

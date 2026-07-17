@@ -34,6 +34,11 @@ function format_clp($valor) {
     return number_format((float)$valor, 0, ',', '.') . ' CLP';
 }
 
+function format_fecha($fecha) {
+    $timestamp = strtotime((string) $fecha);
+    return $timestamp !== false ? date('d-m-Y', $timestamp) : (string) $fecha;
+}
+
 function normalizar_rut($rut) {
     $rut = strtoupper(trim($rut));
     return preg_replace('/[^0-9K]/', '', $rut);

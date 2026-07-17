@@ -16,6 +16,7 @@ window.Feedback = (function () {
     var CANCEL_BUTTON_CLASS = 'font-sans text-xs font-semibold rounded-xl px-5 py-2.5 border border-slate-200 bg-white text-slate-600 hover:bg-slate-50 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-slate-300';
     var DANGER_BUTTON_CLASS = BUTTON_BASE + ' bg-rose-500 hover:bg-rose-600 text-white focus-visible:ring-rose-300';
     var SUCCESS_BUTTON_CLASS = BUTTON_BASE + ' bg-emerald-500 hover:bg-emerald-600 text-white focus-visible:ring-emerald-300';
+    var WARNING_BUTTON_CLASS = BUTTON_BASE + ' bg-amber-500 hover:bg-amber-600 text-white focus-visible:ring-amber-300';
     var PRIMARY_BUTTON_CLASS = BUTTON_BASE + ' bg-primary-600 hover:bg-primary-700 text-white focus-visible:ring-primary-300';
 
     function toast(msg, icon) {
@@ -64,6 +65,23 @@ window.Feedback = (function () {
                 htmlContainer: TEXT_CLASS,
                 actions: ACTIONS_CLASS,
                 confirmButton: DANGER_BUTTON_CLASS,
+            },
+        });
+    }
+
+    function warning(msg) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Atención',
+            text: msg,
+            confirmButtonText: 'Aceptar',
+            buttonsStyling: false,
+            customClass: {
+                popup: POPUP_CLASS,
+                title: TITLE_CLASS,
+                htmlContainer: TEXT_CLASS,
+                actions: ACTIONS_CLASS,
+                confirmButton: WARNING_BUTTON_CLASS,
             },
         });
     }
@@ -124,6 +142,8 @@ window.Feedback = (function () {
             toast(msg, 'success');
         } else if (status === 'error') {
             error(msg);
+        } else if (status === 'warning') {
+            warning(msg);
         }
 
         params.delete('status');
@@ -138,5 +158,5 @@ window.Feedback = (function () {
         bindConfirmDeleteLinks();
     });
 
-    return { toast: toast, success: success, error: error, confirm: confirm };
+    return { toast: toast, success: success, error: error, warning: warning, confirm: confirm };
 })();

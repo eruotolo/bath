@@ -6,7 +6,7 @@ include '../layouts/helpers.php';
 global $link;
 
 if (!isset($_FILES['archivo_facturas']) || $_FILES['archivo_facturas']['error'] !== UPLOAD_ERR_OK) {
-    header('Location: ../dash-invoices-upload.php?error=sin_archivo');
+    header('Location: ../dash-invoices-list.php?action=upload&err=sin_archivo');
     exit();
 }
 
@@ -14,14 +14,14 @@ $archivo_tmp = $_FILES['archivo_facturas']['tmp_name'];
 $extension = strtolower(pathinfo($_FILES['archivo_facturas']['name'], PATHINFO_EXTENSION));
 
 if ($extension !== 'xlsx') {
-    header('Location: ../dash-invoices-upload.php?error=formato_invalido');
+    header('Location: ../dash-invoices-list.php?action=upload&err=formato_invalido');
     exit();
 }
 
 $filas = leer_xlsx($archivo_tmp);
 
 if ($filas === false || count($filas) < 2) {
-    header('Location: ../dash-invoices-upload.php?error=sin_filas');
+    header('Location: ../dash-invoices-list.php?action=upload&err=sin_filas');
     exit();
 }
 
@@ -89,12 +89,12 @@ foreach ($filas as $fila) {
 }
 
 if (count($filas_procesadas) === 0) {
-    header('Location: ../dash-invoices-upload.php?error=sin_filas');
+    header('Location: ../dash-invoices-list.php?action=upload&err=sin_filas');
     exit();
 }
 
 $_SESSION['carga_facturas'] = $filas_procesadas;
 
-header('Location: ../dash-invoices-upload-preview.php');
+header('Location: ../dash-invoices-list.php');
 
 $link->close();

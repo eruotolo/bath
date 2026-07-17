@@ -690,7 +690,36 @@
     }
 
     /* ===== Modal overrides (legacy Bootstrap JS hasta Fase 8) =====
-       El JS sigue siendo bootstrap.Modal; nosotros re-skineamos el aspecto. */
+       El JS sigue siendo bootstrap.Modal; nosotros re-skineamos el aspecto.
+
+       Mismo caso que .tab-pane mas arriba: bootstrap.css proveia el display
+       toggle Y el positioning fixed/centrado de .modal, y se retiro en Fase 9b.
+       bs-shim.js solo togglea .show + setea style.display inline al abrir/cerrar
+       (no crea un .modal-backdrop aparte: el propio .modal actua como overlay de
+       click-fuera-para-cerrar, ver firebackdropClick() en bs-shim.js). Sin este
+       positioning el modal queda en el flujo normal del documento en vez de un
+       overlay fixed centrado — todo lo demas (oculto por defecto, dialog
+       centrado) va aca. */
+    .modal {
+        position: fixed;
+        inset: 0;
+        z-index: 1055;
+        display: none;
+        outline: 0;
+    }
+    .modal.show {
+        display: block;
+        background: rgba(15, 23, 42, .5);
+    }
+    .modal-dialog {
+        position: relative;
+        width: auto;
+        margin: 1.75rem auto;
+        max-width: 500px;
+        pointer-events: none;
+    }
+    .modal-dialog .modal-content { pointer-events: auto; }
+    .modal-open { overflow: hidden; }
     .modal-header {
         border-bottom: 1px solid var(--color-slate-100, #f1f5f9);
         padding: 16px 24px;
@@ -713,15 +742,15 @@
     }
     .modal-backdrop.show { opacity: .4; }
 
-    /* ===== Re-skin de Choices.js dentro de #bath-drawer, #contract-drawer, #service-drawer =====
+    /* ===== Re-skin de Choices.js dentro de #bath-drawer, #contract-drawer, #service-drawer, #invoice-drawer, #invoice-edit-drawer =====
        Choices.js oculta el <select> original y crea su propio DOM (.choices, .choices__inner, ...)
        con su theme por defecto (Open Sans, radios de 2.5px, gris), que no respeta los inputs
        Tailwind del resto del drawer (rounded-xl, border-slate-200, focus:border-...).
-       Scoped a #bath-drawer, #contract-drawer (acento emerald) y #service-drawer (acento indigo)
+       Scoped a #bath-drawer, #contract-drawer (acento emerald) y #service-drawer, #invoice-drawer, #invoice-edit-drawer (acento indigo)
        para no afectar los otros data-enhanced-select del resto de la app
        (esos usan .dt-select/.dt-input, un sistema visual distinto). */
-    #bath-drawer .choices, #contract-drawer .choices, #service-drawer .choices { font-size: 12px !important; }
-    #bath-drawer .choices__inner, #contract-drawer .choices__inner, #service-drawer .choices__inner {
+    #bath-drawer .choices, #contract-drawer .choices, #service-drawer .choices, #invoice-drawer, #invoice-edit-drawer .choices { font-size: 12px !important; }
+    #bath-drawer .choices__inner, #contract-drawer .choices__inner, #service-drawer .choices__inner, #invoice-drawer, #invoice-edit-drawer .choices__inner {
         display: flex !important;
         align-items: center !important;
         min-height: 40px !important;
@@ -741,15 +770,17 @@
         border-color: #10b981 !important;
     }
     #service-drawer .choices.is-open .choices__inner,
-    #service-drawer .choices.is-focused .choices__inner {
+    #service-drawer .choices.is-focused .choices__inner,
+    #invoice-drawer, #invoice-edit-drawer .choices.is-open .choices__inner,
+    #invoice-drawer, #invoice-edit-drawer .choices.is-focused .choices__inner {
         border-color: #6366f1 !important;
     }
-    #bath-drawer .choices__list--single, #contract-drawer .choices__list--single, #service-drawer .choices__list--single { padding: 0 !important; }
-    #bath-drawer .choices__list--single .choices__item, #contract-drawer .choices__list--single .choices__item, #service-drawer .choices__list--single .choices__item {
+    #bath-drawer .choices__list--single, #contract-drawer .choices__list--single, #service-drawer .choices__list--single, #invoice-drawer, #invoice-edit-drawer .choices__list--single { padding: 0 !important; }
+    #bath-drawer .choices__list--single .choices__item, #contract-drawer .choices__list--single .choices__item, #service-drawer .choices__list--single .choices__item, #invoice-drawer, #invoice-edit-drawer .choices__list--single .choices__item {
         font-family: var(--font-sans) !important;
         color: #000 !important;
     }
-    #bath-drawer .choices__placeholder, #contract-drawer .choices__placeholder, #service-drawer .choices__placeholder {
+    #bath-drawer .choices__placeholder, #contract-drawer .choices__placeholder, #service-drawer .choices__placeholder, #invoice-drawer, #invoice-edit-drawer .choices__placeholder {
         opacity: 1 !important;
         color: var(--color-slate-400, #94a3b8) !important;
     }
@@ -758,21 +789,23 @@
     #contract-drawer .choices__list--dropdown,
     #contract-drawer .choices__list[aria-expanded],
     #service-drawer .choices__list--dropdown,
-    #service-drawer .choices__list[aria-expanded] {
+    #service-drawer .choices__list[aria-expanded],
+    #invoice-drawer, #invoice-edit-drawer .choices__list--dropdown,
+    #invoice-drawer, #invoice-edit-drawer .choices__list[aria-expanded] {
         border: 1px solid var(--color-slate-200, #e2e8f0) !important;
         border-radius: 12px !important;
         box-shadow: 0 10px 25px -5px rgba(15, 23, 42, .1) !important;
         overflow: hidden !important;
         z-index: 60 !important;
     }
-    #bath-drawer .choices__list--dropdown .choices__input, #contract-drawer .choices__list--dropdown .choices__input, #service-drawer .choices__list--dropdown .choices__input {
+    #bath-drawer .choices__list--dropdown .choices__input, #contract-drawer .choices__list--dropdown .choices__input, #service-drawer .choices__list--dropdown .choices__input, #invoice-drawer, #invoice-edit-drawer .choices__list--dropdown .choices__input {
         margin: 0 !important;
         padding: 10px 16px !important;
         font-family: var(--font-sans) !important;
         font-size: 12px !important;
         border-bottom: 1px solid var(--color-slate-100, #f1f5f9) !important;
     }
-    #bath-drawer .choices__list--dropdown .choices__item, #contract-drawer .choices__list--dropdown .choices__item, #service-drawer .choices__list--dropdown .choices__item {
+    #bath-drawer .choices__list--dropdown .choices__item, #contract-drawer .choices__list--dropdown .choices__item, #service-drawer .choices__list--dropdown .choices__item, #invoice-drawer, #invoice-edit-drawer .choices__list--dropdown .choices__item {
         font-family: var(--font-sans) !important;
         font-size: 12px !important;
         padding: 8px 16px !important;
@@ -781,7 +814,8 @@
         background: #ecfdf5 !important;
         color: #047857 !important;
     }
-    #service-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted {
+    #service-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted,
+    #invoice-drawer, #invoice-edit-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted {
         background: #eef2ff !important;
         color: #4338ca !important;
     }
