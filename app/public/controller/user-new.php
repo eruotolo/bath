@@ -7,8 +7,18 @@ use App\Infrastructure\Persistence\MysqliUserRepository;
 
 global $link;
 include "../layouts/config.php";
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
+require_permission('create', 'User');
 
 if (isset($_POST['crear'])){
+    $new_category = (int) ($_POST['category'] ?? 0);
+    if ($new_category === 3) {
+        require_permission('grant_superadmin');
+    } else {
+        require_permission('manage_users');
+    }
+
     #file name with a random number so that similar dont get replaced
     $pname = rand(1000,10000)."-".$_FILES["file"]["name"];
 

@@ -6,10 +6,13 @@ use App\Application\Invoice\SetInvoiceState;
 use App\Infrastructure\Persistence\MysqliInvoiceRepository;
 
 include ('../layouts/config.php');
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 global $link;
 
 $id_Factura = (int) $_GET['id_Factura'];
 $estado_Factura = (int) $_GET['estado_Factura'];
+require_permission('update', 'Invoice', $id_Factura);
 
 if (!in_array($estado_Factura, [1, 2, 3], true)) {
     $estado_Factura = 3;

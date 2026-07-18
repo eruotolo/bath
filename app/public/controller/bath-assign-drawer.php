@@ -10,6 +10,7 @@ use App\Infrastructure\Persistence\MysqliContractRepository;
 
 require_once __DIR__ . '/../layouts/helpers.php';
 require_authenticated_session('../auth-login.php');
+require_once __DIR__ . '/../layouts/permissions.php';
 
 global $link;
 include('../layouts/config.php');
@@ -25,6 +26,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['submit_assign_bath']
 
 $idBath     = (int) ($_POST['id_Bath'] ?? 0);
 $idContrato = (int) ($_POST['id_Contrato'] ?? 0);
+require_permission('update', 'Bathroom', $idBath);
 
 if ($idBath <= 0 || $idContrato <= 0) {
     bath_assign_redirect('action=edit&id=' . $idBath . '&err=' . urlencode('Datos de asignación inválidos.'));

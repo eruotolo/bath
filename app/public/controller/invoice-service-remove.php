@@ -6,11 +6,14 @@ use App\Application\Invoice\RemoveAssignedService;
 use App\Infrastructure\Persistence\MysqliInvoiceRepository;
 
 require '../layouts/config.php';
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 global $link;
 
 $id_Relacion = (int) $_GET['id_Relacion'];
 $id_Factura = (int) $_GET['id_Factura'];
 $origen = $_GET['origen'] ?? '';
+require_permission('update', 'Invoice', $id_Factura);
 
 $useCase = new RemoveAssignedService(new MysqliInvoiceRepository($link));
 

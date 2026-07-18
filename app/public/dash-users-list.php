@@ -1,5 +1,6 @@
 <?php global $link;
 include 'layouts/session.php'; ?>
+<?php require_once 'layouts/permissions.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
 
 <?php
@@ -128,7 +129,7 @@ function baseQueryString(array $excludes = ['page']): string {
                                             </td>
                                             <td class="px-6 py-4 text-right">
                                                 <div class="inline-flex items-center justify-end gap-1">
-                                                    <?php if ($_SESSION['category'] == 1): ?>
+                                                    <?php if (current_nivel() >= NIVEL_ADMIN): ?>
                                                         <a href="dash-users-list.php?action=edit&id_User=<?php echo (int) $row['id']; ?>" class="dt-cell-action" title="Editar">
                                                             <i data-lucide="square-pen"></i>
                                                         </a>
@@ -147,17 +148,27 @@ function baseQueryString(array $excludes = ['page']): string {
                                                             </ul>
                                                         </div>
                                                     <?php else: ?>
-                                                        <span class="dt-cell-action opacity-50 cursor-not-allowed pointer-events-none" title="Sin permisos para editar">
+                                                        <a href="dash-users-list.php?action=edit&id_User=<?php echo (int) $row['id']; ?>"
+                                                           class="dt-cell-action"
+                                                           title="Editar (requiere autorización de un administrador)"
+                                                           data-requires-elevation="1"
+                                                           data-action="update"
+                                                           data-entidad="User"
+                                                           data-id="<?php echo (int) $row['id']; ?>">
                                                             <i data-lucide="square-pen"></i>
-                                                        </span>
+                                                        </a>
                                                         <div class="dropdown">
                                                             <button class="dt-cell-action dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
                                                                 <i data-lucide="more-horizontal"></i>
                                                             </button>
                                                             <ul class="dropdown-menu dropdown-menu-end m-0 min-w-[220px] list-none overflow-hidden rounded-2xl border border-slate-100 bg-white p-2 shadow-xl shadow-slate-200/50">
-                                                                <li><span class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-300 cursor-not-allowed"><i data-lucide="key" class="!h-[14px] !w-[14px] shrink-0"></i>Password Default</span></li>
+                                                                <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/user-default-pass.php?id_User=<?php echo (int) $row['id']; ?>" data-requires-elevation="1" data-action="update" data-entidad="User" data-id="<?php echo (int) $row['id']; ?>"><i data-lucide="key" class="!h-[14px] !w-[14px] shrink-0"></i>Password Default</a></li>
                                                                 <li><hr class="dropdown-divider m-1 border-slate-100"></li>
-                                                                <li><span class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-300 cursor-not-allowed"><i data-lucide="lock" class="!h-[14px] !w-[14px] shrink-0"></i>Inactivar</span></li>
+                                                                <li>
+                                                                    <a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-rose-500 hover:bg-rose-50 hover:text-rose-500" href="controller/user-inactive.php?id_User=<?php echo (int) $row['id']; ?>" data-confirm-delete data-confirm-title="¿Inactivar este usuario?" data-confirm-text="No podrá iniciar sesión hasta que se reactive." data-requires-elevation="1" data-action="update" data-entidad="User" data-id="<?php echo (int) $row['id']; ?>">
+                                                                        <i data-lucide="lock" class="!h-[14px] !w-[14px] shrink-0"></i>Inactivar
+                                                                    </a>
+                                                                </li>
                                                             </ul>
                                                         </div>
                                                     <?php endif; ?>
@@ -312,6 +323,7 @@ function baseQueryString(array $excludes = ['page']): string {
                 >
                     <option value="">Seleccione una categoría...</option>
                     <?php foreach ($categorias as $cat): ?>
+                        <?php if ((int) $cat['id_category'] === 3 && current_nivel() !== NIVEL_SUPERADMIN) continue; ?>
                         <option
                             value="<?php echo (int) $cat['id_category']; ?>"
                             <?php echo ($isEdit && (int) $cat['id_category'] === (int) $editUser->category) ? 'selected' : ''; ?>

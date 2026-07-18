@@ -7,8 +7,11 @@ use App\Infrastructure\Persistence\MysqliBathroomRepository;
 
 global $link;
 require '../layouts/config.php';
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 
 $id_Bath = (int) $_GET['id_Bath'];
+require_permission('update', 'Bathroom', $id_Bath);
 
 $useCase = new SetBathroomAssigned(new MysqliBathroomRepository($link));
 

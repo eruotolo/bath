@@ -1,4 +1,6 @@
 <?php
+require_once __DIR__ . '/permissions.php';
+
 $current_script = basename($_SERVER['PHP_SELF']);
 
 function is_nav_item_active(array $item, string $current_script): bool {
@@ -88,9 +90,29 @@ $nav_sections = [
             'icon' => 'users-2',
             'url' => 'dash-users-list.php',
             'match' => ['dash-users-list.php', 'dash-users-add.php', 'dash-users-edit.php', 'dash-users-profile.php'],
+            'require_nivel' => NIVEL_ADMIN,
+        ],
+        [
+            'label' => 'Bitácora de Actividad',
+            'icon' => 'file-clock',
+            'url' => 'dash-activity-log.php',
+            'match' => ['dash-activity-log.php'],
+            'require_nivel' => NIVEL_SUPERADMIN,
         ],
     ],
 ];
+
+// Filtrado por nivel: ocultar items cuyo require_nivel exceda el rol del usuario en sesión.
+$current_nivel_sb = current_nivel();
+foreach ($nav_sections as $__section => $__items) {
+    $nav_sections[$__section] = array_values(array_filter($__items, static function (array $i) use ($current_nivel_sb): bool {
+        return !isset($i['require_nivel']) || $current_nivel_sb >= $i['require_nivel'];
+    }));
+}
+unset($__section, $__items);
+
+// Si tras el filtro la sección queda vacía, la quitamos del render.
+$nav_sections = array_filter($nav_sections, static fn(array $items): bool => count($items) > 0);
 ?>
 <!--
     Sidebar branding v1.1 - migrado a Tailwind 4 (plan-migracion-bootstrap-tailwind, Fase 2).

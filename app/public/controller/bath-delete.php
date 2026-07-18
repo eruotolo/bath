@@ -6,9 +6,12 @@ use App\Application\Bathroom\DeleteBathroom;
 use App\Infrastructure\Persistence\MysqliBathroomRepository;
 
 include "../layouts/config.php";
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 global $link;
 
 $id_Bath = (int) $_GET['id_Bath'];
+require_permission('delete', 'Bathroom', $id_Bath);
 
 $useCase = new DeleteBathroom(new MysqliBathroomRepository($link));
 

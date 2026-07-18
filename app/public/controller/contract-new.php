@@ -9,6 +9,9 @@ use App\Infrastructure\Persistence\MysqliBathroomRepository;
 
 global $link;
 include('../layouts/config.php');
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
+require_permission('create', 'Contract');
 
 function contractNewRedirect(string $query): void {
     header('Location: ../dash-contracts.php' . ($query ? '?' . $query : ''));

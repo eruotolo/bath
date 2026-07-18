@@ -6,9 +6,12 @@ use App\Application\Certificate\DeleteCertificate;
 use App\Infrastructure\Persistence\MysqliCertificateRepository;
 
 require '../layouts/config.php';
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 global $link;
 
 $id_Certificado = (int) $_GET['id_Certificado'];
+require_permission('delete', 'Certificate', $id_Certificado);
 $useCase = new DeleteCertificate(new MysqliCertificateRepository($link));
 
 try {

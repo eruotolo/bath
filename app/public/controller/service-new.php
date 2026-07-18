@@ -8,6 +8,9 @@ use App\Infrastructure\Persistence\MysqliServiceRepository;
 
 global $link;
 include ('../layouts/config.php');
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
+require_permission('create', 'Service');
 
 if (isset($_POST['crear'])){
     $serviceRepository = new MysqliServiceRepository($link);

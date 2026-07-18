@@ -7,8 +7,11 @@ use App\Infrastructure\Persistence\MysqliContractRepository;
 
 global $link;
 require '../layouts/config.php';
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 
 $id_Contrato = (int) $_GET['id_Contrato'];
+require_permission('update', 'Contract', $id_Contrato);
 
 $useCase = new SetContractState(new MysqliContractRepository($link));
 

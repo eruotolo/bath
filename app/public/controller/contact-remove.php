@@ -7,10 +7,13 @@ use App\Infrastructure\Persistence\MysqliContactRepository;
 
 global $link;
 require '../layouts/config.php';
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 
 // Obtención del identificador único de la fila a eliminar
 $id_Contacto = (int) $_GET['id_Contacto'];
 $id_Cliente = (int) $_GET['id_Cliente'];
+require_permission('delete', 'Customer', $id_Contacto);
 
 $useCase = new DeleteContact(new MysqliContactRepository($link));
 

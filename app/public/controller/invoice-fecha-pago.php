@@ -6,9 +6,12 @@ use App\Application\Invoice\SetInvoicePaymentDate;
 use App\Infrastructure\Persistence\MysqliInvoiceRepository;
 
 include '../layouts/config.php';
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 global $link;
 
 $id_Factura = (int) $_POST['id_Factura'];
+require_permission('update', 'Invoice', $id_Factura);
 $fecha_Pago = trim($_POST['fecha_Pago']);
 
 if ($fecha_Pago !== '' && !preg_match('/^\d{4}-\d{2}-\d{2}$/', $fecha_Pago)) {

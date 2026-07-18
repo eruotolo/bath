@@ -7,6 +7,7 @@ use App\Infrastructure\Persistence\MysqliBathroomRepository;
 
 require_once __DIR__ . '/../layouts/helpers.php';
 require_authenticated_session('../auth-login.php');
+require_once __DIR__ . '/../layouts/permissions.php';
 
 global $link;
 include('../layouts/config.php');
@@ -21,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['submit_unassign_bath
 }
 
 $idBath = (int) ($_POST['id_Bath'] ?? 0);
+require_permission('update', 'Bathroom', $idBath);
 if ($idBath <= 0) {
     bath_unassign_redirect('flash=error&msg=' . urlencode('ID de baño inválido.'));
 }

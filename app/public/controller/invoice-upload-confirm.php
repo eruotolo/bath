@@ -7,7 +7,9 @@ use App\Infrastructure\Persistence\MysqliInvoiceRepository;
 
 session_start();
 include '../layouts/config.php';
+require_once '../layouts/permissions.php';
 global $link;
+require_permission('create', 'Invoice');
 
 $invoiceRepository = new MysqliInvoiceRepository($link);
 

@@ -7,6 +7,9 @@ use App\Infrastructure\Persistence\MysqliCertificateRepository;
 
 global $link;
 include('../layouts/config.php');
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
+require_permission('create', 'Certificate');
 
 if (isset($_POST['crear'])) {
     $useCase = new CreateCertificate(new MysqliCertificateRepository($link));

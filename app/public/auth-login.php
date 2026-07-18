@@ -48,6 +48,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $_SESSION['lastname'] = $lastname;
                             $_SESSION['category'] = $category;
                             $_SESSION['state'] = $state;
+
+                            $_SESSION['nivel'] = 0;
+                            if ($stmt_nivel = mysqli_prepare($link, "SELECT nivel_category FROM category WHERE id_category = ?")) {
+                                mysqli_stmt_bind_param($stmt_nivel, "i", $category);
+                                if (mysqli_stmt_execute($stmt_nivel)) {
+                                    mysqli_stmt_bind_result($stmt_nivel, $nivel_category);
+                                    if (mysqli_stmt_fetch($stmt_nivel)) {
+                                        $_SESSION['nivel'] = (int) $nivel_category;
+                                    }
+                                }
+                                mysqli_stmt_close($stmt_nivel);
+                            }
+
                             header("location: index.php");
                         } else {
                             $login_error = "La contraseña ingresada no es válida.";

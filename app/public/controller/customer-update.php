@@ -7,10 +7,12 @@ use App\Infrastructure\Persistence\MysqliCustomerRepository;
 
 session_start();
 include ('../layouts/config.php');
+require_once '../layouts/permissions.php';
 global $link;
 
 if (isset($_POST['update'])){
     $id_Cliente = (int) $_POST['idCliente'];
+    require_permission('update', 'Customer', $id_Cliente);
 
     $useCase = new UpdateCustomer(new MysqliCustomerRepository($link));
 

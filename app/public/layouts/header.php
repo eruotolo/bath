@@ -39,7 +39,8 @@ $page_titles = [
 $page_title = isset($page_titles[$current_script]) ? $page_titles[$current_script] : 'Blanco Servicios';
 
 // $_SESSION['category'] es int FK a tabla category (auth-login.php)
-$category_names = [1 => 'Administrador', 2 => 'Usuario'];
+// 3 roles: 1=Administrador (nivel 2), 2=Usuario (nivel 1), 3=SuperAdministrador (nivel 3).
+$category_names = [1 => 'Administrador', 2 => 'Usuario', 3 => 'SuperAdministrador'];
 $user_category = $category_names[$_SESSION['category'] ?? 0] ?? '';
 ?>
 <!--

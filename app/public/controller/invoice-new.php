@@ -7,7 +7,10 @@ use App\Application\Invoice\CreateInvoice;
 use App\Infrastructure\Persistence\MysqliInvoiceRepository;
 
 include '../layouts/config.php';
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 global $link;
+require_permission('create', 'Invoice');
 
 if(isset($_POST['crear'])){
     $input = $_POST;

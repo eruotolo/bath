@@ -7,7 +7,9 @@ use App\Infrastructure\Persistence\MysqliContactRepository;
 
 session_start();
 include ('../layouts/config.php');
+require_once '../layouts/permissions.php';
 global $link;
+require_permission('create', 'Customer');
 
 if (isset($_POST['crear'])){
     $id_Cliente = (int) $_POST['id_Cliente'];

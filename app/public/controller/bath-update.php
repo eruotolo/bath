@@ -6,10 +6,13 @@ use App\Application\Bathroom\UpdateBathroom;
 use App\Infrastructure\Persistence\MysqliBathroomRepository;
 
 include "../layouts/config.php";
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 global $link;
 
 if (isset($_POST['update'])){
     $id_Bath = (int) $_POST['id_Bath'];
+    require_permission('update', 'Bathroom', $id_Bath);
     $codigo_Bath = $_POST['codigo_Bath'];
 
     $useCase = new UpdateBathroom(new MysqliBathroomRepository($link));

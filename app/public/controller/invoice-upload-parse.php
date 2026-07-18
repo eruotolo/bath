@@ -3,7 +3,9 @@
 session_start();
 include '../layouts/config.php';
 include '../layouts/helpers.php';
+require_once '../layouts/permissions.php';
 global $link;
+require_permission('create', 'Invoice');
 
 if (!isset($_FILES['archivo_facturas']) || $_FILES['archivo_facturas']['error'] !== UPLOAD_ERR_OK) {
     header('Location: ../dash-invoices-list.php?action=upload&err=sin_archivo');

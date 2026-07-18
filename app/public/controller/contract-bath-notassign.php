@@ -7,10 +7,13 @@ use App\Infrastructure\Persistence\MysqliBathroomRepository;
 
 global $link;
 require '../layouts/config.php';
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 
 $id_Contrato = (int) $_GET['id_Contrato'];
 $id_Bath = (int) $_GET['id_Bath'];
 $id_Relacion = (int) $_GET['id_Relacion'];
+require_permission('update', 'Contract', $id_Contrato);
 
 $useCase = new UnassignBathroomFromContract(new MysqliBathroomRepository($link));
 

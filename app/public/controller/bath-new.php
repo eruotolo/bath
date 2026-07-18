@@ -8,6 +8,9 @@ use App\Infrastructure\Persistence\MysqliBathroomRepository;
 global $link;
 
 include ('../layouts/config.php');
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
+require_permission('create', 'Bathroom');
 
 if (isset($_POST['crear'])){
     $codigo_Bath = $_POST['codigo_Bath'];

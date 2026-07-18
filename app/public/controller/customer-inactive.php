@@ -6,9 +6,12 @@ use App\Application\Customer\DeactivateCustomer;
 use App\Infrastructure\Persistence\MysqliCustomerRepository;
 
 require '../layouts/config.php';
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 global $link;
 
 $id_Cliente = (int) $_GET['id_Cliente'];
+require_permission('update', 'Customer', $id_Cliente);
 
 $useCase = new DeactivateCustomer(new MysqliCustomerRepository($link));
 

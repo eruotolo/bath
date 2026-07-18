@@ -7,9 +7,11 @@ use App\Infrastructure\Persistence\MysqliBathroomRepository;
 
 require_once __DIR__ . '/../layouts/helpers.php';
 require_authenticated_session('../auth-login.php');
+require_once __DIR__ . '/../layouts/permissions.php';
 
 global $link;
 include('../layouts/config.php');
+require_permission('create', 'Bathroom');
 
 function bath_create_redirect(string $query): void {
     header('Location: ../dash-bathrooms.php' . ($query ? '?' . $query : ''));

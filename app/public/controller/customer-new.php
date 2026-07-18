@@ -7,6 +7,9 @@ use App\Infrastructure\Persistence\MysqliCustomerRepository;
 
 global $link;
 include ('../layouts/config.php');
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
+require_permission('create', 'Customer');
 
 if (isset($_POST['crear'])){
     $useCase = new CreateCustomer(new MysqliCustomerRepository($link));

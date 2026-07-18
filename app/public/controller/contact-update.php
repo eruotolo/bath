@@ -7,10 +7,13 @@ use App\Infrastructure\Persistence\MysqliContactRepository;
 
 global $link;
 include ('../layouts/config.php');
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 
 if (isset($_POST['update'])){
     $id_Contacto = (int) $_POST['idC'];
     $id_Cliente = (int) $_POST['idCC'];
+    require_permission('update', 'Customer', $id_Contacto);
 
     $useCase = new UpdateContact(new MysqliContactRepository($link));
 

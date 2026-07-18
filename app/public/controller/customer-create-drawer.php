@@ -8,6 +8,9 @@ use App\Infrastructure\Persistence\MysqliCustomerRepository;
 global $link;
 include('../layouts/config.php');
 include('../layouts/helpers.php');
+require_once '../layouts/session.php';
+require_once __DIR__ . '/../layouts/permissions.php';
+require_permission('create', 'Customer');
 
 function customerCreateRedirect(string $query): void {
     header('Location: ../dash-customers.php' . ($query ? '?' . $query : ''));

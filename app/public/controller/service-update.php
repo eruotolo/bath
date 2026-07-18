@@ -8,9 +8,12 @@ use App\Infrastructure\Persistence\MysqliServiceRepository;
 
 global $link;
 include ('../layouts/config.php');
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 
 if (isset($_POST['update'])){
     $id_Servicio = (int) $_POST['id_Servicio'];
+    require_permission('update', 'Service', $id_Servicio);
 
     $serviceRepository = new MysqliServiceRepository($link);
     $useCase = new UpdateService($serviceRepository);

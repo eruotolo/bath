@@ -7,10 +7,13 @@ use App\Application\Invoice\UpdateInvoice;
 use App\Infrastructure\Persistence\MysqliInvoiceRepository;
 
 include '../layouts/config.php';
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 global $link;
 
 if (isset($_POST['editar'])) {
     $id_Factura = (int) $_POST['id_Factura'];
+    require_permission('update', 'Invoice', $id_Factura);
     $invoiceRepository = new MysqliInvoiceRepository($link);
 
     // Una factura pagada no se puede editar (mismo criterio que el drawer):

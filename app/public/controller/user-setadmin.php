@@ -7,12 +7,26 @@ use App\Infrastructure\Persistence\MysqliUserRepository;
 
 global $link;
 include ('../layouts/config.php');
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 
 if (isset($_GET['id_User'])){
     $id = (int) $_GET['id_User'];
+    require_permission('update', 'User', $id);
     $category = (int) $_GET['category'];
 
-    $useCase = new ToggleUserAdmin(new MysqliUserRepository($link));
+    $repository = new MysqliUserRepository($link);
+
+    $target = $repository->find($id);
+    if ($target !== null && $target->category === 3) {
+        require_permission('grant_superadmin');
+    }
+
+    if ($category === 3) {
+        require_permission('grant_superadmin');
+    }
+
+    $useCase = new ToggleUserAdmin($repository);
 
     try {
         $useCase->handle($id, $category);

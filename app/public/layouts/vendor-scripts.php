@@ -16,6 +16,9 @@
 <script src="assets/js/components/form-validator.js"></script>
 <script src="assets/js/components/rut-mask.js"></script>
 
+<!-- elevación (step-up) para Usuario nivel 1 — modal SweetAlert2 + fetch a auth-elevate.php (plan-roles-permisos §5) -->
+<script src="assets/js/components/elevation.js"></script>
+
 <!-- selects con buscador (Sprint 3 plan-mejoras-frontend) -->
 <script src="assets/libs/choices.js/public/assets/scripts/choices.min.js"></script>
 <script src="assets/js/components/select-enhanced.js"></script>

@@ -7,9 +7,26 @@ use App\Infrastructure\Persistence\MysqliUserRepository;
 
 global $link;
 include "../layouts/config.php";
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 
 if(isset($_POST['update'])){
     $id = (int) $_POST['id'];
+    require_permission('update', 'User', $id);
+
+    $repository = new MysqliUserRepository($link);
+
+    $target = $repository->find($id);
+    if ($target !== null && $target->category === 3) {
+        require_permission('grant_superadmin');
+    }
+
+    $new_category = (int) ($_POST['category'] ?? 0);
+    if ($new_category === 3) {
+        require_permission('grant_superadmin');
+    } else {
+        require_permission('manage_users');
+    }
 
     $imageFilename = null;
     if(isset($_FILES['file']) && $_FILES["file"]["error"] == 0){
@@ -28,7 +45,7 @@ if(isset($_POST['update'])){
         $imageFilename = $pname;
     }
 
-    $useCase = new UpdateUser(new MysqliUserRepository($link));
+    $useCase = new UpdateUser($repository);
 
     try {
         $useCase->handle($id, $_POST, $imageFilename);

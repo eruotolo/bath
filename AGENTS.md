@@ -136,20 +136,22 @@ Después de agregar/modificar código en `app/src/`: `docker-compose exec php co
 
 ## Orquestación de planes (Orca) — **importante**
 
-Los planes de `.doc/` están divididos en **fases**. Cada fase equivale a una **tarea de un plan de orquestación Orca** y se ejecutan de forma **secuencial** (Fase/Tarea N depende de N-1; la columna "Depende de" de cada plan marca el mínimo real de precedencia). Ningún plan se ejecuta "todo de una": se despacha tarea por tarea, en orden.
+Los planes de `.doc/` están divididos en **fases**. Cada fase equivale a una **tarea de un plan de orquestación Orca**. **Desde 2026-07-18 se ejecutan por olas, no estrictamente secuenciales**: la columna "Depende de" de cada plan marca el mínimo real de precedencia, y toda tarea cuyas dependencias ya cerraron puede despacharse en paralelo con otras tareas en la misma situación — **siempre que no toquen los mismos archivos** (si dos tareas paralelas candidatas comparten archivo, se fuerza orden entre ellas aunque la dependencia formal no lo exija). Ningún plan se ejecuta "todo de una": se despacha por olas, con QA manual al cierre de cada ola antes de abrir la siguiente.
 
-**Selección de modelo por complejidad de la tarea** (obligatorio anotarlo en la tabla de fases de cada plan, columna "Modelo (Orca)"):
+**Modelos disponibles** (obligatorio anotarlo en la tabla de fases de cada plan, columna "Modelo (Orca)"):
 
-| Modelo | Cuándo usarlo |
+| Modelo | Rol |
 |---|---|
-| **Sonnet 5** | Tareas **complejas o críticas**: lógica de seguridad/permisos, endpoints con estado, vistas nuevas con UI/interacción, QA que requiere razonamiento (intentos de bypass, casos borde). |
-| **GLM-5.2** | Tareas **medianas**: helpers con lógica clara y acotada, integraciones entre piezas, componentes de frontend con spec definida. |
-| **MiniMax-M3** | Tareas **rápidas y repetitivas**: migraciones SQL, cambios mecánicos en muchos archivos con patrón idéntico, gating cosmético de UI, ajustes de una o dos líneas. |
+| **Sonnet 5** | **Orquestador y controlador del proceso** — no ejecuta tareas de código. Despacha cada ola, revisa el diff de cada worker antes de dar luz verde a la siguiente ola, y hace de árbitro cuando dos tareas paralelas tocan archivos compartidos. |
+| **Codex gpt-5.6-terra (high)** | Tareas **críticas/seguridad**: lógica de permisos, endpoints con estado que manejan credenciales o tokens, guards que se aplican sobre muchos controllers, QA que requiere razonamiento adversarial (intentos de bypass, casos borde). Effort **high** — el costo de un salteo en estas tareas es alto (bypass de auth, reutilización de token). |
+| **OpenCode GLM-5.2** | Tareas **complejas no-críticas**: componentes de frontend con spec definida, integraciones entre piezas ya construidas, vistas nuevas con UI/interacción sin superficie de seguridad. |
+| **OpenCode MiniMax-M3** | Tareas **rápidas y repetitivas**: migraciones SQL, cambios mecánicos en muchos archivos con patrón idéntico, gating cosmético de UI, ajustes de una o dos líneas. |
 
 Reglas:
-- Toda tabla de fases en un plan `.doc/plan-*.md` **debe** llevar las columnas `Tarea`, `Modelo (Orca)` y `Depende de`, además de Fase/Entregable/Riesgo.
-- La **criticidad de seguridad** manda sobre la complejidad pura: una tarea repetitiva pero que toca el gate de permisos va en **Sonnet 5**, no en MiniMax.
-- El orquestador ejecuta secuencial y hace QA manual entre tareas (sin tests automatizados). No avanzar a la tarea siguiente si la anterior no pasó su smoke test.
+- Toda tabla de fases en un plan `.doc/plan-*.md` **debe** llevar las columnas `Tarea`, `Ola`, `Modelo (Orca)` y `Depende de`, además de Fase/Entregable/Riesgo.
+- La **criticidad de seguridad** manda sobre la complejidad pura: una tarea repetitiva pero que toca el gate de permisos va en **Codex-terra (high)**, no en MiniMax.
+- Dentro de una misma ola, no despachar dos workers con el mismo modelo en simultáneo si el setup de Orca no soporta dos terminales concurrentes del mismo modelo — en ese caso esas dos tareas quedan secuenciales entre sí aunque sigan en paralelo con el resto de la ola.
+- El orquestador (Sonnet 5) hace QA manual al cierre de cada ola completa (sin tests automatizados). No abrir la ola siguiente si alguna tarea de la ola actual no pasó su smoke test.
 
 ## Comandos
 

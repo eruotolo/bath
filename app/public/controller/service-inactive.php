@@ -6,9 +6,12 @@ use App\Application\Service\DeactivateService;
 use App\Infrastructure\Persistence\MysqliServiceRepository;
 
 require '../layouts/config.php';
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 global $link;
 
 $id_Servicio = (int) $_GET['id_Servicio'];
+require_permission('update', 'Service', $id_Servicio);
 
 $useCase = new DeactivateService(new MysqliServiceRepository($link));
 

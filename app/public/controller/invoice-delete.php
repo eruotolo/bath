@@ -6,9 +6,12 @@ use App\Application\Invoice\SetInvoiceState;
 use App\Infrastructure\Persistence\MysqliInvoiceRepository;
 
 include "../layouts/config.php";
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 global $link;
 
 $id_Factura = (int) $_GET['id_Factura'];
+require_permission('delete', 'Invoice', $id_Factura);
 
 $useCase = new SetInvoiceState(new MysqliInvoiceRepository($link));
 

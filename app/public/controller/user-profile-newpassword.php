@@ -9,10 +9,12 @@ global $link;
 include "../layouts/config.php";
 
 session_start();
+require_once '../layouts/permissions.php';
 
 if (isset($_POST['update'])){
     $requestedId = (int) $_POST['id'];
     $sessionUserId = (int) ($_SESSION['id'] ?? 0);
+    require_permission('update', 'User', $requestedId);
 
     $useCase = new ChangeOwnPassword(new MysqliUserRepository($link));
 

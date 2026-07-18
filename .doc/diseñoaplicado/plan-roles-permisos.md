@@ -1,8 +1,20 @@
 # Plan — Roles y Permisos (RBAC + elevación por acción)
 
-**Estado:** propuesta (pendiente de aprobación) — **decisiones de diseño ya confirmadas (ver §11)**
+**Estado:** ✅ EJECUTADO Y CERRADO (Orca, estructura de olas) — QA final con hallazgos corregidos y verificados
 **Fecha:** 2026-07-18
 **Objetivo:** definir 3 roles jerárquicos y controlar los permisos a nivel de **cada acción CRUD** de la aplicación, con enforcement **server-side** (no solo UI).
+
+## Resultado de la ejecución (2026-07-18)
+
+Ejecutado en 4 olas orquestadas vía Orca (Sonnet 5 como orquestador puro; Codex `gpt-5.6-terra high` para tareas críticas/seguridad — T3, T4, T9 —; OpenCode GLM-5.2 para T5, T7; OpenCode MiniMax-M3 para T0, T1, T2, T6, T8), con sesiones PHP efímeras para todo el QA — **nunca credenciales reales**.
+
+**T0-T8 implementadas sin incidentes.** El QA final (T9) corrió 10 casos con sesiones inyectadas + curl y encontró **2 fallos reales**, corregidos y re-verificados el mismo día:
+
+1. **Bypass crítico (caso 7):** `controller/user-setadmin.php` (endpoint huérfano de navegación, retirado de la UI en el plan de Personal y Roles) seguía siendo alcanzable por URL directa y **no** tenía la protección "solo SuperAdmin otorga/edita SuperAdmin" que T7 sí agregó en `user-update.php` — un Admin (nivel 2) podía degradar a un SuperAdministrador real vía `GET user-setadmin.php?id_User=X&category=1`. Parchado con el mismo guard `grant_superadmin`. Ver `.doc/orfanatos-pendientes.md` cluster "Personal y Roles" (actualizado).
+2. **Mismatch funcional:** el botón "Inactivar" de `dash-users-list.php` pedía elevación con `action='delete'`, pero `user-inactive.php` exige `action='update'` (T3 lo clasificó como cambio de estado) — la elevación se consumía pero la acción igual se bloqueaba. Corregido alineando el `data-action` del botón.
+3. **Hallazgo relacionado, fuera de alcance de este plan (caso 10):** `controller/servicio-pdf.php` (legacy, SQL injection activa + bug de columna `SR.id_Bath` ya documentado en `AGENTS.md`) resultó estar **100% huérfano** (sin referencias en el codebase) y ya reemplazado por `service-pdf.php` (moderno, DDD). Neutralizado como redirect seguro en vez de migrar una entidad que ya estaba migrada. Ver `.doc/orfanatos-pendientes.md` cluster "servicio-pdf.php".
+
+**Pendiente real, no bloqueante:** T5 (modal de elevación) solo tiene `data-requires-elevation` cableado en `dash-users-list.php` — las demás vistas (`dash-bathrooms`, `dash-customers`, `dash-contracts`, `dash-services`, `dash-invoices-list`, `dash-certificates`) necesitan el mismo tratamiento de T6 (agregar los `data-attributes` a sus botones editar/eliminar) para que un Usuario pueda pedir elevación ahí también — el JS de T5 es genérico y los toma automáticamente en cuanto existan. No se hizo en este plan porque T6 solo cubrió la vista de Usuarios explícitamente.
 
 ---
 
@@ -241,24 +253,29 @@ Cosmético (comodidad), **siempre respaldado por el gate server-side**:
 
 ---
 
-## 10. Fases de implementación
+## 10. Fases de implementación — por olas
 
-Cada fase es una **tarea secuencial de orquestación Orca** (Fase N depende de Fase N-1). El modelo se asigna por complejidad (ver `AGENTS.md § Orquestación de planes`): **Sonnet 5** = complejo/crítico (seguridad), **GLM-5.2** = mediano, **MiniMax-M3** = rápido/repetitivo.
+Estructura de olas (ver `AGENTS.md § Orquestación de planes`, actualizado 2026-07-18): cada tarea se despacha en cuanto sus dependencias reales cierran, no en fila estricta. **Sonnet 5 es orquestador puro** (no ejecuta código, hace QA de cierre de cada ola y arbitra archivos compartidos). Modelos ejecutores: **Codex gpt-5.6-terra (high)** = crítico/seguridad, **GLM-5.2** = complejo no-crítico, **MiniMax-M3** = rápido/repetitivo.
 
-| Tarea | Fase — Entregable | Riesgo | Modelo (Orca) | Depende de |
-|---|---|---|---|---|
-| **T0** | Migración `category.nivel_category` + SuperAdmin + promover Edgardo | Bajo | MiniMax-M3 | — |
-| **T1** | `auth-login.php` / lock-screen cargan `$_SESSION['nivel']` | Bajo | MiniMax-M3 | T0 |
-| **T2** | Helper `layouts/permissions.php` (`can` / `require_permission` / niveles) | Bajo | GLM-5.2 | T1 |
-| **T3** | Guard `require_permission()` en los ~57 controllers de mutación (por acción/entidad) | **Alto** (volumen + es el gate real, seguridad) | Sonnet 5 | T2 |
-| **T4** | Endpoint `controller/auth-elevate.php` + token de elevación one-time + rate limit | Medio (seguridad) | Sonnet 5 | T2 |
-| **T5** | Frontend: modal SweetAlert2 de elevación en editar/eliminar del Usuario (intercept submit/click) | Medio | GLM-5.2 | T4 |
-| **T6** | Gating de UI/menús (Logs solo SuperAdmin, Usuarios n≥2, otorgar SuperAdmin) | Bajo | MiniMax-M3 | T2 |
-| **T7** | Gestión de roles: `user-new`/`user-update`/`user-setadmin` con 3 categorías + regla de otorgamiento | Medio | GLM-5.2 | T3 |
-| **T8** | Integración con `logs_actividad` (AUTHORIZE + quién autorizó) | Bajo (depende del plan de logs) | MiniMax-M3 | T4 |
-| **T9** | QA por rol (SuperAdmin / Admin / Usuario) incluyendo intento de bypass por URL directa | Medio | Sonnet 5 | T3, T4, T5, T6, T7 |
+**T0 ya ejecutada** — la migración `(3, 'SuperAdministrador')` en `category` corrió como parte de `.doc/diseñoaplicado/plan-personal-roles-rebranding.md` (v2.2.0, 2026-07-18). Falta igual `nivel_category` (T0 abajo se reduce a eso).
 
-> Secuencial estricto: T0 → T1 → T2 → T3 → T4 → T5 → T6 → T7 → T8 → T9. La columna "Depende de" marca el mínimo real de precedencia; el orquestador ejecuta en ese orden. Las tareas de seguridad (T3, T4, T9) van en **Sonnet 5** por criticidad, no solo por complejidad.
+| Ola | Tarea | Entregable | Riesgo | Modelo (Orca) | Depende de |
+|---|---|---|---|---|---|
+| **0** (cadena estricta) | **T0** | Migración `category.nivel_category` (fila SuperAdmin ya existe) + promover Edgardo | Bajo | MiniMax-M3 | — |
+| **0** | **T1** | `auth-login.php` / lock-screen cargan `$_SESSION['nivel']` | Bajo | MiniMax-M3 | T0 |
+| **0** | **T2** | Helper `layouts/permissions.php` (`can` / `require_permission` / `consume_elevation` / niveles) | Bajo | MiniMax-M3 | T1 |
+| **1** (paralelo, sin archivos compartidos) | **T3** | Guard `require_permission()` en los ~57 controllers de mutación (por acción/entidad) | **Alto** (volumen + es el gate real, seguridad) | Codex-terra (high) | T2 |
+| **1** | **T4** | Endpoint `controller/auth-elevate.php` + token de elevación one-time + rate limit | Medio (seguridad) | Codex-terra (high) | T2 |
+| **1** | **T6** | Gating de UI/menús (Logs solo SuperAdmin, Usuarios n≥2, otorgar SuperAdmin) | Bajo | MiniMax-M3 | T2 |
+| **2** (paralelo, cada una espera solo su dep directa) | **T5** | Frontend: modal SweetAlert2 de elevación en editar/eliminar del Usuario (intercept submit/click) | Medio | GLM-5.2 | T4 |
+| **2** | **T7** | Gestión de roles: `user-new`/`user-update`/`user-setadmin` con 3 categorías + regla de otorgamiento | Medio | GLM-5.2 | T3 *(mismos archivos que T3 — no correr antes de que T3 cierre)* |
+| **2** | **T8** | Integración con `logs_actividad` (AUTHORIZE + quién autorizó) | Bajo (depende del plan de logs) | MiniMax-M3 | T4 |
+| **3** (convergencia) | **T9** | QA por rol (SuperAdmin / Admin / Usuario) incluyendo intento de bypass por URL directa | Medio | Codex-terra (high) | T3, T4, T5, T6, T7 |
+
+**Notas de despacho:**
+- Ola 1: si el setup de Orca no soporta dos terminales Codex-terra simultáneas, T3 y T4 quedan secuenciales entre sí (T3 primero, por ser el gate de mayor riesgo) pero **ambas siguen en paralelo con T6** (MiniMax, sin conflicto de archivos).
+- Ola 2: T7 depende de T3 porque edita los mismos archivos (`user-new.php`, `user-update.php`, `user-setadmin.php`) que T3 ya instrumentó con `require_permission()` — no es una dependencia lógica, es de archivo. T5 y T8 no comparten archivos entre sí ni con T7, corren libres en cuanto T4 (T5, T8) o T3 (T7) cierran.
+- T9 no depende de T8 formalmente (el plan de logs es un cruce, no un bloqueo), pero conviene que T8 haya cerrado antes de dar el plan por terminado.
 
 **QA obligatorio (sin tests automatizados):** por cada rol, verificar que:
 1. La UI muestra/esconde lo correcto.

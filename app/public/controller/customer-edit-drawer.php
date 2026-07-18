@@ -9,6 +9,8 @@ use App\Infrastructure\Persistence\MysqliCustomerRepository;
 global $link;
 include('../layouts/config.php');
 include('../layouts/helpers.php');
+require_once '../layouts/session.php';
+require_once __DIR__ . '/../layouts/permissions.php';
 
 function customerEditRedirect(string $query): void {
     header('Location: ../dash-customers.php' . ($query ? '?' . $query : ''));
@@ -20,6 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !isset($_POST['submit_edit_client']
 }
 
 $idCliente = (int) ($_POST['id_Cliente'] ?? 0);
+require_permission('update', 'Customer', $idCliente);
 if ($idCliente <= 0) {
     customerEditRedirect('action=edit&id=0&err=' . urlencode('ID de cliente inválido.'));
 }

@@ -8,9 +8,12 @@ use App\Infrastructure\Persistence\MysqliBathroomRepository;
 global $link;
 
 include ('../layouts/config.php');
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 
 if (isset($_POST['update'])){
     $id_Contrato = (int) $_POST['id_Contrato'];
+    require_permission('update', 'Contract', $id_Contrato);
     $idBanos = array_map('intval', (array) ($_POST['id_Bath'] ?? []));
 
     $useCase = new AssignBathroomToContract(new MysqliBathroomRepository($link));

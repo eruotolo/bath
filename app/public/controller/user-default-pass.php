@@ -7,10 +7,13 @@ use App\Infrastructure\Persistence\MysqliUserRepository;
 
 global $link;
 include ('../layouts/config.php');
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 
 // RESETEAR PASSWORD A UN VALOR TEMPORAL ALEATORIO
 if (isset($_GET['id_User'])){
     $id = (int) $_GET['id_User'];
+    require_permission('update', 'User', $id);
 
     $useCase = new ResetUserPassword(new MysqliUserRepository($link));
 

@@ -6,10 +6,13 @@ use App\Application\Invoice\AssignServiceToInvoice;
 use App\Infrastructure\Persistence\MysqliInvoiceRepository;
 
 include '../layouts/config.php';
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 global $link;
 
 if(isset($_POST['update'])){
     $id_Factura = (int) $_POST['id_Factura'];
+    require_permission('update', 'Invoice', $id_Factura);
     $id_Servicio = (int) $_POST['id_Servicio'];
     $id_Contrato = (int) $_POST['id_Contrato'];
     $origen = $_POST['origen'] ?? '';

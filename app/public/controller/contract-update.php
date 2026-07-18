@@ -8,9 +8,12 @@ use App\Infrastructure\Persistence\MysqliContractRepository;
 global $link;
 
 include ('../layouts/config.php');
+require_once '../layouts/session.php';
+require_once '../layouts/permissions.php';
 
 if (isset($_POST['update'])){
     $id_Contrato = (int) $_POST['id_Contrato'];
+    require_permission('update', 'Contract', $id_Contrato);
 
     $input = $_POST;
     $input['valorMensual_Contrato'] = str_replace('.', '', trim((string) ($input['valorMensual_Contrato'] ?? '')));
