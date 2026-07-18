@@ -141,7 +141,7 @@ final class MysqliInvoiceRepository implements InvoiceRepositoryInterface
     public function listAssignedServices(int $idFactura): array
     {
         $stmt = $this->connection->prepare(
-            'SELECT FS.id_Relacion, FS.id_Factura, SR.id_Servicio, SR.nro_Servicio, SR.fecha_Servicio, SR.observaciones_Servicio
+            'SELECT FS.id_Relacion, FS.id_Factura, SR.id_Servicio, SR.nro_Servicio, SR.fecha_Servicio, SR.observaciones_Servicio, SR.valor_Servicio
              FROM factura_servicio FS
              JOIN servicios SR ON FS.id_Servicio = SR.id_Servicio
              WHERE FS.id_Factura = ?'

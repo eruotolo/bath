@@ -2,6 +2,7 @@
 
 require __DIR__ . '/../../vendor/autoload.php';
 
+use App\Application\Invoice\AssignServiceToInvoice;
 use App\Application\Invoice\CreateInvoice;
 use App\Infrastructure\Persistence\MysqliInvoiceRepository;
 
@@ -9,13 +10,22 @@ include '../layouts/config.php';
 global $link;
 
 if(isset($_POST['crear'])){
-    $id_Contrato = (int) $_POST['id_Contrato'];
+    $input = $_POST;
+    $input['valor_Factura'] = str_replace('.', '', trim((string) ($input['valor_Factura'] ?? '')));
 
-    $useCase = new CreateInvoice(new MysqliInvoiceRepository($link));
+    $invoiceRepository = new MysqliInvoiceRepository($link);
+    $useCase = new CreateInvoice($invoiceRepository);
 
     try {
-        $id_factura_creada = $useCase->handle($_POST);
-        header("Location: ../dash-invoices-detail.php?id_Factura=$id_factura_creada&id_Contrato=$id_Contrato");
+        $id_factura_creada = $useCase->handle($input);
+
+        $serviciosSeleccionados = array_filter(array_map('intval', $_POST['servicios'] ?? []));
+        $assignUseCase = new AssignServiceToInvoice($invoiceRepository);
+        foreach ($serviciosSeleccionados as $id_Servicio) {
+            $assignUseCase->handle($id_factura_creada, $id_Servicio);
+        }
+
+        header("Location: ../dash-invoices-list.php");
     } catch (\mysqli_sql_exception $e) {
         header("Location: ../index.php");
     }

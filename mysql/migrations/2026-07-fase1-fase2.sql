@@ -113,6 +113,21 @@ ALTER TABLE facturas ADD COLUMN IF NOT EXISTS fecha_Pago DATE NULL DEFAULT NULL;
 -- ----------------------------------------------------------------------------
 
 
+-- ----------------------------------------------------------------------------
+-- SECCION 6 - Servicios: valor propio por servicio (feature drawers Nueva/Editar
+-- Factura, julio 2026)
+-- ----------------------------------------------------------------------------
+
+-- Hasta ahora ningun servicio tenia un monto propio (ni servicios, ni
+-- tipo_servicio, ni bathrooms/servicios_bathrooms lo guardaban - solo el
+-- contrato tiene valorMensual_Contrato/valorTotal_Contrato). Se agrega esta
+-- columna para que cada servicio cargue su propio precio desde
+-- dash-services.php, y ese monto se pueda mostrar y sumar al armar una
+-- factura (dash-invoices-list.php). Los servicios ya existentes quedan en 0
+-- hasta que se les cargue un valor a mano.
+ALTER TABLE servicios ADD COLUMN IF NOT EXISTS valor_Servicio INT NOT NULL DEFAULT 0;
+
+
 -- ============================================================================
 -- Verificado y APLICADO contra la base de testing (donbano) el 2026-07-08:
 --   - Secciones 1-3: columnas/constraint ya presentes, IF NOT EXISTS confirmado

@@ -18,6 +18,7 @@ final class CreateService
             date: $input['fecha_Servicio'],
             observations: $input['observaciones_Servicio'],
             state: 1,
+            value: (int) ($input['valor_Servicio'] ?? 0),
             installation: !empty($input['instalacion_Tipo']),
             repair: !empty($input['reparacion_Tipo']),
             cleaning: !empty($input['limpieza_Tipo']),

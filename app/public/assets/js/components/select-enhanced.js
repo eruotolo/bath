@@ -50,7 +50,16 @@ window.SelectEnhanced = (function () {
         var temp = document.createElement('select');
         temp.innerHTML = html;
         var choices = Array.from(temp.options).map(function (opt) {
-            var selected = selectedValue != null ? String(opt.value) === String(selectedValue) : opt.selected;
+            // Un <select> nativo sin ningún <option selected> marca el primero
+            // como .selected=true por defecto (comportamiento del parser HTML,
+            // no algo que esté en el fragmento). En un <select multiple> eso hace
+            // que Choices.js termine marcando TODAS las opciones como elegidas
+            // (ver bug: cascada contrato->servicios seleccionaba todos los servicios
+            // sin que el usuario tocara nada). Por eso, sin selectedValue explícito,
+            // en selects múltiples se ignora opt.selected y arranca vacío.
+            var selected = selectedValue != null
+                ? String(opt.value) === String(selectedValue)
+                : (el.multiple ? false : opt.selected);
             return { value: opt.value, label: opt.textContent.trim(), selected: selected, disabled: opt.disabled };
         });
 
@@ -67,14 +76,21 @@ window.SelectEnhanced = (function () {
 
     // Engancha un select "padre" para que, al cambiar, pida por AJAX las opciones
     // del select "hijo" y las cargue (respetando si el hijo tiene Choices.js o no).
+    // Dispara un 'change' sintético en el hijo después de poblarlo: Choices.js no
+    // emite 'change' cuando setChoices() selecciona la primera opción automáticamente
+    // (pasa siempre que solo llega una opción, o ninguna quedó marcada 'selected'),
+    // así que sin esto una cascada encadenada (ej. contrato -> servicios) nunca se dispara.
     function cascade(config) {
         var parentEl = document.getElementById(config.parent);
         if (!parentEl) return;
 
         parentEl.addEventListener('change', function () {
             var value = parentEl.value;
+            var childEl = document.getElementById(config.child);
+
             if (!value) {
                 setOptionsFromHtml(config.child, '');
+                if (childEl) childEl.dispatchEvent(new Event('change'));
                 return;
             }
 
@@ -85,6 +101,7 @@ window.SelectEnhanced = (function () {
                 .then(function (res) { return res.text(); })
                 .then(function (html) {
                     setOptionsFromHtml(config.child, html);
+                    if (childEl) childEl.dispatchEvent(new Event('change'));
                 });
         });
     }

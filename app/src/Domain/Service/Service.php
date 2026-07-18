@@ -11,6 +11,7 @@ final class Service
         public readonly string $date,
         public readonly ?string $observations,
         public readonly int $state,
+        public readonly int $value,
         public readonly bool $installation,
         public readonly bool $repair,
         public readonly bool $cleaning,

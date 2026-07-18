@@ -587,6 +587,17 @@ function baseQueryString(array $excludes = ['page']): string {
             </div>
 
             <div class="space-y-1.5">
+                <label class="font-sans text-xs font-bold text-slate-600 block">Valor del Servicio (CLP)</label>
+                <input
+                    type="number"
+                    name="valor_Servicio"
+                    value="<?php echo $isEdit ? (int) ($editService['valor_Servicio'] ?? 0) : ''; ?>"
+                    placeholder="e.g. 12345"
+                    class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-all font-sans"
+                >
+            </div>
+
+            <div class="space-y-1.5">
                 <label class="font-sans text-xs font-bold text-slate-600 block">Observaciones</label>
                 <textarea
                     name="observaciones_Servicio"

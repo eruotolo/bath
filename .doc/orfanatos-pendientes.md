@@ -140,3 +140,24 @@ A diferencia de los 3 clusters de arriba (páginas que SÍ tuvieron uso y quedar
 - 🔴 `app/public/auth-register.php` — cero enlaces desde `auth-login.php`; no hay "Registrarse". Auto-contenida. Contiene un bug de password reflejado en `value=` tras error de validación (`:122,130`). **Decisión de Edgardo (2026-07-16): no tocar por ahora.**
 
 Ambas siguen siendo accesibles tecleando la URL directo — el "huérfano" es solo de navegación UI, no de disponibilidad real.
+
+---
+
+## Cluster "Detalle de Factura" (huérfano, 2026-07-17)
+
+Origen: `dash-invoices-list.php` migró la gestión de servicios asociados a una factura al drawer lateral **"Editar Factura" ya existente** (`?action=edit&id_Factura=X`), agregándole una sección "Servicios de la Factura" (agregar/quitar), en vez de crear una acción `manage` separada. La página legacy full-page `dash-invoices-detail.php` (que mostraba el detalle de factura con layout de "factura impresa" y un modal para asignar servicios) quedó sin ningún link de navegación que apunte a ella tras quitar el item "Agregar Servicios a la Factura" del dropdown de acciones (a pedido de Edgardo, ronda de feedback de diseño del 2026-07-17).
+
+**Nota de corrección:** una versión anterior de esta entrada mencionaba un drawer `?action=manage` — eso no llegó a implementarse así; el drawer real reutiliza `?action=edit`. Se corrige acá para que quede consistente con el código.
+
+**Seguro de borrar** — el reemplazo (sección de servicios dentro del drawer Editar) ya está implementado, probado en navegador (agregar/quitar servicio, orden de la sección) y en uso. Igual que el resto de los clusters, se deja para limpieza por lotes.
+
+### Páginas huérfanas
+- 🔴 `app/public/dash-invoices-detail.php` — página completa de detalle de factura con modal "Asignar Servicio". Reemplazada por la sección "Servicios de la Factura" del drawer `?action=edit&id_Factura=X`. Antes la enlazaba el botón "Agregar Servicios a la Factura" del dropdown de acciones de la fila (quitado en `dash-invoices-list.php`).
+
+### Controllers — re-apuntados, no huérfanos
+`controller/invoice-new.php` redirige ahora a `dash-invoices-list.php` (plano) tras crear la factura, en vez de a la página detail. `controller/invoice-service-add.php` e `invoice-service-remove.php` siguen aceptando ambos orígenes: si vienen con `origen=edit-factura` (el caso real hoy, desde el drawer) redirigen a `dash-invoices-list.php?action=edit&id_Factura=X`; si no, siguen con su comportamiento original de redirigir a `dash-invoices-detail.php` (rama que quedó sin ningún llamador real tras este cambio, pero no se borró — no se tocó su lógica, solo se le sumó la rama nueva). No borrar estos 3 controllers.
+
+### Otros puntos a tocar al limpiar (todavía NO tocados, a diferencia de lo que decía la versión anterior de esta entrada)
+- `app/public/layouts/sidebar.php:76` — sigue con `'dash-invoices-detail.php'` en el array `match` del menú activo. Falta quitarlo.
+- `app/public/layouts/header.php:29` — sigue con la entrada del breadcrumb `'dash-invoices-detail.php' => 'Control de Facturación'`. Falta quitarla.
+- La rama "no edit-factura" de `invoice-service-add.php`/`invoice-service-remove.php` (redirige a la página huérfana) queda muerta — al borrar la página, evaluar si conviene simplificar esos controllers para que siempre redirijan al drawer.

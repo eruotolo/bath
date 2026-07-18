@@ -1,8 +1,19 @@
+/* Declarar el orden de layers ANTES que cualquier @import que use @layer
+   por nombre (ej. components.css hace @layer components { ... }). Si esta
+   declaracion no es la primera, cada @layer con bloque registra su posicion
+   en el orden global la PRIMERA vez que el nombre aparece -- y "components"
+   quedaba registrado por components.css antes de llegar aca, colandose
+   ANTES que "base" (Preflight) en vez de despues. Resultado: cualquier regla
+   de components.css que pisara margin/padding/border sin !important perdia
+   silenciosamente contra el reset universal de Preflight (*{margin:0;
+   padding:0;border:0}), aunque compilara sin errores. Ver .modal-dialog
+   (quedaba con margin:0 pese a declarar "margin: 1.75rem auto") como caso
+   descubierto en julio 2026. */
+@layer theme, base, components, utilities;
+
 @import "./theme.css";
 @import "./layout.css";
 @import "./components.css";
-
-@layer theme, base, components, utilities;
 
 @import "tailwindcss/theme.css" layer(theme);
 @import "tailwindcss/preflight.css" layer(base);

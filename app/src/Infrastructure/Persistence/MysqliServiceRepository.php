@@ -17,12 +17,13 @@ final class MysqliServiceRepository implements ServiceRepositoryInterface
         $date = $service->date;
         $observations = $service->observations;
         $state = $service->state;
+        $value = $service->value;
 
         $stmt = $this->connection->prepare(
-            'INSERT INTO servicios (id_Contrato, nro_Servicio, fecha_Servicio, observaciones_Servicio, estado_Servicio)
-             VALUES (?, ?, ?, ?, ?)'
+            'INSERT INTO servicios (id_Contrato, nro_Servicio, fecha_Servicio, observaciones_Servicio, estado_Servicio, valor_Servicio)
+             VALUES (?, ?, ?, ?, ?, ?)'
         );
-        $stmt->bind_param('iissi', $contractId, $nro, $date, $observations, $state);
+        $stmt->bind_param('iissii', $contractId, $nro, $date, $observations, $state, $value);
         $stmt->execute();
         $id = $stmt->insert_id;
 
@@ -39,12 +40,13 @@ final class MysqliServiceRepository implements ServiceRepositoryInterface
         $date = $service->date;
         $observations = $service->observations;
         $state = $service->state;
+        $value = $service->value;
 
         $stmt = $this->connection->prepare(
-            'UPDATE servicios SET id_Contrato = ?, nro_Servicio = ?, fecha_Servicio = ?, observaciones_Servicio = ?, estado_Servicio = ?
+            'UPDATE servicios SET id_Contrato = ?, nro_Servicio = ?, fecha_Servicio = ?, observaciones_Servicio = ?, estado_Servicio = ?, valor_Servicio = ?
              WHERE id_Servicio = ?'
         );
-        $stmt->bind_param('iissii', $contractId, $nro, $date, $observations, $state, $id);
+        $stmt->bind_param('iissiii', $contractId, $nro, $date, $observations, $state, $value, $id);
         $stmt->execute();
 
         $this->updateTipoServicio($service);
@@ -231,6 +233,7 @@ final class MysqliServiceRepository implements ServiceRepositoryInterface
             date: $row['fecha_Servicio'],
             observations: $row['observaciones_Servicio'],
             state: (int) $row['estado_Servicio'],
+            value: (int) $row['valor_Servicio'],
             installation: (bool) $row['instalacion_Tipo'],
             repair: (bool) $row['reparacion_Tipo'],
             cleaning: (bool) $row['limpieza_Tipo'],

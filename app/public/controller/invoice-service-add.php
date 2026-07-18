@@ -12,12 +12,17 @@ if(isset($_POST['update'])){
     $id_Factura = (int) $_POST['id_Factura'];
     $id_Servicio = (int) $_POST['id_Servicio'];
     $id_Contrato = (int) $_POST['id_Contrato'];
+    $origen = $_POST['origen'] ?? '';
 
     $useCase = new AssignServiceToInvoice(new MysqliInvoiceRepository($link));
 
     try {
         $useCase->handle($id_Factura, $id_Servicio);
-        header("Location: ../dash-invoices-detail.php?id_Factura=$id_Factura&id_Contrato=$id_Contrato");
+        if ($origen === 'edit-factura') {
+            header("Location: ../dash-invoices-list.php?action=edit&id_Factura=$id_Factura");
+        } else {
+            header("Location: ../dash-invoices-detail.php?id_Factura=$id_Factura&id_Contrato=$id_Contrato");
+        }
     } catch (\mysqli_sql_exception $e) {
         header("../index.php");
     }
