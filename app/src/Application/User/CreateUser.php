@@ -11,6 +11,10 @@ final class CreateUser
 
     public function handle(array $input, string $imageFilename): int
     {
+        $category = isset($input['category']) && in_array((int) $input['category'], [1, 2, 3], true)
+            ? (int) $input['category']
+            : 2;
+
         $user = new User(
             id: null,
             useremail: $input['useremail'],
@@ -20,7 +24,7 @@ final class CreateUser
             name: $input['name'],
             lastname: $input['lastname'],
             image: $imageFilename,
-            category: 2,
+            category: $category,
             state: 1,
         );
 

@@ -134,6 +134,23 @@ Después de agregar/modificar código en `app/src/`: `docker-compose exec php co
 6. **¿Dependencia nueva?** Vendorizar en `app/public/vendor/<lib>/`, salvo que sea parte del refactor DDD (donde entra por Composer).
 7. Sin tests → QA manual. No commitear sin pedido explícito.
 
+## Orquestación de planes (Orca) — **importante**
+
+Los planes de `.doc/` están divididos en **fases**. Cada fase equivale a una **tarea de un plan de orquestación Orca** y se ejecutan de forma **secuencial** (Fase/Tarea N depende de N-1; la columna "Depende de" de cada plan marca el mínimo real de precedencia). Ningún plan se ejecuta "todo de una": se despacha tarea por tarea, en orden.
+
+**Selección de modelo por complejidad de la tarea** (obligatorio anotarlo en la tabla de fases de cada plan, columna "Modelo (Orca)"):
+
+| Modelo | Cuándo usarlo |
+|---|---|
+| **Sonnet 5** | Tareas **complejas o críticas**: lógica de seguridad/permisos, endpoints con estado, vistas nuevas con UI/interacción, QA que requiere razonamiento (intentos de bypass, casos borde). |
+| **GLM-5.2** | Tareas **medianas**: helpers con lógica clara y acotada, integraciones entre piezas, componentes de frontend con spec definida. |
+| **MiniMax-M3** | Tareas **rápidas y repetitivas**: migraciones SQL, cambios mecánicos en muchos archivos con patrón idéntico, gating cosmético de UI, ajustes de una o dos líneas. |
+
+Reglas:
+- Toda tabla de fases en un plan `.doc/plan-*.md` **debe** llevar las columnas `Tarea`, `Modelo (Orca)` y `Depende de`, además de Fase/Entregable/Riesgo.
+- La **criticidad de seguridad** manda sobre la complejidad pura: una tarea repetitiva pero que toca el gate de permisos va en **Sonnet 5**, no en MiniMax.
+- El orquestador ejecuta secuencial y hace QA manual entre tareas (sin tests automatizados). No avanzar a la tarea siguiente si la anterior no pasó su smoke test.
+
 ## Comandos
 
 ```bash

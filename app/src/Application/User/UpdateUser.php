@@ -19,5 +19,9 @@ final class UpdateUser
         $lastname = ($input['lastname'] ?? '') !== '' ? $input['lastname'] : null;
 
         $this->repository->update($id, $useremail, $username, $name, $lastname, $imageFilename);
+
+        if (isset($input['category']) && in_array((int) $input['category'], [1, 2, 3], true)) {
+            $this->repository->setCategory($id, (int) $input['category']);
+        }
     }
 }

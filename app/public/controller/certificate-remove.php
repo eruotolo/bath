@@ -13,9 +13,11 @@ $useCase = new DeleteCertificate(new MysqliCertificateRepository($link));
 
 try {
     $useCase->handle($id_Certificado);
-    header('Location: ../dash-certificates.php');
+    header('Location: ../dash-certificates.php?flash=success&msg=' . urlencode('Certificado eliminado correctamente'));
+    exit();
 } catch (\mysqli_sql_exception $e) {
-    header('Location: ../index.php');
+    header('Location: ../dash-certificates.php?flash=error&msg=' . urlencode('No se pudo eliminar el certificado'));
+    exit();
 }
 
 $link->close();

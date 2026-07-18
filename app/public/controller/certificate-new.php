@@ -13,9 +13,13 @@ if (isset($_POST['crear'])) {
 
     try {
         $useCase->handle($_POST);
-        header('Location: ../dash-certificates.php');
+        header('Location: ../dash-certificates.php?flash=success&msg=' . urlencode('Certificado creado correctamente'));
         exit();
     } catch (\mysqli_sql_exception $e) {
-        echo 'Error al insertar el registro: ' . $e->getMessage();
+        header('Location: ../dash-certificates.php?flash=error&msg=' . urlencode('No se pudo crear el certificado'));
+        exit();
     }
+} else {
+    header('Location: ../dash-certificates.php?flash=error&msg=' . urlencode('No se pudo crear el certificado'));
+    exit();
 }

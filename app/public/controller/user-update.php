@@ -32,9 +32,10 @@ if(isset($_POST['update'])){
 
     try {
         $useCase->handle($id, $_POST, $imageFilename);
-        header('Location: ../dash-users-list.php');
+        header('Location: ../dash-users-list.php?status=success&msg=' . urlencode('Usuario actualizado correctamente'));
+        exit();
     } catch (\mysqli_sql_exception $e) {
-        echo '<script> alert ("No se pudo crear el usuario")</script>';
-        header('Location: ../index.php');
+        header('Location: ../dash-users-list.php?status=error&msg=' . urlencode('No se pudo actualizar el usuario'));
+        exit();
     }
 }

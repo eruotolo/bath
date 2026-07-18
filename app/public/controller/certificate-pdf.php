@@ -31,13 +31,10 @@ $logo_zl = __DIR__ . '/../assets/images/logo_zl.png';
 $logo_rc = __DIR__ . '/../assets/images/logo_rc.png';
 $firma = __DIR__ . '/../assets/images/firma.jpeg';
 
-$content = '
-    <table style="width: 100%; border-collapse: collapse;">
-        <tr>
-            <td style="width: 50%;"><img src="' . $logo_zl . '" height="60"></td>
-            <td style="width: 50%; text-align: right;"><img src="' . $logo_rc . '" height="60"></td>
-        </tr>
-    </table>
+// writeHTML() no resuelve <img src="{ruta absoluta filesystem}"> de forma confiable
+// cuando corre vía PHP-FPM (funciona en CLI). Logos y firma se insertan con
+// $pdf->Image() directamente en vez de embebidos en el HTML (mismo patrón que service-pdf.php).
+$headerContent = '
     <div style="text-align: center; margin-top: 10px;">
         <h3 style="font-size: 13px;">Certificado de disposici&oacute;n final de residuos</h3>
         <p style="font-size: 10px;">NRO: ' . htmlspecialchars($certificado) . ' - Fecha: ' . date('d/m/Y', strtotime($row['fechahoy_Certificado'])) . '</p>
@@ -53,9 +50,9 @@ $content = '
     <p style="font-size: 9px;">Lo residuos retirados fueron trasladados y posteriormente tratados en la planta de tratamiento en Castro, de la empresa SURALIS, de acuerdo a contrato vigente.</p>
     <p style="font-size: 9px;">Los residuos fueron gestionados seg&uacute;n lo dispuesto por la legislaci&oacute;n chilena y a la normativa que regula este tipo de servicios. Resoluci&oacute;n sanitaria del Cami&oacute;n transportador Nro. 2310428351 de fecha 17/10/2023.</p>
     <p style="font-size: 9px;">Se extiende el presente documento, a petici&oacute;n del cliente para ser utilizada como respaldo frente fiscalizaci&oacute;n.</p>
-    <div style="text-align: center; margin-top: 15px;">
-        <img src="' . $firma . '" height="60">
-    </div>
+';
+
+$footerContent = '
     <hr>
     <table style="width: 100%; font-size: 8px;">
         <tr>
@@ -80,7 +77,19 @@ $pdf->setPrintHeader(false);
 $pdf->setPrintFooter(false);
 $pdf->SetMargins(15, 15, 15);
 $pdf->AddPage();
-$pdf->writeHTML($content, true, false, true, false, '');
+
+// Logos lado a lado (reemplaza la tabla <img> que no renderizaba bajo PHP-FPM)
+$pdf->Image($logo_zl, 15, 15, 25, 0, 'PNG');
+$pdf->Image($logo_rc, 170, 15, 25, 0, 'PNG');
+$pdf->SetY(max($pdf->GetY(), 45));
+
+$pdf->writeHTML($headerContent, true, false, true, false, '');
+
+$firmaY = $pdf->GetY() + 5;
+$pdf->Image($firma, 85, $firmaY, 40, 0, 'JPEG');
+$pdf->SetY($firmaY + 24);
+
+$pdf->writeHTML($footerContent, true, false, true, false, '');
 ob_end_clean();
 
 $pdf->Output('certificado-' . $certificado . '.pdf', 'I');

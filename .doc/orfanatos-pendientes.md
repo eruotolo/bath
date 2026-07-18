@@ -161,3 +161,42 @@ Origen: `dash-invoices-list.php` migró la gestión de servicios asociados a una
 - `app/public/layouts/sidebar.php:76` — sigue con `'dash-invoices-detail.php'` en el array `match` del menú activo. Falta quitarlo.
 - `app/public/layouts/header.php:29` — sigue con la entrada del breadcrumb `'dash-invoices-detail.php' => 'Control de Facturación'`. Falta quitarla.
 - La rama "no edit-factura" de `invoice-service-add.php`/`invoice-service-remove.php` (redirige a la página huérfana) queda muerta — al borrar la página, evaluar si conviene simplificar esos controllers para que siempre redirijan al drawer.
+
+---
+
+## Cluster "Certificados" (huérfano, 2026-07-18)
+
+Origen: la migración de `dash-certificates.php` al lineamiento de las vistas ya rebrandeadas reemplazó dos páginas de página completa. La creación pasó a un drawer lateral embebido (`?action=new`, mismo endpoint `controller/certificate-new.php`) y la visualización imprimible pasó a un lightbox sobre `controller/certificate-pdf.php` (mismo patrón que `dash-services.php` → `service-pdf.php`).
+
+**Seguro de borrar** — el reemplazo (drawer + lightbox) ya está implementado, probado (curl autenticado + inspección visual del PDF generado) y en uso. Se deja para limpieza por lotes, misma política que los demás clusters.
+
+### Páginas huérfanas
+- 🔴 `app/public/dash-certificates-add.php` — página completa de "Nuevo Certificado" (posteaba a `controller/certificate-new.php`, mismo endpoint que ahora usa el drawer `?action=new`).
+- 🔴 `app/public/dash-certificates-item.php` — página completa de preview imprimible (layout full-page con CSS print, sin POST propio). Reemplazada por el lightbox sobre `controller/certificate-pdf.php`.
+
+### Controllers — no huérfanos, no tocar
+`controller/certificate-new.php` sigue en uso activo por el drawer `?action=new` (mismo endpoint que ya usaba la página legacy). No hay controller análogo para `dash-certificates-item.php` porque la versión full-page solo hacía preview — no tenía POST propio.
+
+### Otros puntos a tocar al limpiar
+- `app/public/layouts/sidebar.php:82` — quitar `'dash-certificates-add.php'` y `'dash-certificates-item.php'` del array `match` (dejar solo `'dash-certificates.php'`).
+- `app/public/layouts/header.php:31-32` — quitar las 2 entradas del breadcrumb (`dash-certificates-add.php`, `dash-certificates-item.php`).
+
+---
+
+## Cluster "Personal y Roles" (huérfano, 2026-07-18)
+
+Origen: la migración de `dash-users-list.php` al lineamiento de las vistas ya rebrandeadas agregó un drawer lateral (`#user-drawer`, modos `new` + `edit`) que reemplaza las 2 páginas de página completa para crear/editar usuario. Además se retiró la opción "Set Admin/User" del dropdown de acciones de la fila — el rol ahora se asigna desde el selector de `category` dentro del mismo drawer (incluyendo el nuevo `SuperAdministrador`, ver T0 del mismo plan).
+
+**Seguro de borrar** — el reemplazo (drawer) ya está implementado y probado; se deja para limpieza por lotes, igual que los demás clusters.
+
+### Páginas huérfanas
+- 🔴 `app/public/dash-users-add.php` — página completa de "Agregar Nuevo Usuario" (posteaba a `controller/user-new.php`, mismo endpoint que ahora usa el drawer `?action=new`).
+- 🔴 `app/public/dash-users-edit.php` — página completa de "Editar Usuario" (posteaba a `controller/user-update.php`, mismo endpoint que ahora usa el drawer `?action=edit&id_User=X`).
+
+### Controllers
+- No huérfanos — `controller/user-new.php` y `controller/user-update.php` siguen en uso activo por el drawer `?action=new` / `?action=edit&id_User=X` (mismos endpoints que ya usaban las páginas legacy).
+- 🔴 `app/public/controller/user-setadmin.php` junto con el use case `App\Application\User\ToggleUserAdmin` (`app/src/Application/User/ToggleUserAdmin.php`) — quedaron sin ningún llamador: la opción "Set Admin/User" se retiró del dropdown de `dash-users-list.php` y el rol ahora se edita completo desde el selector `category` del drawer.
+
+### Otros puntos a tocar al limpiar
+- `app/public/layouts/sidebar.php:90` — el array `match` de la entrada "Personal & Roles" incluye hoy `'dash-users-add.php'` y `'dash-users-edit.php'` además de `'dash-users-list.php'` y `'dash-users-profile.php'`. Al limpiar, quitar las 2 entradas huérfanas y dejar solo `list.php` y `profile.php` (`profile.php` NO es huérfana, se queda).
+- `app/public/layouts/header.php:34-35` — el array de breadcrumbs tiene una entrada por cada una de las 4 vistas de usuarios (`dash-users-add.php` => 'Personal de Operaciones', `dash-users-edit.php` => 'Personal de Operaciones', junto a `list` y `profile` en líneas 33 y 36). Al limpiar, quitar las 2 entradas de las páginas huérfanas.

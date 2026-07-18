@@ -26,12 +26,15 @@ if (isset($_POST['crear'])){
     try {
         $useCase->handle($_POST, $pname);
         header('Location: ../dash-users-list.php?status=success&msg=' . urlencode('Usuario creado correctamente'));
+        exit();
     } catch (\mysqli_sql_exception $e) {
-        header('Location: ../index.php?status=error&msg=' . urlencode('No se pudo crear el usuario'));
+        header('Location: ../dash-users-list.php?status=error&msg=' . urlencode('No se pudo crear el usuario'));
+        exit();
     }
 
 }else{
-    header('Location: ../index.php?status=error&msg=' . urlencode('No se pudo crear el usuario'));
+    header('Location: ../dash-users-list.php?status=error&msg=' . urlencode('No se pudo crear el usuario'));
+    exit();
 }
 // Cerrar la conexión
 $link->close();
