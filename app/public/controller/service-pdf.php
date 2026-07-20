@@ -7,6 +7,8 @@ use App\Infrastructure\Persistence\MysqliServiceRepository;
 
 global $link;
 include('../layouts/config.php');
+session_start();
+require_once '../layouts/activity_logger.php';
 require_once('../assets/tcpdf/tcpdf.php');
 
 $id_Servicio = isset($_GET['id_Servicio']) ? (int) $_GET['id_Servicio'] : 0;
@@ -139,5 +141,12 @@ $pdf->SetY($firmaY + 24);
 
 $pdf->writeHTML($footerContent, true, false, true, false, '');
 ob_end_clean();
+
+log_activity_ctx($link, 'PDF', [
+    'entidad' => 'Service',
+    'entidad_id' => $id_Servicio,
+    'descripcion' => 'Generó PDF de servicio N° ' . $row['nro_Servicio'],
+    'datos' => null,
+]);
 
 $pdf->Output('servicio-' . $row['nro_Servicio'] . '.pdf', 'I');

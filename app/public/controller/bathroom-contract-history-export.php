@@ -1,9 +1,12 @@
 <?php
 
 include('../layouts/session.php');
+include('../layouts/permissions.php');
+require_permission('export');
 
 global $link;
 include('../layouts/config.php');
+require_once '../layouts/activity_logger.php';
 
 $format = isset($_GET['format']) ? strtolower((string) $_GET['format']) : '';
 if (!in_array($format, ['csv', 'pdf'], true)) {
@@ -21,6 +24,13 @@ $query = "SELECT * FROM bathrooms BT
          WHERE BT.estado_Bath = 1 ORDER BY fechaCompra_Bath DESC";
 $result = mysqli_query($link, $query);
 $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+log_activity_ctx($link, 'EXPORT', [
+    'entidad' => 'Bathroom',
+    'entidad_id' => null,
+    'descripcion' => 'Exportó histórico de baños con contratos (' . $format . ', ' . count($rows) . ' registros)',
+    'datos' => null,
+]);
 
 if ($format === 'csv') {
     header('Content-Type: text/csv; charset=utf-8');

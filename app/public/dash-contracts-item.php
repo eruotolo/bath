@@ -126,8 +126,8 @@ if ($contrato !== null) {
                                                     <?php endif; ?>
                                                 </td>
                                                 <td class="border-b border-slate-100 px-6 py-4 text-center" style="width: 70px;">
-                                                    <a href="controller/contract-bath-notassign.php?id_Contrato=<?php echo (int) $bano['id_Contrato']; ?>&id_Bath=<?php echo (int) $bano['id_Bath']; ?>&id_Relacion=<?php echo (int) $bano['id_Relacion']; ?>" class="dt-cell-action delete-contacto" title="No Asignar">
-                                                        <i data-lucide="trash-2"></i>
+                                                    <a href="controller/contract-bath-notassign.php?id_Contrato=<?php echo (int) $bano['id_Contrato']; ?>&id_Bath=<?php echo (int) $bano['id_Bath']; ?>&id_Relacion=<?php echo (int) $bano['id_Relacion']; ?>" class="dt-cell-action delete-contacto" title="No Asignar" aria-label="No asignar baño <?php echo htmlspecialchars($bano['codigo_Bath'], ENT_QUOTES, 'UTF-8'); ?>" data-confirm-delete data-confirm-title="¿Desasignar este baño?" data-confirm-text="El baño quedará disponible para otros contratos.">
+                                                        <i data-lucide="trash-2" aria-hidden="true"></i>
                                                     </a>
                                                 </td>
                                             </tr>

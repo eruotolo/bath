@@ -126,6 +126,27 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
         </a>
         HTML;
 }
+
+$contract_export_params = [];
+if (in_array($estado_Contrato_filtro, [1, 2], true)) {
+    $contract_export_params['estado'] = $estado_Contrato_filtro;
+}
+if ($sortBy !== null) {
+    $contract_export_params['sort'] = $sortBy;
+    $contract_export_params['dir'] = $sortDir;
+}
+$contract_csv_url = 'controller/contract-export.php?' . http_build_query(
+    ['format' => 'csv'] + $contract_export_params,
+    '',
+    '&',
+    PHP_QUERY_RFC3986
+);
+$contract_pdf_url = 'controller/contract-export.php?' . http_build_query(
+    ['format' => 'pdf'] + $contract_export_params,
+    '',
+    '&',
+    PHP_QUERY_RFC3986
+);
 ?>
 
 <head>
@@ -170,7 +191,8 @@ function sort_header_html(string $label, string $column, ?string $currentSort, s
                             'search_placeholder' => 'Buscar por cliente, obra...',
                             'item_label' => $titulo_listado,
                             'per_page' => 9,
-                            'actions_html' => '<a href="?action=new' . htmlspecialchars(baseQueryString(['action', 'id_Contrato']), ENT_QUOTES, 'UTF-8') . '" id="add-contract-btn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-sans text-xs font-semibold flex items-center space-x-1.5 shadow-lg shadow-indigo-600/10 transition-all active:scale-95"><i data-lucide="plus" class="w-3.5 h-3.5"></i><span>Agregar Nuevo Contrato</span></a>',
+                            'actions_html' => table_native_export_buttons($contract_csv_url, $contract_pdf_url, 'contract')
+                                . '<a href="?action=new' . htmlspecialchars(baseQueryString(['action', 'id_Contrato']), ENT_QUOTES, 'UTF-8') . '" id="add-contract-btn" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-xl font-sans text-xs font-semibold flex items-center space-x-1.5 shadow-lg shadow-indigo-600/10 transition-all active:scale-95"><i data-lucide="plus" class="w-3.5 h-3.5"></i><span>Agregar Nuevo Contrato</span></a>',
                             'columns' => [
                                 ['label' => sort_header_html('Cliente', 'cliente', $sortBy, $sortDir, $estado_Contrato_filtro), 'html' => true],
                                 ['label' => sort_header_html('Obra', 'obra', $sortBy, $sortDir, $estado_Contrato_filtro), 'html' => true],

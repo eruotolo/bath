@@ -9,6 +9,7 @@ use App\Infrastructure\Persistence\MysqliBathroomRepository;
 require_once __DIR__ . '/../layouts/helpers.php';
 require_authenticated_session('../auth-login.php');
 require_once __DIR__ . '/../layouts/permissions.php';
+require_once __DIR__ . '/../layouts/activity_logger.php';
 
 global $link;
 include('../layouts/config.php');
@@ -75,7 +76,21 @@ try {
     if (!$ok) {
         bath_edit_redirect('action=edit&id=' . $idBath . '&err=' . urlencode("Ya existe otro baño con el código '$codigo'."));
     }
+
+    log_activity_ctx($link, 'UPDATE', [
+        'entidad' => 'Bathroom',
+        'entidad_id' => $idBath,
+        'descripcion' => "Actualizó baño código $codigo",
+        'datos' => $_POST,
+    ]);
 } catch (\mysqli_sql_exception $e) {
+    log_activity_ctx($link, 'UPDATE', [
+        'entidad' => 'Bathroom',
+        'entidad_id' => $idBath,
+        'descripcion' => "Error al actualizar baño código $codigo",
+        'datos' => $_POST,
+        'resultado' => 'error',
+    ]);
     bath_edit_redirect('action=edit&id=' . $idBath . '&err=' . urlencode('No se pudo actualizar el baño. Intente nuevamente.'));
 }
 

@@ -11,6 +11,7 @@ global $link;
 include('../layouts/config.php');
 require_once '../layouts/session.php';
 require_once '../layouts/permissions.php';
+require_once '../layouts/activity_logger.php';
 require_permission('create', 'Contract');
 
 function contractNewRedirect(string $query): void {
@@ -74,20 +75,35 @@ try {
         'observacion_Contrato' => $observacion,
     ]);
 } catch (\mysqli_sql_exception $e) {
+    log_activity_ctx($link, 'CREATE', [
+        'entidad' => 'Contract',
+        'descripcion' => "Error al crear contrato para cliente id $idCliente (obra '$obra')",
+        'datos' => $_POST,
+        'resultado' => 'error',
+    ]);
     contractNewRedirect('action=new&err=' . urlencode('No se pudo crear el contrato. Intente nuevamente.'));
 }
 
 $bathroomRepository = new MysqliBathroomRepository($link);
+$bathAsignados = [];
 foreach ($idBanos as $idBath) {
     if ($idBath <= 0) {
         continue;
     }
     try {
         (new AssignBathroomToContract($bathroomRepository))->handle($idContrato, $idBath);
+        $bathAsignados[] = $idBath;
     } catch (\Throwable $e) {
         // Best-effort: un baño puntual puede fallar (p. ej. ya asignado por otro usuario)
         // sin abortar la creación del contrato ni el resto de asignaciones.
     }
 }
+
+log_activity_ctx($link, 'CREATE', [
+    'entidad' => 'Contract',
+    'entidad_id' => $idContrato,
+    'descripcion' => "Creó contrato id $idContrato (cliente id $idCliente, obra '$obra')",
+    'datos' => $_POST,
+]);
 
 contractNewRedirect('flash=success&msg=' . urlencode('Contrato creado correctamente.'));

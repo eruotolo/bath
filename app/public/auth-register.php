@@ -119,7 +119,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                     <div class="mb-3 <?php echo !empty($password_err) ? 'has-error' : ''; ?>">
                                         <label for="userpassword" class="dt-label">Password</label>
-                                        <input type="password" class="dt-input" id="userpassword" placeholder="Ingresa tu password" required name="password" value="<?php echo htmlspecialchars($password, ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="password" class="dt-input" id="userpassword" placeholder="Ingresa tu password" required name="password" autocomplete="new-password">
                                         <?php if (!empty($password_err)): ?>
                                             <span class="font-sans text-xs text-rose-600 mt-1 block"><?php echo htmlspecialchars($password_err, ENT_QUOTES, 'UTF-8'); ?></span>
                                         <?php endif; ?>
@@ -127,7 +127,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
                                     <div class="mb-3 <?php echo !empty($confirm_password_err) ? 'has-error' : ''; ?>">
                                         <label class="dt-label" for="userpassword">Confirmar Password</label>
-                                        <input type="password" class="dt-input" id="confirm_password" placeholder="Confirma tu password" name="confirm_password" value="<?php echo htmlspecialchars($confirm_password, ENT_QUOTES, 'UTF-8'); ?>">
+                                        <input type="password" class="dt-input" id="confirm_password" placeholder="Confirma tu password" name="confirm_password" autocomplete="new-password">
                                         <?php if (!empty($confirm_password_err)): ?>
                                             <span class="font-sans text-xs text-rose-600 mt-1 block"><?php echo htmlspecialchars($confirm_password_err, ENT_QUOTES, 'UTF-8'); ?></span>
                                         <?php endif; ?>

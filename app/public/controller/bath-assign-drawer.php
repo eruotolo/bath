@@ -11,6 +11,7 @@ use App\Infrastructure\Persistence\MysqliContractRepository;
 require_once __DIR__ . '/../layouts/helpers.php';
 require_authenticated_session('../auth-login.php');
 require_once __DIR__ . '/../layouts/permissions.php';
+require_once __DIR__ . '/../layouts/activity_logger.php';
 
 global $link;
 include('../layouts/config.php');
@@ -57,7 +58,21 @@ if ($contrato === null || $contrato->state !== 2) {
 
 try {
     (new AssignBathroomToContract($bathRepo))->handle($idContrato, $idBath);
+
+    log_activity_ctx($link, 'ASSIGN', [
+        'entidad' => 'Bathroom',
+        'entidad_id' => $idBath,
+        'descripcion' => "Asignó baño id $idBath al contrato id $idContrato",
+        'datos' => $_POST,
+    ]);
 } catch (\mysqli_sql_exception | \DomainException $e) {
+    log_activity_ctx($link, 'ASSIGN', [
+        'entidad' => 'Bathroom',
+        'entidad_id' => $idBath,
+        'descripcion' => "Error al asignar baño id $idBath al contrato id $idContrato",
+        'datos' => $_POST,
+        'resultado' => 'error',
+    ]);
     bath_assign_redirect('action=edit&id=' . $idBath . '&err=' . urlencode('No se pudo asignar el baño. Intente nuevamente.'));
 }
 

@@ -8,6 +8,8 @@ use App\Infrastructure\Persistence\MysqliInvoiceRepository;
 
 global $link;
 include('../layouts/config.php');
+session_start();
+require_once '../layouts/activity_logger.php';
 require_once('../assets/tcpdf/tcpdf.php');
 
 $id_Factura = isset($_GET['id_Factura']) ? (int) $_GET['id_Factura'] : 0;
@@ -98,5 +100,12 @@ $pdf->SetMargins(15, 15, 15);
 $pdf->AddPage();
 $pdf->writeHTML($content, true, false, true, false, '');
 ob_end_clean();
+
+log_activity_ctx($link, 'PDF', [
+    'entidad' => 'Invoice',
+    'entidad_id' => $id_Factura,
+    'descripcion' => 'Generó PDF de factura N° ' . $row['numero_Factura'],
+    'datos' => null,
+]);
 
 $pdf->Output('factura-' . $row['numero_Factura'] . '.pdf', 'I');

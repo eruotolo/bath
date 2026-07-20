@@ -995,10 +995,10 @@
     border-radius: 12px !important;
     transition: border-color .15s !important;
   }
-  #bath-drawer .choices.is-open .choices__inner, #bath-drawer .choices.is-focused .choices__inner, #contract-drawer .choices.is-open .choices__inner, #contract-drawer .choices.is-focused .choices__inner {
+  #contract-drawer .choices.is-open .choices__inner, #contract-drawer .choices.is-focused .choices__inner {
     border-color: #10b981 !important;
   }
-  #service-drawer .choices.is-open .choices__inner, #service-drawer .choices.is-focused .choices__inner, #certificate-drawer .choices.is-open .choices__inner, #certificate-drawer .choices.is-focused .choices__inner, #invoice-drawer .choices.is-open .choices__inner, #invoice-drawer .choices.is-focused .choices__inner, #invoice-edit-drawer .choices.is-open .choices__inner, #invoice-edit-drawer .choices.is-focused .choices__inner {
+  #bath-drawer .choices.is-open .choices__inner, #bath-drawer .choices.is-focused .choices__inner, #service-drawer .choices.is-open .choices__inner, #service-drawer .choices.is-focused .choices__inner, #certificate-drawer .choices.is-open .choices__inner, #certificate-drawer .choices.is-focused .choices__inner, #invoice-drawer .choices.is-open .choices__inner, #invoice-drawer .choices.is-focused .choices__inner, #invoice-edit-drawer .choices.is-open .choices__inner, #invoice-edit-drawer .choices.is-focused .choices__inner {
     border-color: #6366f1 !important;
   }
   #bath-drawer .choices__list--single, #contract-drawer .choices__list--single, #service-drawer .choices__list--single, #invoice-drawer .choices__list--single, #invoice-edit-drawer .choices__list--single, #certificate-drawer .choices__list--single {
@@ -1031,11 +1031,11 @@
     font-size: 12px !important;
     padding: 8px 16px !important;
   }
-  #bath-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted, #contract-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted {
+  #contract-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted {
     background: #ecfdf5 !important;
     color: #047857 !important;
   }
-  #service-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted, #certificate-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted, #invoice-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted, #invoice-edit-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted {
+  #bath-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted, #service-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted, #certificate-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted, #invoice-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted, #invoice-edit-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted {
     background: #eef2ff !important;
     color: #4338ca !important;
   }
@@ -1822,9 +1822,6 @@
   .me-auto {
     margin-inline-end: auto !important;
   }
-  .\!mt-0 {
-    margin-top: 0 !important;
-  }
   .mt-0 {
     margin-top: 0 !important;
   }
@@ -1878,9 +1875,6 @@
   }
   .\!mb-0 {
     margin-bottom: 0 !important;
-  }
-  .\!mb-3 {
-    margin-bottom: calc(var(--spacing) * 3) !important;
   }
   .mb-0 {
     margin-bottom: 0 !important;
@@ -2315,6 +2309,10 @@
   }
   .translate-x-0 {
     --tw-translate-x: 0 !important;
+    translate: var(--tw-translate-x) var(--tw-translate-y) !important;
+  }
+  .translate-x-full {
+    --tw-translate-x: 100% !important;
     translate: var(--tw-translate-x) var(--tw-translate-y) !important;
   }
   .-translate-y-1 {
@@ -2754,9 +2752,6 @@
   .border-emerald-500 {
     border-color: var(--color-emerald-500) !important;
   }
-  .border-emerald-600 {
-    border-color: var(--color-emerald-600) !important;
-  }
   .border-indigo-100 {
     border-color: var(--color-indigo-100) !important;
   }
@@ -2859,17 +2854,11 @@
   .bg-emerald-50 {
     background-color: var(--color-emerald-50) !important;
   }
-  .bg-emerald-100 {
-    background-color: var(--color-emerald-100) !important;
-  }
   .bg-emerald-400 {
     background-color: var(--color-emerald-400) !important;
   }
   .bg-emerald-500 {
     background-color: var(--color-emerald-500) !important;
-  }
-  .bg-emerald-600 {
-    background-color: var(--color-emerald-600) !important;
   }
   .bg-indigo-50 {
     background-color: var(--color-indigo-50) !important;
@@ -3430,8 +3419,14 @@
   .text-wrap {
     text-wrap: wrap !important;
   }
+  .break-words {
+    overflow-wrap: break-word !important;
+  }
   .whitespace-nowrap {
     white-space: nowrap !important;
+  }
+  .whitespace-pre-wrap {
+    white-space: pre-wrap !important;
   }
   .text-amber-500 {
     color: var(--color-amber-500) !important;
@@ -4281,13 +4276,6 @@
       }
     }
   }
-  .hover\:text-emerald-600 {
-    &:hover {
-      @media (hover: hover) {
-        color: var(--color-emerald-600) !important;
-      }
-    }
-  }
   .hover\:text-emerald-700 {
     &:hover {
       @media (hover: hover) {
@@ -4426,14 +4414,6 @@
       box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow) !important;
     }
   }
-  .focus\:ring-emerald-500\/20 {
-    &:focus {
-      --tw-ring-color: color-mix(in srgb, oklch(69.6% 0.17 162.48) 20%, transparent) !important;
-      @supports (color: color-mix(in lab, red, red)) {
-        --tw-ring-color: color-mix(in oklab, var(--color-emerald-500) 20%, transparent) !important;
-      }
-    }
-  }
   .focus\:ring-indigo-500 {
     &:focus {
       --tw-ring-color: var(--color-indigo-500) !important;
@@ -4564,9 +4544,9 @@
       display: flex !important;
     }
   }
-  .sm\:w-64 {
+  .sm\:max-w-lg {
     @media (width >= 40rem) {
-      width: calc(var(--spacing) * 64) !important;
+      max-width: var(--container-lg) !important;
     }
   }
   .sm\:max-w-md {
@@ -4694,6 +4674,11 @@
       grid-column: span 1 / span 1 !important;
     }
   }
+  .lg\:col-span-2 {
+    @media (width >= 64rem) {
+      grid-column: span 2 / span 2 !important;
+    }
+  }
   .lg\:ml-72 {
     @media (width >= 64rem) {
       margin-left: calc(var(--spacing) * 72) !important;
@@ -4743,6 +4728,11 @@
   .lg\:grid-cols-5 {
     @media (width >= 64rem) {
       grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    }
+  }
+  .lg\:grid-cols-6 {
+    @media (width >= 64rem) {
+      grid-template-columns: repeat(6, minmax(0, 1fr)) !important;
     }
   }
   .lg\:transition-\[cubic-bezier\(0\.4\,0\,0\.2\,1\)\] {

@@ -142,8 +142,9 @@ if ($customer !== null) {
                                                                     <i data-lucide="square-pen"></i>
                                                                 </a>
                                                                 <a href="controller/contact-remove.php?id_Contacto=<?php echo (int) $contacto->id; ?>&id_Cliente=<?php echo (int) $contacto->customerId; ?>"
-                                                                   class="dt-cell-action delete-contacto" title="Eliminar">
-                                                                    <i data-lucide="trash-2"></i>
+                                                                   class="dt-cell-action delete-contacto" title="Eliminar" aria-label="Eliminar contacto"
+                                                                   data-confirm-delete data-confirm-title="¿Eliminar este contacto?" data-confirm-text="Esta acción no se puede deshacer.">
+                                                                    <i data-lucide="trash-2" aria-hidden="true"></i>
                                                                 </a>
                                                             </div>
                                                         </td>

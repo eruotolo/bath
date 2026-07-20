@@ -162,8 +162,8 @@ if ($row !== null) {
                                                 <td class="font-sans text-sm"><?php echo date('d/m/Y', strtotime($rows['fecha_Servicio'])); ?></td>
                                                 <td class="font-sans text-sm"><?php echo htmlspecialchars($rows['observaciones_Servicio'] ?? '', ENT_QUOTES, 'UTF-8'); ?></td>
                                                 <td class="text-center" style="width: 70px;">
-                                                    <a href="controller/invoice-service-remove.php?id_Relacion=<?php echo (int) $rows['id_Relacion']; ?>&id_Factura=<?php echo (int) $rows['id_Factura']; ?>" class="dt-cell-action" title="Eliminar">
-                                                        <i data-lucide="trash-2"></i>
+                                                    <a href="controller/invoice-service-remove.php?id_Relacion=<?php echo (int) $rows['id_Relacion']; ?>&id_Factura=<?php echo (int) $rows['id_Factura']; ?>" class="dt-cell-action" title="Eliminar" aria-label="Eliminar servicio de la factura" data-confirm-delete data-confirm-title="¿Eliminar este servicio de la factura?" data-confirm-text="El servicio quedará liberado para volver a facturarse.">
+                                                        <i data-lucide="trash-2" aria-hidden="true"></i>
                                                     </a>
                                                 </td>
                                             </tr>

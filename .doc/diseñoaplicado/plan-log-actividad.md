@@ -1,6 +1,6 @@
 # Plan — Sistema de Log de Actividad del Usuario
 
-**Estado:** propuesta (pendiente de aprobación) — **decisiones de alcance ya confirmadas (ver §10)**
+**Estado:** ✅ **EJECUTADO 2026-07-18** por olas (Codex-terra high / GLM-5.2 / MiniMax-M3 + Sonnet 5 orquestador y ejecutor de T6). QA manual completa por tarea + smoke test final de T6 en navegador real (curl con usuarios temporales SuperAdmin/Usuario, sin credenciales reales). Hallazgo colateral: `servicio-pdf.php` ya no tenía la SQL injection documentada como "excepción conocida" — fue neutralizado a redirect en el commit `3c1d1d0` (mismo día, plan roles-permisos); `AGENTS.md` quedó desactualizado en ese punto.
 **Fecha:** 2026-07-18
 **Objetivo:** registrar en base de datos **las acciones CRUD y de negocio del usuario logueado** sobre las 7 entidades del sistema, más los eventos de sesión (login/logout) y de salida (export/PDF).
 
@@ -215,22 +215,38 @@ Referencia para implementar Fase 4-6 (60 controllers). Resumen por entidad:
 
 ## 9. Fases de implementación
 
-Cada fase es una **tarea secuencial de orquestación Orca** (Fase N depende de Fase N-1). El modelo se asigna por complejidad (ver `AGENTS.md § Orquestación de planes`): **Sonnet 5** = complejo/crítico, **GLM-5.2** = mediano, **MiniMax-M3** = rápido/repetitivo.
+Orquestación por olas (no estrictamente secuencial): toda tarea cuyas dependencias ya cerraron se despacha en paralelo con otras en la misma situación, salvo que compartan archivos o **modelo** (una sola terminal por modelo a la vez — ver nota bajo la tabla). Asignación de modelo (revisada 2026-07-18, sesión de despacho):
 
-| Tarea | Fase — Entregable | Riesgo | Modelo (Orca) | Depende de |
-|---|---|---|---|---|
-| **T0** | Migración `logs_actividad` + correr en local | Bajo | MiniMax-M3 | — |
-| **T1** | `layouts/activity_logger.php` (`log_activity` + `log_activity_ctx`) | Bajo | GLM-5.2 | T0 |
-| **T2** | LOGIN / LOGOUT (auth-login, logout, lock-screen) | Bajo | MiniMax-M3 | T1 |
-| **T3** | CRUD en controllers DDD por entidad (7 tandas) | Medio (volumen) | GLM-5.2 | T1 |
-| **T4** | CRUD en 4 controllers procedurales restantes | Bajo | MiniMax-M3 | T1 |
-| **T5** | EXPORT / PDF | Bajo | MiniMax-M3 | T1 |
-| **T6** | Vista `dash-activity-log.php` (SuperAdmin) + item sidebar | Medio | Sonnet 5 | T3, T4, T5 |
-| **T7** | Retención / limpieza (opcional) | Bajo | MiniMax-M3 | T0 |
+- **Sonnet 5**: orquestador de la ola + tareas complejas donde la superficie de permisos ya está auditada/reutilizada (sin riesgo nuevo de seguridad).
+- **Codex gpt-5.6-terra (high)**: tareas complejas con superficie de seguridad **nueva o sensible** (passwords, cambio de rol, gates ya bypasseados antes). Manda sobre complejidad pura.
+- **GLM-5.2**: tareas medianas sin superficie crítica.
+- **MiniMax-M3**: tareas mecánicas/repetitivas, patrón ya 100% especificado en el plan.
 
-> Secuencial estricto: T0 → T1 → T2 → T3 → T4 → T5 → T6 → T7. Las dependencias de la última columna indican el mínimo real; el orquestador las ejecuta en ese orden.
+| Tarea | Entregable | Ola | Modelo (Orca) | Depende de | Riesgo |
+|---|---|---|---|---|---|
+| **T0** | Migración `logs_actividad` + correr en local | 1 | MiniMax-M3 | — | Bajo |
+| **T1** | `layouts/activity_logger.php` (`log_activity` + `log_activity_ctx`) | 2 | GLM-5.2 | T0 | Bajo-medio (blacklist secrets) |
+| **T2** | LOGIN / LOGOUT (auth-login, logout, lock-screen) | 3 | GLM-5.2 | T1 | Bajo (toca auth) |
+| **T3a** | CRUD DDD — Bathroom | 3 | MiniMax-M3 | T1 | Bajo |
+| **T3b** | CRUD DDD — Customer + Contact | 3 | MiniMax-M3 | T1 | Bajo |
+| **T3c** | CRUD DDD — Contract | 3 | MiniMax-M3 | T1 | Bajo |
+| **T3d** | CRUD DDD — Service | 3 | MiniMax-M3 | T1 | Bajo |
+| **T3e** | CRUD DDD — Invoice (incl. import/upload-parse/confirm/cancel) | 3 | GLM-5.2 | T1 | Medio (más variedad de acciones) |
+| **T3f** | CRUD DDD — Certificate | 3 | MiniMax-M3 | T1 | Bajo |
+| **T3g** | CRUD DDD — User (setadmin, password-reset, role-change) | 3 | **Codex-terra high** | T1 | **Alto** — mismo controller que ya tuvo bypass crítico (roles/permisos); no debe filtrar `hashed_password` en `datos_Log` |
+| **T4** | CRUD en 4 controllers procedurales restantes | 3 | MiniMax-M3 | T1 | Bajo |
+| **T5** | EXPORT / PDF | 3 | MiniMax-M3 | T1 | Bajo |
+| **T6** | Vista `dash-activity-log.php` (SuperAdmin) + item sidebar | 4 | Sonnet 5 | T3a-g, T4, T5 | Medio — guard reutiliza `require_min_nivel(NIVEL_SUPERADMIN)` ya auditado, riesgo real es UI/paginación/filtros |
+| **T7** | Retención / limpieza (opcional) | 4 | MiniMax-M3 | T0 | Bajo |
 
-**QA:** sin tests automatizados → smoke test manual por fase en `http://localhost` (`docker-compose restart php`), verificando filas en `logs_actividad` vía phpMyAdmin tras cada acción.
+**Nota de paralelismo real:** dentro de la Ola 3 hay 9 tareas candidatas, pero varias comparten modelo y una sola terminal por modelo puede estar activa a la vez:
+- Cola MiniMax-M3 (secuencial entre sí): T3a → T3b → T3c → T3d → T3f → T4 → T5
+- Cola GLM-5.2 (secuencial entre sí): T2 → T3e
+- Codex-terra high: T3g (sola, sin cola)
+
+Es decir, 3 terminales concurrentes reales en la Ola 3, no 9. La Ola 4 (T6, T7) abre recién cuando cierran **todas** las colas de la Ola 3.
+
+**QA:** sin tests automatizados → smoke test manual por tarea en `http://localhost` (`docker-compose restart php`), verificando filas en `logs_actividad` vía phpMyAdmin tras cada acción. QA de T3g y T6 incluye intento adversarial (bypass de guard, intento de filtrar password) antes de dar luz verde a la Ola 4.
 
 ---
 

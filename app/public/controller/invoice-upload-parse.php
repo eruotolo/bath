@@ -4,10 +4,16 @@ session_start();
 include '../layouts/config.php';
 include '../layouts/helpers.php';
 require_once '../layouts/permissions.php';
+require_once '../layouts/activity_logger.php';
 global $link;
 require_permission('create', 'Invoice');
 
 if (!isset($_FILES['archivo_facturas']) || $_FILES['archivo_facturas']['error'] !== UPLOAD_ERR_OK) {
+    log_activity_ctx($link, 'IMPORT', [
+        'entidad' => 'Invoice',
+        'descripcion' => 'Error al parsear carga de facturas: no se adjuntó archivo',
+        'resultado' => 'error',
+    ]);
     header('Location: ../dash-invoices-list.php?action=upload&err=sin_archivo');
     exit();
 }
@@ -16,6 +22,11 @@ $archivo_tmp = $_FILES['archivo_facturas']['tmp_name'];
 $extension = strtolower(pathinfo($_FILES['archivo_facturas']['name'], PATHINFO_EXTENSION));
 
 if ($extension !== 'xlsx') {
+    log_activity_ctx($link, 'IMPORT', [
+        'entidad' => 'Invoice',
+        'descripcion' => "Error al parsear carga de facturas: formato inválido ($extension)",
+        'resultado' => 'error',
+    ]);
     header('Location: ../dash-invoices-list.php?action=upload&err=formato_invalido');
     exit();
 }
@@ -23,6 +34,11 @@ if ($extension !== 'xlsx') {
 $filas = leer_xlsx($archivo_tmp);
 
 if ($filas === false || count($filas) < 2) {
+    log_activity_ctx($link, 'IMPORT', [
+        'entidad' => 'Invoice',
+        'descripcion' => 'Error al parsear carga de facturas: archivo sin filas válidas',
+        'resultado' => 'error',
+    ]);
     header('Location: ../dash-invoices-list.php?action=upload&err=sin_filas');
     exit();
 }
@@ -91,11 +107,32 @@ foreach ($filas as $fila) {
 }
 
 if (count($filas_procesadas) === 0) {
+    log_activity_ctx($link, 'IMPORT', [
+        'entidad' => 'Invoice',
+        'descripcion' => 'Error al parsear carga de facturas: ninguna fila procesada',
+        'resultado' => 'error',
+    ]);
     header('Location: ../dash-invoices-list.php?action=upload&err=sin_filas');
     exit();
 }
 
 $_SESSION['carga_facturas'] = $filas_procesadas;
+
+$filas_ok = 0;
+$filas_error = 0;
+foreach ($filas_procesadas as $fila_p) {
+    if ($fila_p['error'] === null) {
+        $filas_ok++;
+    } else {
+        $filas_error++;
+    }
+}
+
+log_activity_ctx($link, 'IMPORT', [
+    'entidad' => 'Invoice',
+    'descripcion' => "Preview de carga de facturas generado (archivo xlsx, $filas_ok filas OK, $filas_error con error)",
+    'datos' => ['filas_ok' => $filas_ok, 'filas_error' => $filas_error],
+]);
 
 header('Location: ../dash-invoices-list.php');
 

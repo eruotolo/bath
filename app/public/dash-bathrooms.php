@@ -15,6 +15,7 @@ use App\Infrastructure\Persistence\MysqliContractRepository;
 global $link;
 
 include('layouts/config.php');
+include('layouts/native-table.php');
 
 $repo = new MysqliBathroomRepository($link);
 $csrf_token = csrf_token();
@@ -185,15 +186,6 @@ function bath_estado_meta(int $estado, int $asignado): array {
     ];
 }
 
-// --- Badge de "Estado Técnico" en la tabla: refleja solo estado_Bath, no la asignación ---
-function bath_estado_tecnico(int $estado): array {
-    return match ($estado) {
-        1 => ['label' => 'Activo', 'tagBg' => 'bg-emerald-50 text-emerald-700'],
-        2 => ['label' => 'Mantención', 'tagBg' => 'bg-amber-50 text-amber-700'],
-        default => ['label' => 'Inactivo', 'tagBg' => 'bg-slate-100 text-slate-600'],
-    };
-}
-
 $pills = [
     'todos' => 'Todos',
     'disponible' => 'Disponibles',
@@ -247,7 +239,7 @@ $pills = [
                                     type="text"
                                     placeholder="Código o Faena..."
                                     id="banos-local-search"
-                                    class="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20 transition-colors font-sans"
+                                    class="w-full pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20 transition-colors font-sans"
                                 />
                             </div>
 
@@ -263,7 +255,13 @@ $pills = [
                             </div>
                         </div>
 
-                        <div class="flex items-center space-x-3 shrink-0">
+                        <div class="flex flex-wrap items-center gap-3 shrink-0">
+                            <?php echo table_native_export_buttons(
+                                'controller/bathroom-export.php?format=csv',
+                                'controller/bathroom-export.php?format=pdf',
+                                'bathroom'
+                            ); ?>
+
                             <div class="bg-slate-100 p-1 rounded-xl flex items-center space-x-0.5">
                                 <button
                                     type="button"
@@ -288,7 +286,7 @@ $pills = [
                             <a
                                 href="?action=new<?php echo base_query_string(['page', 'action', 'id', 'assign', 'err']); ?>"
                                 id="new-bath-btn"
-                                class="px-4 py-2 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl font-sans text-xs font-semibold flex items-center space-x-1.5 shadow-lg shadow-emerald-500/10 transition-all active:scale-95"
+                                class="px-4 py-2 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl font-sans text-xs font-semibold flex items-center space-x-1.5 shadow-lg shadow-indigo-500/10 transition-all active:scale-95"
                             >
                                 <i data-lucide="plus" class="w-3.5 h-3.5"></i>
                                 <span>Registrar Baño</span>
@@ -352,7 +350,7 @@ $pills = [
                                     <span class="text-slate-400 font-mono">C: <?php echo htmlspecialchars($fecha, ENT_QUOTES, 'UTF-8'); ?></span>
                                     <a
                                         href="?action=edit&id=<?php echo (int) $b['id_Bath']; ?><?php echo base_query_string(['page', 'action', 'id', 'assign', 'err']); ?>"
-                                        class="text-emerald-600 hover:text-emerald-700 font-bold hover:underline transition-colors"
+                                        class="text-indigo-600 hover:text-indigo-700 font-bold hover:underline transition-colors"
                                     >
                                         Editar baño
                                     </a>
@@ -400,7 +398,7 @@ $pills = [
                                             <td class="px-6 py-4">
                                                 <a
                                                     href="?action=edit&id=<?php echo (int) $b['id_Bath']; ?><?php echo base_query_string(['page', 'action', 'id', 'assign', 'err']); ?>"
-                                                    class="font-mono font-extrabold text-slate-800 text-sm hover:text-emerald-600 transition-colors"
+                                                    class="font-mono font-extrabold text-slate-800 text-sm hover:text-indigo-600 transition-colors"
                                                 >
                                                     <?php echo htmlspecialchars($b['codigo_Bath'], ENT_QUOTES, 'UTF-8'); ?>
                                                 </a>
@@ -416,8 +414,12 @@ $pills = [
                                                     <?php else: ?>
                                                         <span class="text-xs text-slate-400 italic">Obra no disponible</span>
                                                     <?php endif; ?>
+                                                <?php elseif ($meta['tone'] === 'amber'): ?>
+                                                    <span class="badge-status is-warn">En Mantención</span>
+                                                <?php elseif ($meta['tone'] === 'slate'): ?>
+                                                    <span class="badge-status is-danger">Fuera de Servicio</span>
                                                 <?php else: ?>
-                                                    <span class="text-xs text-emerald-600 bg-emerald-50 px-2 py-0.5 rounded-full font-bold uppercase font-sans">Bodega Central</span>
+                                                    <span class="badge-status is-success">En Bodega</span>
                                                 <?php endif; ?>
                                             </td>
                                             <td class="px-6 py-4 text-xs font-sans text-slate-500 italic max-w-xs truncate"><?php echo htmlspecialchars($obs, ENT_QUOTES, 'UTF-8'); ?></td>
@@ -430,14 +432,15 @@ $pills = [
                                                 <div class="inline-flex items-center gap-1">
                                                     <a
                                                         href="?action=edit&id=<?php echo (int) $b['id_Bath']; ?><?php echo base_query_string(['page', 'action', 'id', 'assign', 'err']); ?>"
-                                                        class="px-3 py-1 bg-emerald-50 text-emerald-600 hover:bg-emerald-100 transition-colors text-xs font-semibold rounded-lg font-sans"
+                                                        class="dt-cell-action"
+                                                        title="Editar"
                                                     >
-                                                        Editar
+                                                        <i data-lucide="square-pen"></i>
                                                     </a>
 
                                                     <div class="dropdown">
-                                                        <button class="p-1.5 rounded-lg border border-slate-100 text-slate-500 hover:text-slate-800 hover:border-slate-200 transition-all dropdown-toggle" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false" title="Más acciones">
-                                                            <i data-lucide="more-horizontal" class="w-4 h-4"></i>
+                                                        <button class="dt-cell-action dropdown-toggle dropdown-toggle-split" type="button" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                                                            <i data-lucide="more-horizontal"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end m-0 min-w-[220px] list-none overflow-hidden rounded-2xl border border-slate-100 bg-white p-2 shadow-xl shadow-slate-200/50">
                                                             <li>
@@ -477,7 +480,7 @@ $pills = [
                         <span class="font-mono text-[10px] text-slate-400 font-bold uppercase">Mostrando <?php echo $firstShown; ?>-<?php echo $lastShown; ?> de <?php echo $totalBaños; ?> Baños</span>
                         <div class="flex items-center space-x-1">
                             <?php if ($currentPage > 1): ?>
-                                <a href="?page=<?php echo $currentPage - 1; ?><?php echo base_query_string(['page']); ?>" class="px-3 py-1 rounded-lg border border-slate-100 bg-white text-xs font-semibold text-slate-500 transition-colors hover:bg-slate-50 hover:text-emerald-600 hover:border-slate-200">Anterior</a>
+                                <a href="?page=<?php echo $currentPage - 1; ?><?php echo base_query_string(['page']); ?>" class="px-3 py-1 rounded-lg border border-slate-100 bg-white text-xs font-semibold text-slate-500 transition-colors hover:bg-slate-50 hover:text-indigo-600 hover:border-slate-200">Anterior</a>
                             <?php else: ?>
                                 <button class="px-3 py-1 rounded-lg border border-slate-100 bg-white text-xs font-semibold text-slate-500 cursor-not-allowed" disabled>Anterior</button>
                             <?php endif; ?>
@@ -485,13 +488,13 @@ $pills = [
                                 <?php if ($item === '...'): ?>
                                     <span class="px-2 py-1 text-xs font-semibold text-slate-400 select-none">...</span>
                                 <?php elseif ($item === $currentPage): ?>
-                                    <span class="px-3 py-1 rounded-lg border border-emerald-600 bg-emerald-600 text-white text-xs font-semibold"><?php echo $item; ?></span>
+                                    <span class="px-3 py-1 rounded-lg border border-indigo-600 bg-indigo-600 text-white text-xs font-semibold"><?php echo $item; ?></span>
                                 <?php else: ?>
-                                    <a href="?page=<?php echo $item; ?><?php echo base_query_string(['page']); ?>" class="px-3 py-1 rounded-lg border border-slate-100 bg-white text-xs font-semibold text-slate-500 transition-colors hover:bg-slate-50 hover:text-emerald-600 hover:border-slate-200"><?php echo $item; ?></a>
+                                    <a href="?page=<?php echo $item; ?><?php echo base_query_string(['page']); ?>" class="px-3 py-1 rounded-lg border border-slate-100 bg-white text-xs font-semibold text-slate-500 transition-colors hover:bg-slate-50 hover:text-indigo-600 hover:border-slate-200"><?php echo $item; ?></a>
                                 <?php endif; ?>
                             <?php endforeach; ?>
                             <?php if ($currentPage < $totalPages): ?>
-                                <a href="?page=<?php echo $currentPage + 1; ?><?php echo base_query_string(['page']); ?>" class="px-3 py-1 rounded-lg border border-slate-100 bg-white text-xs font-semibold text-slate-500 transition-colors hover:bg-slate-50 hover:text-emerald-600 hover:border-slate-200">Siguiente</a>
+                                <a href="?page=<?php echo $currentPage + 1; ?><?php echo base_query_string(['page']); ?>" class="px-3 py-1 rounded-lg border border-slate-100 bg-white text-xs font-semibold text-slate-500 transition-colors hover:bg-slate-50 hover:text-indigo-600 hover:border-slate-200">Siguiente</a>
                             <?php else: ?>
                                 <button class="px-3 py-1 rounded-lg border border-slate-100 bg-white text-xs font-semibold text-slate-500 cursor-not-allowed" disabled>Siguiente</button>
                             <?php endif; ?>
@@ -511,7 +514,7 @@ $pills = [
 
         <div class="px-6 py-5 border-b border-slate-100 flex items-center justify-between bg-slate-50">
             <div class="flex items-center space-x-3">
-                <div class="w-10 h-10 rounded-xl <?php echo $drawerMode === 'edit' ? 'bg-emerald-100 text-emerald-700' : 'bg-emerald-500 text-white shadow-lg shadow-emerald-500/10'; ?> flex items-center justify-center">
+                <div class="w-10 h-10 rounded-xl <?php echo $drawerMode === 'edit' ? 'bg-indigo-100 text-indigo-700' : 'bg-indigo-500 text-white shadow-lg shadow-indigo-500/10'; ?> flex items-center justify-center">
                     <i data-lucide="<?php echo $drawerMode === 'edit' ? 'square-pen' : 'bath'; ?>" class="w-5 h-5"></i>
                 </div>
                 <div>
@@ -556,7 +559,7 @@ $pills = [
                     name="codigo_Bath"
                     placeholder="e.g. AT096"
                     value="<?php echo htmlspecialchars($drawerMode === 'edit' ? $editingBath->codigoBath : '', ENT_QUOTES, 'UTF-8'); ?>"
-                    class="w-full px-4 py-2.5 text-xs rounded-xl border transition-all font-mono <?php echo $err_es_codigo ? 'border-rose-400 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20' : 'border-slate-200 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'; ?>"
+                    class="w-full px-4 py-2.5 text-xs rounded-xl border transition-all font-mono <?php echo $err_es_codigo ? 'border-rose-400 focus:border-rose-500 focus:ring-2 focus:ring-rose-500/20' : 'border-slate-200 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500/20'; ?>"
                     required
                 >
                 <?php if ($err_es_codigo): ?>
@@ -573,7 +576,7 @@ $pills = [
                     type="date"
                     name="fechaCompra_Bath"
                     value="<?php echo htmlspecialchars($drawerMode === 'edit' ? $editingBath->fechaCompraBath : date('Y-m-d'), ENT_QUOTES, 'UTF-8'); ?>"
-                    class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-mono"
+                    class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500 transition-all font-mono"
                 >
             </div>
 
@@ -581,7 +584,7 @@ $pills = [
                 <label class="font-sans text-xs font-bold text-slate-600 block">Estado Técnico</label>
                 <select
                     name="estado_Bath"
-                    class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-emerald-500 transition-all font-sans"
+                    class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-indigo-500 transition-all font-sans"
                 >
                     <option value="1" <?php echo ($drawerMode === 'edit' && $editingBath->estadoBath === 1) ? 'selected' : ''; ?>>Activo (Disponible para faenas)</option>
                     <option value="2" <?php echo ($drawerMode === 'edit' && $editingBath->estadoBath === 2) ? 'selected' : ''; ?>>Mantención (En reparación)</option>
@@ -595,7 +598,7 @@ $pills = [
                     name="observacion_Bath"
                     placeholder="e.g. Cabina estándar reforzada, SO"
                     rows="4"
-                    class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-emerald-500 transition-all font-sans"
+                    class="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 focus:outline-none focus:border-indigo-500 transition-all font-sans"
                 ><?php echo htmlspecialchars($drawerMode === 'edit' ? $editingBath->observacionBath : '', ENT_QUOTES, 'UTF-8'); ?></textarea>
             </div>
 
@@ -610,7 +613,7 @@ $pills = [
                     type="submit"
                     name="<?php echo $drawerMode === 'edit' ? 'submit_edit_bath' : 'submit_new_bath'; ?>"
                     id="<?php echo $drawerMode === 'edit' ? 'submit-edit-bath' : 'submit-new-bath'; ?>"
-                    class="flex-1 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-semibold font-sans transition-colors shadow-lg shadow-emerald-500/10"
+                    class="flex-1 py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl text-xs font-semibold font-sans transition-colors shadow-lg shadow-indigo-500/10"
                 >
                     <?php echo $drawerMode === 'edit' ? 'Guardar Cambios' : 'Guardar en Inventario'; ?>
                 </button>
@@ -653,7 +656,7 @@ $pills = [
                         </button>
                     </form>
                 <?php elseif ($editingBath->estadoBath === 1): ?>
-                    <span class="font-sans text-[10px] font-bold text-emerald-600 block uppercase">Asignar a obra</span>
+                    <span class="font-sans text-[10px] font-bold text-indigo-600 block uppercase">Asignar a obra</span>
                     <form method="post" action="controller/bath-assign-drawer.php" class="space-y-2">
                         <input type="hidden" name="csrf_token" value="<?php echo htmlspecialchars($csrf_token, ENT_QUOTES, 'UTF-8'); ?>">
                         <input type="hidden" name="id_Bath" value="<?php echo (int) $editingBath->id; ?>">
@@ -661,7 +664,7 @@ $pills = [
                             <select
                                 name="id_Contrato"
                                 id="id_Contrato_assign"
-                                class="dt-select w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-emerald-500 transition-all font-sans"
+                                class="dt-select w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 bg-white focus:outline-none focus:border-indigo-500 transition-all font-sans"
                                 data-enhanced-select
                                 data-search-placeholder="Buscar obra..."
                                 required
@@ -676,7 +679,7 @@ $pills = [
                             <button
                                 type="submit"
                                 name="submit_assign_bath"
-                                class="w-full py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-xl text-xs font-semibold font-sans transition-colors"
+                                class="w-full py-2.5 bg-indigo-500 hover:bg-indigo-600 text-white rounded-xl text-xs font-semibold font-sans transition-colors"
                             >
                                 Confirmar Asignación
                             </button>

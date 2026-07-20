@@ -10,6 +10,7 @@ global $link;
 include ('../layouts/config.php');
 require_once '../layouts/session.php';
 require_once '../layouts/permissions.php';
+require_once '../layouts/activity_logger.php';
 
 if (isset($_POST['update'])){
     $id_Contrato = (int) $_POST['id_Contrato'];
@@ -18,17 +19,26 @@ if (isset($_POST['update'])){
 
     $useCase = new AssignBathroomToContract(new MysqliBathroomRepository($link));
 
+    $asignados = [];
     foreach ($idBanos as $id_Bath) {
         if ($id_Bath <= 0) {
             continue;
         }
         try {
             $useCase->handle($id_Contrato, $id_Bath);
+            $asignados[] = $id_Bath;
         } catch (\Throwable $e) {
             // Best-effort: un baño puntual puede fallar (p. ej. ya asignado por otro usuario)
             // sin abortar la asignación del resto.
         }
     }
+
+    log_activity_ctx($link, 'ASSIGN', [
+        'entidad' => 'Contract',
+        'entidad_id' => $id_Contrato,
+        'descripcion' => 'Asignó ' . count($asignados) . ' baños al contrato id ' . $id_Contrato . ' (ids: ' . implode(',', $asignados) . ')',
+        'datos' => $_POST,
+    ]);
 
     header("Location: ../dash-contracts.php?action=manage&id_Contrato=$id_Contrato");
 

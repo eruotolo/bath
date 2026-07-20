@@ -9,6 +9,7 @@ global $link;
 include "../layouts/config.php";
 require_once '../layouts/session.php';
 require_once '../layouts/permissions.php';
+require_once '../layouts/activity_logger.php';
 
 if(isset($_POST['update'])){
     $id = (int) $_POST['id'];
@@ -46,12 +47,33 @@ if(isset($_POST['update'])){
     }
 
     $useCase = new UpdateUser($repository);
+    $log_data = [
+        'id_User' => $id,
+        'useremail' => $_POST['useremail'] ?? null,
+        'username' => $_POST['username'] ?? null,
+        'name' => $_POST['name'] ?? null,
+        'lastname' => $_POST['lastname'] ?? null,
+        'category' => $_POST['category'] ?? null,
+    ];
 
     try {
         $useCase->handle($id, $_POST, $imageFilename);
+        log_activity_ctx($link, 'UPDATE', [
+            'entidad' => 'User',
+            'entidad_id' => $id,
+            'descripcion' => "Actualizó usuario ID $id",
+            'datos' => $log_data,
+        ]);
         header('Location: ../dash-users-list.php?status=success&msg=' . urlencode('Usuario actualizado correctamente'));
         exit();
     } catch (\mysqli_sql_exception $e) {
+        log_activity_ctx($link, 'UPDATE', [
+            'entidad' => 'User',
+            'entidad_id' => $id,
+            'descripcion' => "No se pudo actualizar el usuario ID $id",
+            'datos' => $log_data,
+            'resultado' => 'error',
+        ]);
         header('Location: ../dash-users-list.php?status=error&msg=' . urlencode('No se pudo actualizar el usuario'));
         exit();
     }

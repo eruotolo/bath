@@ -9,6 +9,7 @@ use App\Infrastructure\Persistence\MysqliInvoiceRepository;
 include '../layouts/config.php';
 require_once '../layouts/session.php';
 require_once '../layouts/permissions.php';
+require_once '../layouts/activity_logger.php';
 global $link;
 
 if (isset($_POST['editar'])) {
@@ -32,8 +33,21 @@ if (isset($_POST['editar'])) {
 
     try {
         $useCase->handle($id_Factura, $input);
+        log_activity_ctx($link, 'UPDATE', [
+            'entidad' => 'Invoice',
+            'entidad_id' => $id_Factura,
+            'descripcion' => 'Editó factura (id ' . $id_Factura . ')',
+            'datos' => $_POST,
+        ]);
         header("Location: ../dash-invoices-list.php");
     } catch (\mysqli_sql_exception $e) {
+        log_activity_ctx($link, 'UPDATE', [
+            'entidad' => 'Invoice',
+            'entidad_id' => $id_Factura,
+            'descripcion' => 'No se pudo editar la factura (id ' . $id_Factura . ')',
+            'datos' => $_POST,
+            'resultado' => 'error',
+        ]);
         header("Location: ../index.php");
     }
 } else {

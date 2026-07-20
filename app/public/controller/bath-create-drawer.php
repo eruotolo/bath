@@ -8,6 +8,7 @@ use App\Infrastructure\Persistence\MysqliBathroomRepository;
 require_once __DIR__ . '/../layouts/helpers.php';
 require_authenticated_session('../auth-login.php');
 require_once __DIR__ . '/../layouts/permissions.php';
+require_once __DIR__ . '/../layouts/activity_logger.php';
 
 global $link;
 include('../layouts/config.php');
@@ -64,7 +65,20 @@ try {
     if ($id === null) {
         bath_create_redirect('action=new&err=' . urlencode("Ya existe un baño con el código '$codigo'. Ingresá un código distinto."));
     }
+
+    log_activity_ctx($link, 'CREATE', [
+        'entidad' => 'Bathroom',
+        'entidad_id' => $id,
+        'descripcion' => "Creó baño código $codigo",
+        'datos' => $_POST,
+    ]);
 } catch (\mysqli_sql_exception $e) {
+    log_activity_ctx($link, 'CREATE', [
+        'entidad' => 'Bathroom',
+        'descripcion' => "Error al crear baño código $codigo",
+        'datos' => $_POST,
+        'resultado' => 'error',
+    ]);
     bath_create_redirect('action=new&err=' . urlencode('No se pudo crear el baño. Intente nuevamente.'));
 }
 

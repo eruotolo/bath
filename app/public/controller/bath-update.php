@@ -8,6 +8,7 @@ use App\Infrastructure\Persistence\MysqliBathroomRepository;
 include "../layouts/config.php";
 require_once '../layouts/session.php';
 require_once '../layouts/permissions.php';
+require_once '../layouts/activity_logger.php';
 global $link;
 
 if (isset($_POST['update'])){
@@ -23,9 +24,22 @@ if (isset($_POST['update'])){
         if (!$ok) {
             header('Location: ../dash-bathrooms-edit.php?id_Bath=' . $id_Bath . '&status=error&msg=' . urlencode("Ya existe un baño con el código '$codigo_Bath'. Ingresá un código distinto."));
         } else {
+            log_activity_ctx($link, 'UPDATE', [
+                'entidad' => 'Bathroom',
+                'entidad_id' => $id_Bath,
+                'descripcion' => "Actualizó baño código $codigo_Bath",
+                'datos' => $_POST,
+            ]);
             header('Location: ../dash-bathrooms.php?status=success&msg=' . urlencode('Baño actualizado correctamente'));
         }
     } catch (\mysqli_sql_exception $e) {
+        log_activity_ctx($link, 'UPDATE', [
+            'entidad' => 'Bathroom',
+            'entidad_id' => $id_Bath,
+            'descripcion' => "Error al actualizar baño código $codigo_Bath",
+            'datos' => $_POST,
+            'resultado' => 'error',
+        ]);
         header('Location: ../dash-bathrooms.php?status=error&msg=' . urlencode('No se pudo actualizar el baño'));
     }
 }else{

@@ -16,6 +16,7 @@ use App\Infrastructure\Persistence\MysqliCustomerRepository;
 use App\Infrastructure\Persistence\MysqliBathroomRepository;
 
 include('layouts/config.php');
+include('layouts/native-table.php');
 
 $servicios = (new ListServices(new MysqliServiceRepository($link)))->handle();
 
@@ -198,7 +199,13 @@ function baseQueryString(array $excludes = ['page']): string {
                             </div>
                         </div>
 
-                        <div class="flex items-center space-x-3 shrink-0">
+                        <div class="flex flex-wrap items-center gap-3 shrink-0">
+                            <?php echo table_native_export_buttons(
+                                'controller/service-export.php?format=csv&filter=' . urlencode($filter),
+                                'controller/service-export.php?format=pdf&filter=' . urlencode($filter),
+                                'service'
+                            ); ?>
+
                             <div class="bg-slate-100 p-1 rounded-xl flex items-center space-x-0.5">
                                 <button
                                     type="button"

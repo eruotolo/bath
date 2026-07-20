@@ -794,7 +794,7 @@
        Choices.js oculta el <select> original y crea su propio DOM (.choices, .choices__inner, ...)
        con su theme por defecto (Open Sans, radios de 2.5px, gris), que no respeta los inputs
        Tailwind del resto del drawer (rounded-xl, border-slate-200, focus:border-...).
-       Scoped a #bath-drawer, #contract-drawer (acento emerald) y #service-drawer, #invoice-drawer, #invoice-edit-drawer, #certificate-drawer (acento indigo)
+       Scoped a #contract-drawer (acento emerald) y #bath-drawer, #service-drawer, #invoice-drawer, #invoice-edit-drawer, #certificate-drawer (acento indigo)
        para no afectar los otros data-enhanced-select del resto de la app
        (esos usan .dt-select/.dt-input, un sistema visual distinto). */
     #bath-drawer .choices, #contract-drawer .choices, #service-drawer .choices, #invoice-drawer .choices, #invoice-edit-drawer .choices, #certificate-drawer .choices { font-size: 12px !important; }
@@ -811,12 +811,12 @@
         border-radius: 12px !important;
         transition: border-color .15s !important;
     }
-    #bath-drawer .choices.is-open .choices__inner,
-    #bath-drawer .choices.is-focused .choices__inner,
     #contract-drawer .choices.is-open .choices__inner,
     #contract-drawer .choices.is-focused .choices__inner {
         border-color: #10b981 !important;
     }
+    #bath-drawer .choices.is-open .choices__inner,
+    #bath-drawer .choices.is-focused .choices__inner,
     #service-drawer .choices.is-open .choices__inner,
     #service-drawer .choices.is-focused .choices__inner,
     #certificate-drawer .choices.is-open .choices__inner,
@@ -866,10 +866,11 @@
         font-size: 12px !important;
         padding: 8px 16px !important;
     }
-    #bath-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted, #contract-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted {
+    #contract-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted {
         background: #ecfdf5 !important;
         color: #047857 !important;
     }
+    #bath-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted,
     #service-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted,
     #certificate-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted,
     #invoice-drawer .choices__list--dropdown .choices__item--selectable.is-highlighted,

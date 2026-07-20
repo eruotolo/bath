@@ -16,6 +16,7 @@ use App\Application\Invoice\ListAssignedServices;
 
 include('layouts/config.php');
 include('layouts/helpers.php');
+include('layouts/native-table.php');
 
 $facturas = (new ListInvoices(new MysqliInvoiceRepository($link)))->handle();
 
@@ -174,11 +175,16 @@ $facturasFiltradas = array_values(array_filter($facturas, function ($row) use ($
                             </div>
                         </div>
 
-                        <div class="flex items-center space-x-3 shrink-0">
+                        <div class="flex flex-wrap items-center gap-3 shrink-0">
                             <div class="dt-range-picker input-group datepicker-range" style="width: auto;">
                                 <input type="text" class="dt-input flatpickr-input" data-input aria-describedby="date1">
                                 <button class="dt-input-suffix" id="date1" data-toggle><i data-lucide="calendar" class="!h-4 !w-4"></i></button>
                             </div>
+                            <?php echo table_native_export_buttons(
+                                'controller/invoice-export.php?format=csv&filter=' . urlencode($filter),
+                                'controller/invoice-export.php?format=pdf&filter=' . urlencode($filter),
+                                'invoice'
+                            ); ?>
                             <a href="?action=upload" class="px-4 py-2 border border-slate-200 text-slate-600 hover:bg-slate-50 rounded-xl font-sans text-xs font-semibold flex items-center space-x-1.5 transition-all active:scale-95">
                                 <i data-lucide="upload" class="w-3.5 h-3.5"></i>
                                 <span>Subir Excel / CSV</span>
@@ -274,10 +280,10 @@ $facturasFiltradas = array_values(array_filter($facturas, function ($row) use ($
                                                             <?php endif; ?>
                                                             <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/invoice-pdf.php?id_Factura=<?php echo (int) $row['id_Factura']; ?>&id_Contrato=<?php echo (int) $row['id_Contrato']; ?>" data-glightbox-preview data-type="external" data-width="900px" data-height="90vh"><i data-lucide="printer" class="!h-[14px] !w-[14px] shrink-0"></i>Imprimir</a></li>
                                                             <li>
-                                                                <a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/invoice-estado.php?id_Factura=<?php echo (int) $row['id_Factura']; ?>&estado_Factura=2"><i data-lucide="circle-check" class="!h-[14px] !w-[14px] shrink-0"></i>Pagado</a>
+                                                                <a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/invoice-estado.php?id_Factura=<?php echo (int) $row['id_Factura']; ?>&estado_Factura=2" data-confirm-delete data-confirm-title="¿Marcar como pagada?" data-confirm-text="La factura pasará a estado Pagado." data-confirm-confirm-text="Sí, marcar pagada"><i data-lucide="circle-check" class="!h-[14px] !w-[14px] shrink-0" aria-hidden="true"></i>Pagado</a>
                                                             </li>
                                                             <li>
-                                                                <a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/invoice-estado.php?id_Factura=<?php echo (int) $row['id_Factura']; ?>&estado_Factura=3"><i data-lucide="circle-x" class="!h-[14px] !w-[14px] shrink-0"></i>Anular Pago</a>
+                                                                <a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/invoice-estado.php?id_Factura=<?php echo (int) $row['id_Factura']; ?>&estado_Factura=3" data-confirm-delete data-confirm-title="¿Anular el pago?" data-confirm-text="La factura volverá a estado pendiente." data-confirm-confirm-text="Sí, anular pago"><i data-lucide="circle-x" class="!h-[14px] !w-[14px] shrink-0" aria-hidden="true"></i>Anular Pago</a>
                                                             </li>
                                                             <li><hr class="dropdown-divider m-1 border-slate-100"></li>
                                                             <li>

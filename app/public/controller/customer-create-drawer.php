@@ -10,6 +10,7 @@ include('../layouts/config.php');
 include('../layouts/helpers.php');
 require_once '../layouts/session.php';
 require_once __DIR__ . '/../layouts/permissions.php';
+require_once __DIR__ . '/../layouts/activity_logger.php';
 require_permission('create', 'Customer');
 
 function customerCreateRedirect(string $query): void {
@@ -78,7 +79,7 @@ $stmt->close();
 
 $repo = new MysqliCustomerRepository($link);
 try {
-    (new CreateCustomer($repo))->handle([
+    $id = (new CreateCustomer($repo))->handle([
         'rut_Cliente'        => $rut,
         'nombre_Cliente'     => mb_strtoupper($nombre),
         'telefono_Cliente'   => $telefono,
@@ -88,7 +89,20 @@ try {
         'ciudad_Cliente'     => mb_strtoupper($ciudad),
         'comuna_Cliente'     => $comuna,
     ]);
+
+    log_activity_ctx($link, 'CREATE', [
+        'entidad' => 'Customer',
+        'entidad_id' => $id,
+        'descripcion' => "Creó cliente id $id (RUT $rut)",
+        'datos' => $_POST,
+    ]);
 } catch (\mysqli_sql_exception $e) {
+    log_activity_ctx($link, 'CREATE', [
+        'entidad' => 'Customer',
+        'descripcion' => "Error al crear cliente RUT $rut",
+        'datos' => $_POST,
+        'resultado' => 'error',
+    ]);
     customerCreateRedirect('action=new&err=' . urlencode('No se pudo crear el cliente. Intente nuevamente.'));
 }
 

@@ -7,6 +7,7 @@ if (isset($_SESSION["loggedin"]) && $_SESSION["loggedin"] === true) {
 }
 
 require_once "layouts/config.php";
+require_once "layouts/activity_logger.php";
 
 $useremail = $username = $password = $image = $name = $lastname = $category = "";
 $login_error = "";
@@ -61,13 +62,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 mysqli_stmt_close($stmt_nivel);
                             }
 
+                            log_activity_ctx($link, 'LOGIN');
+
                             header("location: index.php");
                         } else {
                             $login_error = "La contraseña ingresada no es válida.";
+                            log_activity($link, [
+                                'id_usuario'  => null,
+                                'username'    => null,
+                                'accion'      => 'ERROR',
+                                'entidad'     => null,
+                                'entidad_id'  => null,
+                                'descripcion' => 'Login fallido para usuario: ' . mb_substr($username, 0, 100),
+                                'pantalla'    => 'auth-login.php',
+                                'metodo'      => 'POST',
+                                'datos'       => null,
+                                'resultado'   => 'error',
+                                'ip'          => $_SERVER['REMOTE_ADDR'] ?? null,
+                                'user_agent'  => substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255),
+                            ]);
                         }
                     }
                 } else {
                     $login_error = "No se encontró una cuenta con ese usuario.";
+                    log_activity($link, [
+                        'id_usuario'  => null,
+                        'username'    => null,
+                        'accion'      => 'ERROR',
+                        'entidad'     => null,
+                        'entidad_id'  => null,
+                        'descripcion' => 'Login fallido para usuario: ' . mb_substr($username, 0, 100),
+                        'pantalla'    => 'auth-login.php',
+                        'metodo'      => 'POST',
+                        'datos'       => null,
+                        'resultado'   => 'error',
+                        'ip'          => $_SERVER['REMOTE_ADDR'] ?? null,
+                        'user_agent'  => substr($_SERVER['HTTP_USER_AGENT'] ?? '', 0, 255),
+                    ]);
                 }
             } else {
                 echo "Oops! Something went wrong. Please try again later.";

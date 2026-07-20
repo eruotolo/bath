@@ -7,6 +7,8 @@ use App\Infrastructure\Persistence\MysqliCertificateRepository;
 
 global $link;
 include('../layouts/config.php');
+session_start();
+require_once '../layouts/activity_logger.php';
 require_once('../assets/tcpdf/tcpdf.php');
 
 $id_Certificado = isset($_GET['id_Certificado']) ? (int) $_GET['id_Certificado'] : 0;
@@ -91,5 +93,12 @@ $pdf->SetY($firmaY + 24);
 
 $pdf->writeHTML($footerContent, true, false, true, false, '');
 ob_end_clean();
+
+log_activity_ctx($link, 'PDF', [
+    'entidad' => 'Certificate',
+    'entidad_id' => $id_Certificado,
+    'descripcion' => 'Generó PDF de certificado código ' . $certificado,
+    'datos' => null,
+]);
 
 $pdf->Output('certificado-' . $certificado . '.pdf', 'I');

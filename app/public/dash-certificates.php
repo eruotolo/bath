@@ -10,6 +10,7 @@ global $link;
 include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
 <?php include('layouts/config.php');
+include('layouts/native-table.php');
 
 $certificates = (new ListCertificates(new MysqliCertificateRepository($link)))->handle();
 
@@ -42,40 +43,25 @@ if ($drawerMode === 'new') {
             <div class="container-fluid px-10 py-10 bg-slate-50/50">
 
                 <div class="space-y-4">
-                    <!-- Toolbar: título + buscador (native-table.js) + Agregar -->
-                    <div class="table-toolbar">
-                        <h5 class="table-toolbar-title">Certificados <span class="count">(<?php echo (int) $certificates['total']; ?>)</span></h5>
-                        <div class="table-toolbar-actions">
-                            <div class="table-toolbar-search">
-                                <div class="relative">
-                                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-                                    <input
-                                        type="text"
-                                        id="tabla-certificados-search"
-                                        data-table-search-input="#tabla-certificados"
-                                        placeholder="Buscar por cliente, obra, número..."
-                                        class="w-full sm:w-64 pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors font-sans"
-                                    >
-                                </div>
-                            </div>
-                            <a href="?action=new" class="dt-btn-add"><i data-lucide="plus"></i> Agregar Nuevo Certificado</a>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden" data-table-native-wrap>
-                        <div class="overflow-x-auto">
-                            <table id="tabla-certificados" class="w-full text-left border-collapse" data-per-page="9" data-item-label="Certificados">
-                                <thead>
-                                    <tr class="border-b border-slate-50 bg-slate-50/50">
-                                        <th scope="col" class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Nro. Certificado</th>
-                                        <th scope="col" class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Cliente</th>
-                                        <th scope="col" class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">RUT Cliente</th>
-                                        <th scope="col" class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Obra</th>
-                                        <th scope="col" class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Fecha del Servicio</th>
-                                        <th scope="col" class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase text-center">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-50">
+                    <?php
+                        $cert_actions = table_native_export_buttons('controller/certificate-export.php?format=csv', 'controller/certificate-export.php?format=pdf', 'certificate')
+                            . '<a href="?action=new" class="dt-btn-add"><i data-lucide="plus"></i> Agregar Nuevo Certificado</a>';
+                        table_native_open([
+                            'table_id' => 'tabla-certificados',
+                            'search_placeholder' => 'Buscar por cliente, obra, número...',
+                            'item_label' => 'Certificados',
+                            'per_page' => 9,
+                            'actions_html' => $cert_actions,
+                            'columns' => [
+                                ['label' => 'Nro. Certificado'],
+                                ['label' => 'Cliente'],
+                                ['label' => 'RUT Cliente'],
+                                ['label' => 'Obra'],
+                                ['label' => 'Fecha del Servicio'],
+                                ['label' => 'Acciones', 'align' => 'center'],
+                            ],
+                        ]);
+                    ?>
                                     <?php foreach ($certificates['items'] as $row): ?>
                                         <?php
                                         $searchable = htmlspecialchars(
@@ -120,14 +106,7 @@ if ($drawerMode === 'new') {
                                             </td>
                                         </tr>
                                     <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="px-6 py-4 bg-slate-50/50 border-t border-slate-50 flex items-center justify-between" data-table-native-pagination>
-                            <span class="font-mono text-[10px] text-slate-400 font-bold uppercase" data-table-native-summary></span>
-                            <div class="flex items-center space-x-1" data-table-native-pages></div>
-                        </div>
-                    </div>
+                    <?php table_native_close(); ?>
                 </div>
 
             </div>

@@ -14,9 +14,12 @@ $uri_path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 $uri_segments = explode('/', $uri_path);
 $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]/$uri_segments[1]";
 if (isset($_POST['submit'])) {
-    $useremail = mysqli_real_escape_string($link, $_POST['useremail']);
-    $sql = "SELECT * FROM users WHERE useremail = '$useremail'";
-    $query = mysqli_query($link, $sql);
+    $useremail = trim($_POST['useremail']);
+    $sql = "SELECT * FROM users WHERE useremail = ?";
+    $stmt = mysqli_prepare($link, $sql);
+    mysqli_stmt_bind_param($stmt, 's', $useremail);
+    mysqli_stmt_execute($stmt);
+    $query = mysqli_stmt_get_result($stmt);
     $emailcount = mysqli_num_rows($query);
     if ($emailcount) {
         $userdata = mysqli_fetch_array($query);
@@ -82,7 +85,7 @@ if (isset($_POST['submit'])) {
                                     </div>
                                 <?php endif; ?>
 
-                                <form class="mt-6" action="<?php echo htmlentities($_SERVER["PHP_SELF"]); ?>" method="post">
+                                <form class="mt-6" action="<?php echo htmlentities($_SERVER["PHP_SELF"], ENT_QUOTES, 'UTF-8'); ?>" method="post">
                                     <div class="mb-3 <?php echo !empty($useremail_err) ? 'has-error' : ''; ?>">
                                         <label class="dt-label">Email</label>
                                         <input type="text" class="dt-input" id="email" name="useremail" placeholder="Ingresá tu email">

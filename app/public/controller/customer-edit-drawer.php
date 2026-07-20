@@ -11,6 +11,7 @@ include('../layouts/config.php');
 include('../layouts/helpers.php');
 require_once '../layouts/session.php';
 require_once __DIR__ . '/../layouts/permissions.php';
+require_once __DIR__ . '/../layouts/activity_logger.php';
 
 function customerEditRedirect(string $query): void {
     header('Location: ../dash-customers.php' . ($query ? '?' . $query : ''));
@@ -105,7 +106,21 @@ try {
         'ciudadCliente'     => mb_strtoupper($ciudad),
         'comunaCliente'     => $comuna,
     ]);
+
+    log_activity_ctx($link, 'UPDATE', [
+        'entidad' => 'Customer',
+        'entidad_id' => $idCliente,
+        'descripcion' => "Actualizó cliente id $idCliente (RUT $rut)",
+        'datos' => $_POST,
+    ]);
 } catch (\mysqli_sql_exception $e) {
+    log_activity_ctx($link, 'UPDATE', [
+        'entidad' => 'Customer',
+        'entidad_id' => $idCliente,
+        'descripcion' => "Error al actualizar cliente id $idCliente (RUT $rut)",
+        'datos' => $_POST,
+        'resultado' => 'error',
+    ]);
     customerEditRedirect('action=edit&id=' . $idCliente . '&err=' . urlencode('No se pudo actualizar el cliente. Intente nuevamente.'));
 }
 

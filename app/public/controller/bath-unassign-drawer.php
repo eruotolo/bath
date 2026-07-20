@@ -8,6 +8,7 @@ use App\Infrastructure\Persistence\MysqliBathroomRepository;
 require_once __DIR__ . '/../layouts/helpers.php';
 require_authenticated_session('../auth-login.php');
 require_once __DIR__ . '/../layouts/permissions.php';
+require_once __DIR__ . '/../layouts/activity_logger.php';
 
 global $link;
 include('../layouts/config.php');
@@ -45,7 +46,21 @@ try {
         $idBath,
         $asignacion['id_Contrato']
     );
+
+    log_activity_ctx($link, 'UNASSIGN', [
+        'entidad' => 'Bathroom',
+        'entidad_id' => $idBath,
+        'descripcion' => "Desasignó baño id $idBath",
+        'datos' => $_POST,
+    ]);
 } catch (\mysqli_sql_exception | \DomainException $e) {
+    log_activity_ctx($link, 'UNASSIGN', [
+        'entidad' => 'Bathroom',
+        'entidad_id' => $idBath,
+        'descripcion' => "Error al desasignar baño id $idBath",
+        'datos' => $_POST,
+        'resultado' => 'error',
+    ]);
     bath_unassign_redirect('flash=error&msg=' . urlencode('No se pudo retirar el baño. Intente nuevamente.'));
 }
 

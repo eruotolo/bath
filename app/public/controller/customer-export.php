@@ -6,7 +6,11 @@ use App\Application\Customer\ListCustomers;
 use App\Infrastructure\Persistence\MysqliCustomerRepository;
 
 global $link;
+include('../layouts/session.php');
 include('../layouts/config.php');
+include('../layouts/permissions.php');
+require_permission('export');
+require_once '../layouts/activity_logger.php';
 
 $format = isset($_GET['format']) ? strtolower((string) $_GET['format']) : '';
 if (!in_array($format, ['csv', 'pdf'], true)) {
@@ -16,6 +20,13 @@ if (!in_array($format, ['csv', 'pdf'], true)) {
 
 $listado = (new ListCustomers(new MysqliCustomerRepository($link)))->handle();
 $clientes = $listado['items'];
+
+log_activity_ctx($link, 'EXPORT', [
+    'entidad' => 'Customer',
+    'entidad_id' => null,
+    'descripcion' => 'Exportó listado de clientes (' . $format . ', ' . count($clientes) . ' registros)',
+    'datos' => null,
+]);
 
 $filenameBase = 'clientes-' . date('Y-m-d');
 

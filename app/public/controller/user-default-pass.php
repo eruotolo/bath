@@ -9,6 +9,7 @@ global $link;
 include ('../layouts/config.php');
 require_once '../layouts/session.php';
 require_once '../layouts/permissions.php';
+require_once '../layouts/activity_logger.php';
 
 // RESETEAR PASSWORD A UN VALOR TEMPORAL ALEATORIO
 if (isset($_GET['id_User'])){
@@ -19,8 +20,21 @@ if (isset($_GET['id_User'])){
 
     try {
         $temporaryPassword = $useCase->handle($id);
+        log_activity_ctx($link, 'PASSWORD_RESET', [
+            'entidad' => 'User',
+            'entidad_id' => $id,
+            'descripcion' => "Reseteo de password a default para usuario ID $id",
+            'datos' => ['id_User' => $id, 'reset_type' => 'temporary_default'],
+        ]);
         header('Location: ../dash-users-list.php?status=success&msg=' . urlencode("Password reseteado. Nueva contraseña temporal: $temporaryPassword — comunicásela al usuario."));
     } catch (\mysqli_sql_exception $e) {
+        log_activity_ctx($link, 'PASSWORD_RESET', [
+            'entidad' => 'User',
+            'entidad_id' => $id,
+            'descripcion' => "No se pudo resetear el password a default para usuario ID $id",
+            'datos' => ['id_User' => $id, 'reset_type' => 'temporary_default'],
+            'resultado' => 'error',
+        ]);
         header('Location: ../index.php?status=error&msg=' . urlencode('No se pudo resetear el password del usuario'));
     }
 

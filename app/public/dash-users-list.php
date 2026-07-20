@@ -12,6 +12,7 @@ use App\Application\User\FindUser;
 use App\Infrastructure\Persistence\MysqliUserRepository;
 
 include 'layouts/config.php';
+include 'layouts/native-table.php';
 
 $useCase = new ListActiveUsers(new MysqliUserRepository($link));
 $usuarios = $useCase->handle();
@@ -71,39 +72,26 @@ function baseQueryString(array $excludes = ['page']): string {
             <div class="container-fluid px-10 py-10 bg-slate-50/50">
 
                 <div class="space-y-4">
-                    <!-- Toolbar: título + buscador (native-table.js) + Agregar Usuario -->
-                    <div class="table-toolbar">
-                        <h5 class="table-toolbar-title">Personal y Roles <span class="count">(<?php echo count($usuarios); ?>)</span></h5>
-                        <div class="table-toolbar-actions">
-                            <div class="table-toolbar-search">
-                                <div class="relative">
-                                    <i data-lucide="search" class="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none"></i>
-                                    <input
-                                        type="text"
-                                        id="tabla-usuarios-search"
-                                        data-table-search-input="#tabla-usuarios"
-                                        placeholder="Buscar por usuario, nombre, email..."
-                                        class="w-full sm:w-64 pl-10 pr-4 py-2 text-sm rounded-xl border border-slate-200 bg-white text-slate-800 focus:outline-none focus:ring-2 focus:ring-indigo-500/20 focus:border-indigo-500 transition-colors font-sans"
-                                    >
-                                </div>
-                            </div>
-                            <a href="dash-users-list.php?action=new" class="dt-btn-add"><i data-lucide="plus"></i> Agregar Usuario</a>
-                        </div>
-                    </div>
-
-                    <div class="bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden" data-table-native-wrap>
-                        <div class="overflow-x-auto">
-                            <table id="tabla-usuarios" class="w-full text-left border-collapse" data-per-page="10" data-item-label="Usuarios">
-                                <thead>
-                                    <tr class="border-b border-slate-50 bg-slate-50/50">
-                                        <th scope="col" class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Usuario</th>
-                                        <th scope="col" class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Nombre</th>
-                                        <th scope="col" class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Email</th>
-                                        <th scope="col" class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase">Categoría</th>
-                                        <th scope="col" class="px-6 py-4 font-mono text-[10px] font-bold text-slate-400 tracking-wider uppercase text-right whitespace-nowrap">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody class="divide-y divide-slate-50">
+                    <?php
+                        $users_actions = '<a href="dash-users-list.php?action=new" class="dt-btn-add"><i data-lucide="plus"></i> Agregar Usuario</a>';
+                        if (can('manage_users')) {
+                            $users_actions = table_native_export_buttons('controller/user-export.php?format=csv', 'controller/user-export.php?format=pdf', 'user') . $users_actions;
+                        }
+                        table_native_open([
+                            'table_id' => 'tabla-usuarios',
+                            'search_placeholder' => 'Buscar por usuario, nombre, email...',
+                            'item_label' => 'Usuarios',
+                            'per_page' => 10,
+                            'actions_html' => $users_actions,
+                            'columns' => [
+                                ['label' => 'Usuario'],
+                                ['label' => 'Nombre'],
+                                ['label' => 'Email'],
+                                ['label' => 'Categoría'],
+                                ['label' => 'Acciones', 'align' => 'right'],
+                            ],
+                        ]);
+                    ?>
                                     <?php foreach ($usuarios as $row): ?>
                                         <?php
                                         $searchable = htmlspecialchars(
@@ -138,7 +126,7 @@ function baseQueryString(array $excludes = ['page']): string {
                                                                 <i data-lucide="more-horizontal"></i>
                                                             </button>
                                                             <ul class="dropdown-menu dropdown-menu-end m-0 min-w-[220px] list-none overflow-hidden rounded-2xl border border-slate-100 bg-white p-2 shadow-xl shadow-slate-200/50">
-                                                                <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/user-default-pass.php?id_User=<?php echo (int) $row['id']; ?>"><i data-lucide="key" class="!h-[14px] !w-[14px] shrink-0"></i>Password Default</a></li>
+                                                                <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/user-default-pass.php?id_User=<?php echo (int) $row['id']; ?>" data-confirm-delete data-confirm-title="¿Restablecer password a la contraseña por defecto?" data-confirm-text="El usuario deberá cambiarla en su próximo inicio de sesión." data-confirm-confirm-text="Sí, restablecer"><i data-lucide="key" class="!h-[14px] !w-[14px] shrink-0" aria-hidden="true"></i>Password Default</a></li>
                                                                 <li><hr class="dropdown-divider m-1 border-slate-100"></li>
                                                                 <li>
                                                                     <a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-rose-500 hover:bg-rose-50 hover:text-rose-500" href="controller/user-inactive.php?id_User=<?php echo (int) $row['id']; ?>" data-confirm-delete data-confirm-title="¿Inactivar este usuario?" data-confirm-text="No podrá iniciar sesión hasta que se reactive.">
@@ -162,7 +150,7 @@ function baseQueryString(array $excludes = ['page']): string {
                                                                 <i data-lucide="more-horizontal"></i>
                                                             </button>
                                                             <ul class="dropdown-menu dropdown-menu-end m-0 min-w-[220px] list-none overflow-hidden rounded-2xl border border-slate-100 bg-white p-2 shadow-xl shadow-slate-200/50">
-                                                                <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/user-default-pass.php?id_User=<?php echo (int) $row['id']; ?>" data-requires-elevation="1" data-action="update" data-entidad="User" data-id="<?php echo (int) $row['id']; ?>"><i data-lucide="key" class="!h-[14px] !w-[14px] shrink-0"></i>Password Default</a></li>
+                                                                <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/user-default-pass.php?id_User=<?php echo (int) $row['id']; ?>" data-requires-elevation="1" data-action="update" data-entidad="User" data-id="<?php echo (int) $row['id']; ?>" data-confirm-delete data-confirm-title="¿Restablecer password a la contraseña por defecto?" data-confirm-text="El usuario deberá cambiarla en su próximo inicio de sesión." data-confirm-confirm-text="Sí, restablecer"><i data-lucide="key" class="!h-[14px] !w-[14px] shrink-0" aria-hidden="true"></i>Password Default</a></li>
                                                                 <li><hr class="dropdown-divider m-1 border-slate-100"></li>
                                                                 <li>
                                                                     <a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-rose-500 hover:bg-rose-50 hover:text-rose-500" href="controller/user-inactive.php?id_User=<?php echo (int) $row['id']; ?>" data-confirm-delete data-confirm-title="¿Inactivar este usuario?" data-confirm-text="No podrá iniciar sesión hasta que se reactive." data-requires-elevation="1" data-action="update" data-entidad="User" data-id="<?php echo (int) $row['id']; ?>">
@@ -183,14 +171,7 @@ function baseQueryString(array $excludes = ['page']): string {
                                             </td>
                                         </tr>
                                     <?php endif; ?>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="px-6 py-4 bg-slate-50/50 border-t border-slate-50 flex items-center justify-between" data-table-native-pagination>
-                            <span class="font-mono text-[10px] text-slate-400 font-bold uppercase" data-table-native-summary></span>
-                            <div class="flex items-center space-x-1" data-table-native-pages></div>
-                        </div>
-                    </div>
+                    <?php table_native_close(); ?>
                 </div>
 
             </div>

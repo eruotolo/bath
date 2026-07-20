@@ -9,6 +9,7 @@ global $link;
 include "../layouts/config.php";
 require_once '../layouts/session.php';
 require_once '../layouts/permissions.php';
+require_once '../layouts/activity_logger.php';
 require_permission('create', 'User');
 
 if (isset($_POST['crear'])){
@@ -32,12 +33,32 @@ if (isset($_POST['crear'])){
     move_uploaded_file($tname, $uploads_dir.'/'.$pname);
 
     $useCase = new CreateUser(new MysqliUserRepository($link));
+    $log_data = [
+        'useremail' => $_POST['useremail'] ?? null,
+        'username' => $_POST['username'] ?? null,
+        'name' => $_POST['name'] ?? null,
+        'lastname' => $_POST['lastname'] ?? null,
+        'category' => $_POST['category'] ?? null,
+    ];
 
     try {
-        $useCase->handle($_POST, $pname);
+        $id = $useCase->handle($_POST, $pname);
+        log_activity_ctx($link, 'CREATE', [
+            'entidad' => 'User',
+            'entidad_id' => $id,
+            'descripcion' => "Creó usuario ID $id",
+            'datos' => $log_data,
+        ]);
         header('Location: ../dash-users-list.php?status=success&msg=' . urlencode('Usuario creado correctamente'));
         exit();
     } catch (\mysqli_sql_exception $e) {
+        log_activity_ctx($link, 'CREATE', [
+            'entidad' => 'User',
+            'entidad_id' => null,
+            'descripcion' => 'No se pudo crear el usuario',
+            'datos' => $log_data,
+            'resultado' => 'error',
+        ]);
         header('Location: ../dash-users-list.php?status=error&msg=' . urlencode('No se pudo crear el usuario'));
         exit();
     }

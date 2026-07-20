@@ -9,12 +9,19 @@ global $link;
 require '../layouts/config.php';
 require_once '../layouts/session.php';
 require_once '../layouts/permissions.php';
+require_once '../layouts/activity_logger.php';
 
 $id_Bath = (int) $_GET['id_Bath'];
 require_permission('update', 'Bathroom', $id_Bath);
 
 $useCase = new SetBathroomEstado(new MysqliBathroomRepository($link));
 $useCase->handle($id_Bath, 0);
+
+log_activity_ctx($link, 'DEACTIVATE', [
+    'entidad' => 'Bathroom',
+    'entidad_id' => $id_Bath,
+    'descripcion' => "Desactivó baño id $id_Bath",
+]);
 
 header("Location: ../dash-bathrooms.php");
 

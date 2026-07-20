@@ -39,6 +39,14 @@ function format_fecha($fecha) {
     return $timestamp !== false ? date('d-m-Y', $timestamp) : (string) $fecha;
 }
 
+function bath_estado_tecnico(int $estado): array {
+    return match ($estado) {
+        1 => ['label' => 'Activo', 'tagBg' => 'bg-emerald-50 text-emerald-700'],
+        2 => ['label' => 'Mantención', 'tagBg' => 'bg-amber-50 text-amber-700'],
+        default => ['label' => 'Inactivo', 'tagBg' => 'bg-slate-100 text-slate-600'],
+    };
+}
+
 function normalizar_rut($rut) {
     $rut = strtoupper(trim($rut));
     return preg_replace('/[^0-9K]/', '', $rut);

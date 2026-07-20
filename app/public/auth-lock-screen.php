@@ -1,6 +1,7 @@
 <?php include 'layouts/session.php'; ?>
 <?php include 'layouts/head-main.php'; ?>
 <?php include 'layouts/config.php'; ?>
+<?php require_once 'layouts/activity_logger.php'; ?>
 
 <?php
 $username = $_SESSION['username'];
@@ -48,9 +49,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 }
                             }
 
+                            log_activity_ctx($link, 'LOGIN');
+
                             header("location: index.php");
                         } else {
                             $password_err = "La contraseña introducida no es válida.";
+                            log_activity_ctx($link, 'ERROR', [
+                                'resultado'   => 'error',
+                                'descripcion' => 'Desbloqueo de pantalla fallido para usuario: ' . mb_substr((string)($_SESSION['username'] ?? ''), 0, 100),
+                            ]);
                         }
                     }
                 }

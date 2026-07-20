@@ -8,6 +8,7 @@ use App\Infrastructure\Persistence\MysqliInvoiceRepository;
 session_start();
 include '../layouts/config.php';
 require_once '../layouts/permissions.php';
+require_once '../layouts/activity_logger.php';
 global $link;
 require_permission('create', 'Invoice');
 
@@ -79,6 +80,13 @@ if (count($rechazadas) > 0) {
 $status = count($rechazadas) === 0 ? 'success' : ($cargadas > 0 ? 'warning' : 'error');
 
 unset($_SESSION['carga_facturas']);
+
+log_activity_ctx($link, 'IMPORT', [
+    'entidad' => 'Invoice',
+    'entidad_id' => null,
+    'descripcion' => 'Importó ' . $cargadas . ' factura(s) desde Excel' . (count($rechazadas) > 0 ? ' (' . count($rechazadas) . ' rechazada(s))' : ''),
+    'datos' => $_POST,
+]);
 
 header('Location: ../dash-invoices-list.php?status=' . $status . '&msg=' . urlencode($msg));
 
