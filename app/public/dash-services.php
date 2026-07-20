@@ -306,7 +306,7 @@ function baseQueryString(array $excludes = ['page']): string {
 
                                 <!-- Footer: acción de impresión (misma acción que la vista de lista) -->
                                 <div class="mt-4 pt-3 border-t border-slate-50 flex items-center justify-end">
-                                    <a href="dash-services-print.php?id_Servicio=<?php echo (int) $row['id_Servicio']; ?>" class="flex items-center gap-1.5 text-[11px] font-sans font-bold text-indigo-600 hover:text-indigo-700 transition-colors">
+                                    <a href="controller/service-pdf.php?id_Servicio=<?php echo (int) $row['id_Servicio']; ?>" data-glightbox-preview data-type="external" data-width="900px" data-height="90vh" class="flex items-center gap-1.5 text-[11px] font-sans font-bold text-indigo-600 hover:text-indigo-700 transition-colors">
                                         <i data-lucide="printer" class="w-3.5 h-3.5"></i>
                                         Imprimir
                                     </a>
@@ -393,7 +393,7 @@ function baseQueryString(array $excludes = ['page']): string {
                                                             <i data-lucide="more-horizontal"></i>
                                                         </button>
                                                         <ul class="dropdown-menu dropdown-menu-end m-0 min-w-[220px] list-none overflow-hidden rounded-2xl border border-slate-100 bg-white p-2 shadow-xl shadow-slate-200/50">
-                                                            <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="dash-services-print.php?id_Servicio=<?php echo (int) $row['id_Servicio']; ?>"><i data-lucide="printer" class="!h-[14px] !w-[14px] shrink-0"></i>Imprimir</a></li>
+                                                            <li><a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-slate-700 hover:bg-slate-50 hover:text-slate-900" href="controller/service-pdf.php?id_Servicio=<?php echo (int) $row['id_Servicio']; ?>" data-glightbox-preview data-type="external" data-width="900px" data-height="90vh"><i data-lucide="printer" class="!h-[14px] !w-[14px] shrink-0"></i>Imprimir</a></li>
                                                             <li><hr class="dropdown-divider m-1 border-slate-100"></li>
                                                             <li>
                                                                 <a class="dropdown-item flex items-center gap-2 whitespace-nowrap rounded-lg px-3 py-2 font-sans text-[13px] text-rose-500 hover:bg-rose-50 hover:text-rose-500" href="controller/service-inactive.php?id_Servicio=<?php echo (int) $row['id_Servicio']; ?>" data-confirm-delete data-confirm-title="¿Eliminar este servicio?" data-confirm-text="Esta acción no se puede deshacer.">

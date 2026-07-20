@@ -15,7 +15,7 @@ require_permission('create', 'Invoice');
 $invoiceRepository = new MysqliInvoiceRepository($link);
 
 if (!isset($_SESSION['carga_facturas'])) {
-    header('Location: ../dash-invoices-upload.php');
+    header('Location: ../dash-invoices-list.php?action=upload&err=sesion_expirada');
     exit();
 }
 

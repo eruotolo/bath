@@ -32,11 +32,11 @@ if (isset($_POST['crear'])){
             'datos' => $_POST,
             'resultado' => 'error',
         ]);
-        header('Location: ../dash-customers-add.php?status=error&msg=' . urlencode('No se pudo crear el cliente'));
+        header('Location: ../dash-customers.php?action=new&err=' . urlencode('No se pudo crear el cliente'));
     }
 
 }else{
-    header('Location: ../dash-customers-add.php?status=error&msg=' . urlencode('No se pudo crear el cliente'));
+    header('Location: ../dash-customers.php?action=new&err=' . urlencode('No se pudo crear el cliente'));
 }
 // Cerrar la conexión
 $link->close();

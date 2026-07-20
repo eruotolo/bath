@@ -4,7 +4,7 @@ server with default setting (user 'root' with no password) */
 /*define('DB_SERVER', 'localhost:3306');*/
 define('DB_SERVER', 'mysql');
 define('DB_USERNAME', 'eruotolo');
-define('DB_PASSWORD', 'Guns026772');
+define('DB_PASSWORD', 'nReLv8pYjFH60kxlOtilsHNZ');
 define('DB_NAME', 'donbano');
 
 /*-------- SERVIDOR DE PRODUCCIÓN --------*/

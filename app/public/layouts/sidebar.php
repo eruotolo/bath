@@ -35,13 +35,13 @@ $nav_sections = [
             'label' => 'Clientes',
             'icon' => 'users',
             'url' => 'dash-customers.php',
-            'match' => ['dash-customers.php', 'dash-customers-add.php', 'dash-customers-item.php'],
+            'match' => ['dash-customers.php', 'dash-customers-item.php'],
         ],
         [
             'label' => 'Baños Químicos',
             'icon' => 'bath',
             'url' => 'dash-bathrooms.php',
-            'match' => ['dash-bathrooms.php', 'dash-bathrooms-add.php', 'dash-bathrooms-edit.php'],
+            'match' => ['dash-bathrooms.php'],
         ],
         [
             'label' => 'Baños & Contratos',
@@ -61,13 +61,13 @@ $nav_sections = [
             'label' => 'Obras & Contratos',
             'icon' => 'file-text',
             'url' => 'dash-contracts.php',
-            'match' => ['dash-contracts.php', 'dash-contracts-add.php', 'dash-contracts-edit.php', 'dash-contracts-item.php'],
+            'match' => ['dash-contracts.php'],
         ],
         [
             'label' => 'Servicios',
             'icon' => 'clipboard-check',
             'url' => 'dash-services.php',
-            'match' => ['dash-services.php', 'dash-services-add.php', 'dash-services-edit.php', 'dash-services-print.php'],
+            'match' => ['dash-services.php'],
         ],
     ],
     'Finanzas' => [
@@ -75,13 +75,13 @@ $nav_sections = [
             'label' => 'Facturas',
             'icon' => 'receipt',
             'url' => 'dash-invoices-list.php',
-            'match' => ['dash-invoices-list.php', 'dash-invoices-add.php', 'dash-invoices-edit.php', 'dash-invoices-upload.php', 'dash-invoices-upload-preview.php', 'dash-invoices-upload-result.php', 'dash-invoices-detail.php'],
+            'match' => ['dash-invoices-list.php'],
         ],
         [
             'label' => 'Certificados',
             'icon' => 'file-check-2',
             'url' => 'dash-certificates.php',
-            'match' => ['dash-certificates.php', 'dash-certificates-add.php', 'dash-certificates-item.php'],
+            'match' => ['dash-certificates.php'],
         ],
     ],
     'Administración' => [
@@ -89,7 +89,7 @@ $nav_sections = [
             'label' => 'Personal & Roles',
             'icon' => 'users-2',
             'url' => 'dash-users-list.php',
-            'match' => ['dash-users-list.php', 'dash-users-add.php', 'dash-users-edit.php', 'dash-users-profile.php'],
+            'match' => ['dash-users-list.php', 'dash-users-profile.php'],
             'require_nivel' => NIVEL_ADMIN,
         ],
         [

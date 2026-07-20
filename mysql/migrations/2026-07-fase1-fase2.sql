@@ -128,6 +128,21 @@ ALTER TABLE facturas ADD COLUMN IF NOT EXISTS fecha_Pago DATE NULL DEFAULT NULL;
 ALTER TABLE servicios ADD COLUMN IF NOT EXISTS valor_Servicio INT NOT NULL DEFAULT 0;
 
 
+-- ----------------------------------------------------------------------------
+-- SECCION 7 - Clientes: columna created_at (hallazgo 2026-07-19)
+-- ----------------------------------------------------------------------------
+
+-- clientes.created_at nunca quedo registrada en ninguna migracion de este
+-- archivo, pero index.php (sparkline del dashboard) y
+-- MysqliCustomerRepository::listActive() / dash-customers.php (orden por
+-- defecto del listado) ya dependian de ella. Existia en el entorno local
+-- viejo como un ALTER TABLE hecho a mano, sin tracking. Se detecto al
+-- reimportar datos reales de produccion (que nunca tuvo esta columna) segun
+-- .doc/plan-importacion-backup-produccion-local.md - pantalla en blanco por
+-- error 500 "Unknown column 'created_at'".
+ALTER TABLE clientes ADD COLUMN IF NOT EXISTS created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP;
+
+
 -- ============================================================================
 -- Verificado y APLICADO contra la base de testing (donbano) el 2026-07-08:
 --   - Secciones 1-3: columnas/constraint ya presentes, IF NOT EXISTS confirmado

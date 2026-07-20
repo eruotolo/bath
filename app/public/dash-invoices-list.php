@@ -30,6 +30,7 @@ $erroresCarga = [
     'sin_archivo' => 'No se recibió ningún archivo. Elegí un archivo .xlsx para continuar.',
     'formato_invalido' => 'El archivo no es un .xlsx válido. Descargá la plantilla y completala sin cambiar el formato.',
     'sin_filas' => 'El archivo no tiene ninguna fila de datos para cargar (solo el encabezado).',
+    'sesion_expirada' => 'La sesión de carga expiró, subí el archivo de nuevo.',
 ];
 
 $facturaEdit = null;

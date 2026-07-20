@@ -34,7 +34,7 @@ if (isset($_POST['crear'])){
             'datos' => $_POST,
             'resultado' => 'error',
         ]);
-        header('Location: ../dash-services-add.php?status=error&msg=' . urlencode('No se pudo crear el servicio'));
+        header('Location: ../dash-services.php?action=new&err=' . urlencode('No se pudo crear el servicio'));
     }
 
 }

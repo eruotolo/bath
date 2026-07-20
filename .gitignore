@@ -1,6 +1,8 @@
 /mysql/mysql-data
 .DS_Store
 /vendor
+.env
+/backup/
 
 # Serena MCP
 .serena/
@@ -8,8 +10,14 @@
 # Tailwind (Fase 0 plan-migracion-bootstrap-tailwind)
 node_modules/
 .pnpm-store/
+
 # tailwind.css compilado se commitea (deploy cPanel no tiene build pipeline)
 graphify-out/
 .claude/
 .idea/
 /.idea/
+/app/huerfanos/
+/rebranding/
+/AGENTS.md
+/CLAUDE.md
+/opencode.json

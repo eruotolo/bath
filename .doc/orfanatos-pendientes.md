@@ -1,3 +1,5 @@
+> **⚠️ SUPERADO (2026-07-19):** este documento quedó desactualizado — contiene al menos una afirmación de migración (cluster "Impresión de Servicios") que nunca se implementó en el código real. Ver `.doc/auditoria-huerfanos-2026-07-19.md` para el estado verificado y corregido. Se deja este archivo como histórico, no se borra.
+
 # Orfanatos pendientes de limpieza
 
 Registro vivo de archivos que quedan huérfanos o semi-huérfanos a medida que avanza el rediseño de la app. La idea es acumular acá y hacer una limpieza por lotes cuando el resto de las páginas involucradas estén migradas al nuevo diseño.
